@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Objects;
 import javax.swing.JOptionPane;
 import org.example.backend.FilesControl;
+import org.example.backend.GestionArchivos;
 
 /**
  *
@@ -12,6 +13,8 @@ import org.example.backend.FilesControl;
 public class VentanaPrincipal extends javax.swing.JFrame {
 
     private final FilesControl control;
+    private final GestionArchivos gestionArchivos;
+    private final GestionTab gestionTab;
 
     /**
      * Creates new form VentanaPrincipal
@@ -19,6 +22,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public VentanaPrincipal() {
         initComponents();
         this.control = new FilesControl();
+        this.gestionArchivos = new GestionArchivos();
+        this.gestionTab = new GestionTab(tab);
     }
 
     /**
@@ -31,9 +36,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         tab = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
         salidaTxtArea = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -46,29 +48,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JavaCraft");
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1058, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        tab.addTab("Pestaña 1", jPanel1);
+        setMinimumSize(new java.awt.Dimension(1082, 658));
 
         salidaTxtArea.setColumns(20);
         salidaTxtArea.setRows(5);
@@ -151,8 +131,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void abrirMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirMenuItemActionPerformed
         File archivo = control.getFile();
         if (!Objects.isNull(archivo)) {
+            System.out.println(" -> " + archivo.getAbsolutePath());
             String contenido = control.getContenido(archivo.getAbsolutePath());
-            jTextArea1.setText(contenido);
+            gestionTab.addTab(archivo.getName(), contenido);
+            //gestionArchivos.addFile(archivo);
         }
     }//GEN-LAST:event_abrirMenuItemActionPerformed
 
@@ -161,7 +143,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_guardarMenuItemActionPerformed
 
     private void eliminarTabMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarTabMenuItemActionPerformed
-        // TODO add your handling code here:
+        //gestionArchivos.removeFile(gestionArchivos.search(new File("olls")));
+        if (tab.getSelectedIndex() != -1) {
+            tab.removeTabAt(tab.getSelectedIndex());
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay pesañas que cerrar", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_eliminarTabMenuItemActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -170,10 +157,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem guardarMenuItem;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenuItem nuevoMenuItem;
     private javax.swing.JTextArea salidaTxtArea;
