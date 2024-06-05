@@ -1,10 +1,21 @@
 package org.example;
 
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import org.example.view.VentanaPrincipal;
 
 public class Main {
+
     public static void main(String[] args) {
-        VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
-        ventanaPrincipal.setVisible(true);
+
+        FlatLaf.registerCustomDefaultsSource("view.theme");
+
+        FlatMacLightLaf.setup();
+        java.awt.EventQueue.invokeLater(() -> {
+            VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
+            ventanaPrincipal.setLocationRelativeTo(null);
+            ventanaPrincipal.setVisible(true);
+        }
+        );
     }
 }
