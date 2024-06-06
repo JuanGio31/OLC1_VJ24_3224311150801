@@ -1,6 +1,13 @@
 package org.example.view;
 
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.io.File;
+import javax.swing.JComponent;
+import javax.swing.JTextArea;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -18,6 +25,8 @@ public class Tab extends javax.swing.JPanel {
     public Tab(File archivo) {
         initComponents();
         this.archivo = archivo;
+
+        jScrollPane1.setRowHeaderView(new LineNumberView(vistaContenido));
     }
 
     /**
@@ -71,4 +80,54 @@ public class Tab extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea vistaContenido;
     // End of variables declaration//GEN-END:variables
+}
+
+class LineNumberView extends JComponent {
+
+    private final JTextArea textArea;
+
+    public LineNumberView(JTextArea textArea) {
+        this.textArea = textArea;
+        textArea.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                repaint();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                repaint();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                repaint();
+            }
+        });
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        FontMetrics fontMetrics = textArea.getFontMetrics(textArea.getFont());
+        int lineHeight = fontMetrics.getHeight();
+        int startY = 0;
+
+        String text = textArea.getText();
+        String[] lines = text.split("\n");
+
+        for (int i = 0; i < lines.length; i++) {
+            g.drawString(String.valueOf(i + 1), 0, startY + fontMetrics.getAscent());
+            startY += lineHeight;
+        }
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        FontMetrics fontMetrics = textArea.getFontMetrics(textArea.getFont());
+        int width = fontMetrics.stringWidth(String.valueOf(textArea.getLineCount())) + 5;
+        int height = textArea.getHeight();
+        return new Dimension(width, height);
+    }
 }
