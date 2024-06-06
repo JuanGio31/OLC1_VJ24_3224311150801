@@ -25,11 +25,14 @@ public class GestionArchivos {
      * no exista en la lista
      *
      * @param file Archivo
+     * @return si se agrega el archivo devuelve true, de lo contrario false
      */
-    public void addFile(File file) {
-        if (archivos.containsKey(file.getAbsolutePath())) {
+    public boolean addFile(File file) {
+        if (!archivos.containsKey(file.getAbsolutePath())) {
             archivos.put(file.getAbsolutePath(), file);
+            return true;
         }
+        return false;
     }
 
     /**
@@ -44,11 +47,13 @@ public class GestionArchivos {
         }
     }
 
-    public File search(File file) {
-        if (archivos.containsKey(file.getAbsolutePath())) {
-            return archivos.get(file.getAbsolutePath());
+    public void mostrar() {
+        for (Map.Entry<String, File> entry : archivos.entrySet()) {
+            String key = entry.getKey();
+            File value = entry.getValue();
+            System.out.println(" --> " + value.getName());
         }
-        return null;
+        System.out.println("\n\n");
     }
 
     public Map<String, File> getArchivos() {

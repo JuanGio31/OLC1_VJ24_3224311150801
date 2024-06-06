@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Objects;
 import javax.swing.JOptionPane;
 import org.example.backend.FilesControl;
-import org.example.backend.GestionArchivos;
 
 /**
  *
@@ -13,7 +12,6 @@ import org.example.backend.GestionArchivos;
 public class VentanaPrincipal extends javax.swing.JFrame {
 
     private final FilesControl control;
-    private final GestionArchivos gestionArchivos;
     private final GestionTab gestionTab;
 
     /**
@@ -22,7 +20,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public VentanaPrincipal() {
         initComponents();
         this.control = new FilesControl();
-        this.gestionArchivos = new GestionArchivos();
         this.gestionTab = new GestionTab(tab);
     }
 
@@ -38,13 +35,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         tab = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         salidaTxtArea = new javax.swing.JTextArea();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        barraMenu = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         nuevoMenuItem = new javax.swing.JMenuItem();
         abrirMenuItem = new javax.swing.JMenuItem();
         guardarMenuItem = new javax.swing.JMenuItem();
         eliminarTabMenuItem = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        menuReport = new javax.swing.JMenu();
+        verReporteItemMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JavaCraft");
@@ -54,7 +52,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         salidaTxtArea.setRows(5);
         jScrollPane1.setViewportView(salidaTxtArea);
 
-        menuArchivo.setText("Archivo");
+        menuArchivo.setText("Accion");
 
         nuevoMenuItem.setText("Nuevo Archivo");
         nuevoMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -88,12 +86,21 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         menuArchivo.add(eliminarTabMenuItem);
 
-        jMenuBar1.add(menuArchivo);
+        barraMenu.add(menuArchivo);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        menuReport.setText("Reportes");
 
-        setJMenuBar(jMenuBar1);
+        verReporteItemMenu.setText("Ver Reportes");
+        verReporteItemMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                verReporteItemMenuActionPerformed(evt);
+            }
+        });
+        menuReport.add(verReporteItemMenu);
+
+        barraMenu.add(menuReport);
+
+        setJMenuBar(barraMenu);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -102,18 +109,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(tab))
-                .addContainerGap())
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
+                    .addComponent(tab)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tab)
+                .addComponent(tab, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -131,36 +136,38 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void abrirMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_abrirMenuItemActionPerformed
         File archivo = control.getFile();
         if (!Objects.isNull(archivo)) {
-            System.out.println(" -> " + archivo.getAbsolutePath());
             String contenido = control.getContenido(archivo.getAbsolutePath());
-            gestionTab.addTab(archivo.getName(), contenido);
-            //gestionArchivos.addFile(archivo);
+            gestionTab.addTab(archivo, contenido);
         }
     }//GEN-LAST:event_abrirMenuItemActionPerformed
 
     private void guardarMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarMenuItemActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_guardarMenuItemActionPerformed
 
     private void eliminarTabMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarTabMenuItemActionPerformed
-        //gestionArchivos.removeFile(gestionArchivos.search(new File("olls")));
         if (tab.getSelectedIndex() != -1) {
-            tab.removeTabAt(tab.getSelectedIndex());
+            gestionTab.deleteTab(tab.getSelectedIndex());
         } else {
             JOptionPane.showMessageDialog(null, "No hay pesañas que cerrar", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_eliminarTabMenuItemActionPerformed
 
+    private void verReporteItemMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verReporteItemMenuActionPerformed
+
+    }//GEN-LAST:event_verReporteItemMenuActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem abrirMenuItem;
+    private javax.swing.JMenuBar barraMenu;
     private javax.swing.JMenuItem eliminarTabMenuItem;
     private javax.swing.JMenuItem guardarMenuItem;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenu menuArchivo;
+    private javax.swing.JMenu menuReport;
     private javax.swing.JMenuItem nuevoMenuItem;
     private javax.swing.JTextArea salidaTxtArea;
     private javax.swing.JTabbedPane tab;
+    private javax.swing.JMenuItem verReporteItemMenu;
     // End of variables declaration//GEN-END:variables
 }

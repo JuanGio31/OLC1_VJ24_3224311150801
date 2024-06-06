@@ -1,16 +1,23 @@
 package org.example.view;
 
+import java.io.File;
+
 /**
  *
  * @author giovanic
  */
 public class Tab extends javax.swing.JPanel {
 
+    private File archivo;
+
     /**
      * Creates new form Tab
+     *
+     * @param archivo archivo que contentra el panel
      */
-    public Tab() {
+    public Tab(File archivo) {
         initComponents();
+        this.archivo = archivo;
     }
 
     /**
@@ -50,6 +57,15 @@ public class Tab extends javax.swing.JPanel {
     public void editarVista(String contenido) {
         vistaContenido.setText(contenido);
     }
+
+    public File getArchivo() {
+        return archivo;
+    }
+
+    public void setArchivo(File archivo) {
+        this.archivo = archivo;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
