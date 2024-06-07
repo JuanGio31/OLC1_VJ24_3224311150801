@@ -79,9 +79,10 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <outputDirectory>${project.build.directory}/generated-sources/cup</outputDirectory>
-                </configuration>
+                <!--                <configuration>-->
+                <!--                    <className>MyParserClassName</className>-->
+                <!--                    <symbolsName>MySymbolsClassName</symbolsName>-->
+                <!--                </configuration>-->
             </plugin>
             
         </plugins>

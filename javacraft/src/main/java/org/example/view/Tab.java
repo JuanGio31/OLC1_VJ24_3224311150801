@@ -121,7 +121,7 @@ class LineNumberView extends JComponent {
             startY += lineHeight;
         }
     }
-
+ 
     @Override
     public Dimension getPreferredSize() {
         FontMetrics fontMetrics = textArea.getFontMetrics(textArea.getFont());
