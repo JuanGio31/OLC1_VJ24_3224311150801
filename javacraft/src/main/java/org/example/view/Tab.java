@@ -10,7 +10,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 /**
- *
  * @author giovanic
  */
 public class Tab extends javax.swing.JPanel {
@@ -47,20 +46,8 @@ public class Tab extends javax.swing.JPanel {
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 792, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 792, Short.MAX_VALUE).addContainerGap()));
+        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addContainerGap().addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE).addContainerGap()));
     }// </editor-fold>//GEN-END:initComponents
 
     public void editarVista(String contenido) {
@@ -73,6 +60,10 @@ public class Tab extends javax.swing.JPanel {
 
     public void setArchivo(File archivo) {
         this.archivo = archivo;
+    }
+
+    public String getVistaContenido() {
+        return vistaContenido.getText();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -121,7 +112,7 @@ class LineNumberView extends JComponent {
             startY += lineHeight;
         }
     }
- 
+
     @Override
     public Dimension getPreferredSize() {
         FontMetrics fontMetrics = textArea.getFontMetrics(textArea.getFont());

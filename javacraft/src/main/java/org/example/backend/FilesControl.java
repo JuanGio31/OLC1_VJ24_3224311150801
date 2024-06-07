@@ -20,7 +20,7 @@ public class FilesControl {
      * Metodo para obtener un file
      *
      * @param filtro la extension predeterminada que se muestra en el
-     * filechooser
+     *               filechooser
      * @return File
      * @throws java.io.FileNotFoundException
      */
@@ -42,13 +42,13 @@ public class FilesControl {
     /**
      * Metodo para obtener el contenido de un archivio
      *
-     * @param f el path del archivo
+     * @param path el path del archivo
      * @return string con el contenido del archivo
      */
-    public String getContenido(String f) {
+    public String getContenido(String path) {
         String cont = "";
         try {
-            cont = getArchivo(f);
+            cont = getArchivo(path);
         } catch (NullPointerException e) {
             System.out.println("error -> No se pudo leer el archivo");
         }
@@ -119,11 +119,12 @@ public class FilesControl {
      * Metodo para escribir en un archivo
      *
      * @param contenido cadena de caracteres
-     * @param fileName el path del archivo
+     * @param ruta      el path del archivo
      */
-    public void escribirEnFile(String contenido, String fileName) {
+    public void sobreEscribir(String contenido, String ruta) {
+        //antes -> escribirEnFile
         try {
-            File file = crearArchivo(fileName);
+            File file = crearArchivo(ruta);
             try (FileWriter myWriter = new FileWriter(file)) {
                 myWriter.write(contenido);
             }
@@ -132,6 +133,11 @@ public class FilesControl {
             System.out.println("An error occurred.");
         }
     }
+
+    public boolean estaSobreEscrito(File file, String contenido) {
+        return !getContenido(file.getAbsolutePath()).equals(contenido);
+    }
+
 
     /**
      * Metodo para eliminar un archivo.
@@ -146,7 +152,7 @@ public class FilesControl {
     /**
      * Elimina los archivos con una determinada extensión de una carpeta
      *
-     * @param path Carpeta de la cual eliminar los archivos
+     * @param path      Carpeta de la cual eliminar los archivos
      * @param extension Extensión de los archivos a eliminar
      */
     public void eliminarPorExtension(String path, final String extension) {
@@ -160,6 +166,7 @@ public class FilesControl {
             archivo.delete();
         }
     }
+
 
     /**
      * Metodo para comprobar la existencia de un archivo
