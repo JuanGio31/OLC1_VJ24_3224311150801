@@ -20,7 +20,7 @@ public class FilesControl {
      * Metodo para obtener un file
      *
      * @param filtro la extension predeterminada que se muestra en el
-     *               filechooser
+     * filechooser
      * @return File
      * @throws java.io.FileNotFoundException
      */
@@ -98,12 +98,12 @@ public class FilesControl {
     /**
      * Metodo para crear un archivo, en este caso html
      *
-     * @param name el nombre del archivo
+     * @param name la ruta del archivo
      * @return retornara el archivo creado
      */
-    private File crearArchivo(String name) {
+    private File crearArchivo(String path) {
         try {
-            File myObj = new File(name);
+            File myObj = new File(path);
             if (myObj.createNewFile()) {
                 System.out.println("File created: " + myObj.getName());
             } else {
@@ -119,7 +119,7 @@ public class FilesControl {
      * Metodo para escribir en un archivo
      *
      * @param contenido cadena de caracteres
-     * @param ruta      el path del archivo
+     * @param ruta el path del archivo
      */
     public void sobreEscribir(String contenido, String ruta) {
         //antes -> escribirEnFile
@@ -134,10 +134,36 @@ public class FilesControl {
         }
     }
 
+    /**
+     * Metodo que sirve para comprobar si el archivo a sido sobreescrito.
+     *
+     * @param file archivo del cual se obtendra el contenido
+     * @param contenido texto a evaluar con el contenido del archivo
+     * @return true: si el archivo esta sobreescrito, de lo contrario false
+     */
     public boolean estaSobreEscrito(File file, String contenido) {
         return !getContenido(file.getAbsolutePath()).equals(contenido);
     }
 
+    public File crearArchivo() {
+        String textoPredefinido = "nuevo_archivo.jc";
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar Archivo");
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.jc", "JC");
+        fileChooser.setFileFilter(filtro);
+        File predeterminado = new File(textoPredefinido);
+        fileChooser.setSelectedFile(predeterminado);
+        //abrir el dialog para guardar
+        int respuesta = fileChooser.showSaveDialog(null);
+        if (respuesta == JFileChooser.APPROVE_OPTION) {
+            if (fileChooser.getSelectedFile().exists()) {
+                return fileChooser.getSelectedFile();
+            } else {
+                return crearArchivo(fileChooser.getSelectedFile().getAbsolutePath());
+            }
+        }
+        return null;
+    }
 
     /**
      * Metodo para eliminar un archivo.
@@ -152,7 +178,7 @@ public class FilesControl {
     /**
      * Elimina los archivos con una determinada extensión de una carpeta
      *
-     * @param path      Carpeta de la cual eliminar los archivos
+     * @param path Carpeta de la cual eliminar los archivos
      * @param extension Extensión de los archivos a eliminar
      */
     public void eliminarPorExtension(String path, final String extension) {
@@ -166,7 +192,6 @@ public class FilesControl {
             archivo.delete();
         }
     }
-
 
     /**
      * Metodo para comprobar la existencia de un archivo

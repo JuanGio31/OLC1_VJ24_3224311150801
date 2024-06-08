@@ -126,11 +126,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void nuevoMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoMenuItemActionPerformed
-        String nombre = JOptionPane.showInputDialog(null, "Ingrese el nombre del archivo", "Nuevo", JOptionPane.PLAIN_MESSAGE);
-        if (nombre != null && !nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(null, nombre);
-        } else {
-            System.out.println("err -> " + nombre);
+        File archivo = control.crearArchivo();
+        if (!Objects.isNull(archivo)) {
+            String contenido = control.getContenido(archivo.getAbsolutePath());
+            gestionTab.addTab(archivo, contenido);
         }
     }//GEN-LAST:event_nuevoMenuItemActionPerformed
 
