@@ -1,16 +1,22 @@
-package org.example;
+package org.example.backend.interprete.analisis;
 
 import java_cup.runtime.*;
+import org.example.backend.interprete.error.*;
+import java.util.LinkedList;
 
 
 %%
 %public
-%class Escaner
+%class Scan
 %cup
 %line
 %column
 %ignorecase
 
+%init{
+    yyline = 1;
+    yycolumn = 1;
+%init}
 
 LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
@@ -25,6 +31,8 @@ CADENA         = "\"" {InputCharacter}* "\""
 CARACTER       = "\'" {CHAR} "\'"
 
 %{
+    public LinkedList<ErrorM> errores = new LinkedList<>();
+
     StringBuffer str = new StringBuffer();
 
     private Symbol symbol(int tipo){
@@ -35,6 +43,7 @@ CARACTER       = "\'" {CHAR} "\'"
         return new Symbol(tipo, yyline, yycolumn, value);
     }
 %}
+
 
 %eofval{
     return symbol(ParserSym.EOF);
@@ -129,7 +138,7 @@ CARACTER       = "\'" {CHAR} "\'"
             {WhiteSpace}+  { /* no haceer nada */}
 
     }
-
-///[^] { throw new Error("cadena ilegal < "+ yytext()+" >"); }
-\n  {yychar=1;}
-. {System.err.println("watning: Unrecognized character "+yytext()+ "--ignored"+" at " + (yyline+1) +", "+(yycolumn+1));}
+    
+    <YYINITIAL> . {
+              errores.add(new ErrorM(TipoError.LEXICO, "El caracter no es valido: "+yytext(), yyline, yycolumn));
+    }

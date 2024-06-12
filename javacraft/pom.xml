@@ -22,12 +22,21 @@
             <version>3.4.1</version>
         </dependency>
         
-        <dependency>
+<!--        <dependency>
             <groupId>com.github.vbmacher</groupId>
             <artifactId>java-cup-runtime</artifactId>
             <version>11b-20160615-3</version>
+        </dependency>-->
+        <dependency>
+            <groupId>de.jflex</groupId>
+            <artifactId>jflex</artifactId>
+            <version>1.9.1</version>
         </dependency>
-        
+        <dependency>
+            <groupId>java_cup</groupId>
+            <artifactId>java_cup</artifactId>
+            <version>0.9e</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -54,7 +63,7 @@
                 </configuration>
             </plugin>
             
-            <plugin>
+<!--            <plugin>
                 <groupId>de.jflex</groupId>
                 <artifactId>jflex-maven-plugin</artifactId>
                 <version>1.9.1</version>
@@ -79,11 +88,11 @@
                         </goals>
                     </execution>
                 </executions>
-                <!--                <configuration>-->
-                <!--                    <className>MyParserClassName</className>-->
-                <!--                    <symbolsName>MySymbolsClassName</symbolsName>-->
-                <!--                </configuration>-->
-            </plugin>
+                                <configuration>
+                                    <className>MyParserClassName</className>
+                                    <symbolsName>MySymbolsClassName</symbolsName>
+                                </configuration>
+            </plugin>-->
             
         </plugins>
     </build>

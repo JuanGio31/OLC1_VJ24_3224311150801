@@ -1,4 +1,4 @@
-package org.example.backend;
+package org.example.backend.util;
 
 import javax.swing.*;
 import java.io.File;

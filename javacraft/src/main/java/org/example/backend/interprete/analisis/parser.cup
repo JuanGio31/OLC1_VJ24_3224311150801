@@ -1,0 +1,61 @@
+package org.example.backend.interprete.analisis;
+
+import java_cup.runtime.Symbol;
+import java.util.LinkedList;
+import org.example.backend.interprete.abstracto.Instruccion;
+import org.example.backend.interprete.expresion.*;
+import org.example.backend.interprete.simbol.*;
+
+import org.example.backend.interprete.metodo.*;
+
+class Parser;
+
+parser code {:
+    
+    public void syntax_error(Symbol s){
+        System.out.println("Error Sintactico en la linea " +
+        (s.left) + " y columna " + (s.right) +
+        ". No se esperaba el componente: " + (s.value) + ".");
+    }
+
+    public void unrecovered_syntax_error (Symbol s){
+        System.out.println("Error Sintactico no recuperable en la linea" +
+        (s.left) + " y columna " + (s.right) +
+        ". No se esperaba el componente: " + (s.value) + ".");
+    }
+:}
+
+
+//** Simboloes terminal **//
+terminal ID, NUMBER, LPAREN, RPAREN, TIMES, INT, DOUBLE, BOOL, CHAR, STRING, VAR, CONST, PLUS, MINUS, DIV, MOD, POWER, EQ;
+terminal NE, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL, OR, AND, XOR, NOT, IF, ELSE, WHILE, DO, FOR, MATCH, DEFAULT, LBRACE;
+terminal RBRACE, FIN_INSTRUCCION, ASSIGN, BREAK, CONTINUE, RETURN, PRINTLN, TRUE, FALSE, CADENA, CARACTER, COMA, DOS_PUNTOS;
+
+//** Simbolos no terminales **//
+nonterminal S, A;
+nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
+nonterminal Instruccion INSTRUCCION;
+nonterminal Instruccion EXPRESION;
+
+
+//** Definir gramaticas **//
+start with INICIO;
+
+INICIO ::= INSTRUCCIONES:a      {:   RESULT = a;   :}
+;
+
+INSTRUCCIONES ::= INSTRUCCIONES:a INSTRUCCION:b     {: RESULT = a; RESULT.add(b); :}
+                | INSTRUCCION:a                   {: RESULT = new LinkedList<>(); RESULT.add(a); :}
+;
+
+INSTRUCCION ::= PRINTLN LPAREN EXPRESION:a RPAREN FIN_INSTRUCCION      {:   RESULT = new Print(a, aleft, aright);   :}
+;
+
+//    public Relacionales(Instruccion cond1, Instruccion cond2, OperadoresRelacionales relacional, int linea, int col) {
+EXPRESION ::= //MENOS EXPRESION:a             {:   RESULT = new Aritmeticas(a, OperadoresAritmeticos.NEGACION, aleft, aright);   :} %prec UMENOS
+//            | EXPRESION:a MAS EXPRESION:b   {:   RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.SUMA, aleft, aright);   :}
+//            | EXPRESION:a IGUAL IGUAL EXPRESION:b {:    RESULT = new Relacionales(a, b, OperadoresRelacionales.EQUALS, aleft, aright);    :}%prec EQUALS
+//            | ENTERO:a      {:   RESULT = new Nativo(Integer.parseInt(a), new Tipo(tipoDato.ENTERO), aleft, aright );   :}
+//            | DECIMAL:a     {:   RESULT = new Nativo(new Double(a), new Tipo(tipoDato.DECIMAL), aleft, aright );   :}
+             CADENA:a      {:   RESULT = new Nativo(a, new Tipo(TipoDeDato.STRING), aleft, aright );   :}
+;

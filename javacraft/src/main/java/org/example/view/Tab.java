@@ -1,13 +1,6 @@
 package org.example.view;
 
-import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.io.File;
-import javax.swing.JComponent;
-import javax.swing.JTextArea;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 /**
  * @author giovanic
@@ -25,7 +18,8 @@ public class Tab extends javax.swing.JPanel {
         initComponents();
         this.archivo = archivo;
 
-        jScrollPane1.setRowHeaderView(new LineNumberView(vistaContenido));
+        NumeroLinea numeroLinea = new NumeroLinea(vistaContenido);
+        jScrollPane1.setRowHeaderView(numeroLinea);
     }
 
     /**
@@ -37,18 +31,72 @@ public class Tab extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        popupCopiar = new javax.swing.JMenuItem();
+        popupPegar = new javax.swing.JMenuItem();
+        popupCortar = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
         vistaContenido = new javax.swing.JTextArea();
 
+        popupCopiar.setText("Copiar");
+        popupCopiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popupCopiarActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(popupCopiar);
+
+        popupPegar.setText("Pegar");
+        popupPegar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popupPegarActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(popupPegar);
+
+        popupCortar.setText("Cortar");
+        popupCortar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popupCortarActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(popupCortar);
+
         vistaContenido.setColumns(20);
+        vistaContenido.setFont(new java.awt.Font("Lato", 0, 14)); // NOI18N
         vistaContenido.setRows(5);
+        vistaContenido.setComponentPopupMenu(jPopupMenu1);
         jScrollPane1.setViewportView(vistaContenido);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
-        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 792, Short.MAX_VALUE).addContainerGap()));
-        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addContainerGap().addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE).addContainerGap()));
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 792, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
+                .addContainerGap())
+        );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void popupCopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popupCopiarActionPerformed
+        vistaContenido.copy();
+    }//GEN-LAST:event_popupCopiarActionPerformed
+
+    private void popupPegarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popupPegarActionPerformed
+        vistaContenido.paste();
+    }//GEN-LAST:event_popupPegarActionPerformed
+
+    private void popupCortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popupCortarActionPerformed
+        vistaContenido.cut();
+    }//GEN-LAST:event_popupCortarActionPerformed
 
     public void editarVista(String contenido) {
         vistaContenido.setText(contenido);
@@ -67,57 +115,11 @@ public class Tab extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuItem popupCopiar;
+    private javax.swing.JMenuItem popupCortar;
+    private javax.swing.JMenuItem popupPegar;
     private javax.swing.JTextArea vistaContenido;
     // End of variables declaration//GEN-END:variables
-}
-
-class LineNumberView extends JComponent {
-
-    private final JTextArea textArea;
-
-    public LineNumberView(JTextArea textArea) {
-        this.textArea = textArea;
-        textArea.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                repaint();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                repaint();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                repaint();
-            }
-        });
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        FontMetrics fontMetrics = textArea.getFontMetrics(textArea.getFont());
-        int lineHeight = fontMetrics.getHeight();
-        int startY = 0;
-
-        String text = textArea.getText();
-        String[] lines = text.split("\n");
-
-        for (int i = 0; i < lines.length; i++) {
-            g.drawString(String.valueOf(i + 1), 0, startY + fontMetrics.getAscent());
-            startY += lineHeight;
-        }
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        FontMetrics fontMetrics = textArea.getFontMetrics(textArea.getFont());
-        int width = fontMetrics.stringWidth(String.valueOf(textArea.getLineCount())) + 5;
-        int height = textArea.getHeight();
-        return new Dimension(width, height);
-    }
 }
