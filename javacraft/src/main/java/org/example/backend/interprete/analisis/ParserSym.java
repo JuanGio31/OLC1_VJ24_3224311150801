@@ -8,61 +8,64 @@ package org.example.backend.interprete.analisis;
 /** CUP generated class containing symbol constants. */
 public class ParserSym {
   /* terminals */
-  public static final int POWER = 18;
-  public static final int CONST = 13;
-  public static final int CHAR = 10;
-  public static final int FIN_INSTRUCCION = 38;
-  public static final int XOR = 27;
-  public static final int DOUBLE = 8;
-  public static final int DOS_PUNTOS = 49;
-  public static final int CONTINUE = 41;
-  public static final int LPAREN = 4;
-  public static final int INT = 7;
-  public static final int PRINTLN = 43;
-  public static final int FOR = 33;
-  public static final int MINUS = 15;
-  public static final int MATCH = 34;
-  public static final int RPAREN = 5;
-  public static final int NOT = 28;
-  public static final int AND = 26;
-  public static final int CARACTER = 47;
-  public static final int OR = 25;
-  public static final int BOOL = 9;
-  public static final int DIV = 16;
-  public static final int PLUS = 14;
-  public static final int ASSIGN = 39;
-  public static final int IF = 29;
-  public static final int ID = 2;
+  public static final int POWER = 20;
+  public static final int CONST = 15;
+  public static final int CHAR = 12;
+  public static final int FIN_INSTRUCCION = 40;
+  public static final int ENTERO = 3;
+  public static final int XOR = 29;
+  public static final int DOUBLE = 10;
+  public static final int DOS_PUNTOS = 50;
+  public static final int CONTINUE = 43;
+  public static final int LPAREN = 6;
+  public static final int INT = 9;
+  public static final int PRINTLN = 45;
+  public static final int FOR = 35;
+  public static final int MINUS = 17;
+  public static final int MATCH = 36;
+  public static final int RPAREN = 7;
+  public static final int NOT = 30;
+  public static final int AND = 28;
+  public static final int CARACTER = 48;
+  public static final int OR = 27;
+  public static final int BOOL = 11;
+  public static final int DIV = 18;
+  public static final int PLUS = 16;
+  public static final int ASSIGN = 41;
+  public static final int UMENOS = 21;
+  public static final int IF = 31;
+  public static final int ID = 5;
   public static final int EOF = 0;
-  public static final int RETURN = 42;
-  public static final int TRUE = 44;
+  public static final int DECIMAL = 4;
+  public static final int RETURN = 44;
+  public static final int TRUE = 46;
   public static final int error = 1;
-  public static final int COMA = 48;
-  public static final int CADENA = 46;
-  public static final int MENOR = 21;
-  public static final int NUMBER = 3;
-  public static final int MOD = 17;
-  public static final int BREAK = 40;
-  public static final int EQ = 19;
-  public static final int MAYOR = 22;
-  public static final int TIMES = 6;
-  public static final int LBRACE = 36;
-  public static final int ELSE = 30;
-  public static final int WHILE = 31;
-  public static final int DEFAULT = 35;
-  public static final int MAYOR_IGUAL = 24;
-  public static final int RBRACE = 37;
-  public static final int NE = 20;
-  public static final int STRING = 11;
-  public static final int MENOR_IGUAL = 23;
-  public static final int FALSE = 45;
-  public static final int VAR = 12;
-  public static final int DO = 32;
+  public static final int COMA = 49;
+  public static final int CADENA = 2;
+  public static final int MENOR = 23;
+  public static final int MOD = 19;
+  public static final int BREAK = 42;
+  public static final int MAYOR = 24;
+  public static final int TIMES = 8;
+  public static final int LBRACE = 38;
+  public static final int ELSE = 32;
+  public static final int WHILE = 33;
+  public static final int DEFAULT = 37;
+  public static final int MAYOR_IGUAL = 26;
+  public static final int RBRACE = 39;
+  public static final int NE = 22;
+  public static final int STRING = 13;
+  public static final int MENOR_IGUAL = 25;
+  public static final int FALSE = 47;
+  public static final int VAR = 14;
+  public static final int DO = 34;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
+  "CADENA",
+  "ENTERO",
+  "DECIMAL",
   "ID",
-  "NUMBER",
   "LPAREN",
   "RPAREN",
   "TIMES",
@@ -78,7 +81,7 @@ public class ParserSym {
   "DIV",
   "MOD",
   "POWER",
-  "EQ",
+  "UMENOS",
   "NE",
   "MENOR",
   "MAYOR",
@@ -105,7 +108,6 @@ public class ParserSym {
   "PRINTLN",
   "TRUE",
   "FALSE",
-  "CADENA",
   "CARACTER",
   "COMA",
   "DOS_PUNTOS"

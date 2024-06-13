@@ -25,7 +25,7 @@ public class GestionTab {
             Tab tab = new Tab(archivo);
             tab.editarVista(contenido);
             tabbedPane.addTab(archivo.getName(), tab);
-            gestionArchivos.mostrar();
+            //gestionArchivos.mostrar();
         }
     }
 
@@ -34,7 +34,7 @@ public class GestionTab {
         sobreEscribir(indicePestania);
         gestionArchivos.removeFile(temp.getArchivo());
         tabbedPane.removeTabAt(indicePestania);
-        gestionArchivos.mostrar();
+        //gestionArchivos.mostrar();
     }
 
     public void sobreEscribir(int indicePestania) {

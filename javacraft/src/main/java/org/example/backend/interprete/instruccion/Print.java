@@ -1,5 +1,6 @@
-package org.example.backend.interprete.metodo;
+package org.example.backend.interprete.instruccion;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.example.backend.interprete.abstracto.Instruccion;
 import org.example.backend.interprete.error.ErrorM;
 import org.example.backend.interprete.simbol.TipoDeDato;
@@ -8,7 +9,6 @@ import org.example.backend.interprete.simbol.Tipo;
 import org.example.backend.interprete.simbol.Tree;
 
 /**
- *
  * @author giovanic
  */
 public class Print extends Instruccion {
@@ -26,7 +26,8 @@ public class Print extends Instruccion {
         if (resultado instanceof ErrorM) {
             return resultado;
         }
-        arbol.Print(resultado.toString());
+        String res = StringEscapeUtils.unescapeJava(resultado.toString());
+        arbol.Print(res);
         return null;
     }
 

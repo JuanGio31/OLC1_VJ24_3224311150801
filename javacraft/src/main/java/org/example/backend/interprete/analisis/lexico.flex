@@ -6,11 +6,14 @@ import java.util.LinkedList;
 
 
 %%
+%cup
 %public
 %class Scan
-%cup
 %line
+%char
 %column
+%full
+//%debug
 %ignorecase
 
 %init{
@@ -19,15 +22,16 @@ import java.util.LinkedList;
 %init}
 
 LineTerminator = \r|\n|\r\n
-InputCharacter = [^\r\n]
+//InputCharacter = [^\r\n]
 WhiteSpace     = {LineTerminator} | [ \t\f]
 ESCAPE         = [\n] | [\t] | [\r] | [\"]
 CHAR           = "." | {ESCAPE}
 
 IDENTIFIER     = [A-Za-z_][A-Za-z0-9_]*
-DIGIT          = [0-9]+ | [0-9]+\.[0-9]+
+ENTERO         = [0-9]+
+DECIMAL        = [0-9]+"."[0-9]+
 COMENTARIO     = [//][^\n]* | "/*"([^*]|" *"[^/])*"*/"
-CADENA         = "\"" {InputCharacter}* "\""
+CADENA         = [\"]([^\"])*[\"]
 CARACTER       = "\'" {CHAR} "\'"
 
 %{
@@ -77,7 +81,7 @@ CARACTER       = "\'" {CHAR} "\'"
             "!"    { return symbol(ParserSym.NOT, yytext()); }
 
             /*  Operaciones relacionales    */
-            "=="   { return symbol(ParserSym.EQ, yytext()); }
+            //"=="   { return symbol(ParserSym.EQ, yytext()); }
             "!="   { return symbol(ParserSym.NE, yytext()); }
             "<"    { return symbol(ParserSym.MENOR, yytext()); }
             "<="   { return symbol(ParserSym.MENOR_IGUAL, yytext()); }
@@ -118,7 +122,7 @@ CARACTER       = "\'" {CHAR} "\'"
             /*  Variables   */
             "true"       { return symbol(ParserSym.TRUE, yytext()); }
             "false"      { return symbol(ParserSym.FALSE, yytext()); }
-            {CADENA}     { return symbol(ParserSym.CADENA, yytext()); }
+            //{CADENA}     { return symbol(ParserSym.CADENA, yytext()); }
             {CARACTER}   { return symbol(ParserSym.CARACTER, yytext()); }
 
             /*  otros   */
@@ -126,17 +130,22 @@ CARACTER       = "\'" {CHAR} "\'"
             ","         { return symbol(ParserSym.COMA, yytext()); }
     }
 
+    <YYINITIAL> {CADENA} {
+            String cadena = yytext();
+            cadena = cadena.substring(1, cadena.length()-1);
+            return symbol(ParserSym.CADENA, cadena); 
+    }
 
     <YYINITIAL>{
             /* Identificadores */
             {IDENTIFIER}   { return symbol(ParserSym.ID, yytext()); }
             /* Numeros/digitos */
-            {DIGIT}        { return symbol(ParserSym.NUMBER, yytext()); }
+            {ENTERO}        { return symbol(ParserSym.ENTERO, yytext()); }
+            {DECIMAL}       { return symbol(ParserSym.DECIMAL, yytext()); }
             /* Comentarios */
             {COMENTARIO}   { /* no hacer nada */ }
             /* espacios en blanco */
             {WhiteSpace}+  { /* no haceer nada */}
-
     }
     
     <YYINITIAL> . {

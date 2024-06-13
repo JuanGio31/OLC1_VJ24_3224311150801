@@ -124,13 +124,13 @@ public class FilesControl {
     public void sobreEscribir(String contenido, String ruta) {
         //antes -> escribirEnFile
         try {
-            File file = crearArchivo(ruta);
-            try (FileWriter myWriter = new FileWriter(file)) {
-                myWriter.write(contenido);
-            }
+            FileWriter myWriter = new FileWriter(ruta);
+            myWriter.write(contenido);
+            myWriter.close();
             System.out.println("Successfully wrote to the file.");
-        } catch (IOException | NullPointerException e) {
+        } catch (IOException e) {
             System.out.println("An error occurred.");
+            e.printStackTrace();
         }
     }
 
@@ -142,7 +142,7 @@ public class FilesControl {
      * @return true: si el archivo esta sobreescrito, de lo contrario false
      */
     public boolean estaSobreEscrito(File file, String contenido) {
-        return !getContenido(file.getAbsolutePath()).equals(contenido);
+        return !getContenido(file.getAbsolutePath()).trim().replaceAll("[\r\n]+$", "").equals(contenido);
     }
 
     public File crearArchivo() {

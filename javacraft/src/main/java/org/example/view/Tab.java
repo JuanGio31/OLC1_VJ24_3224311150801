@@ -111,7 +111,7 @@ public class Tab extends javax.swing.JPanel {
     }
 
     public String getVistaContenido() {
-        return vistaContenido.getText();
+        return vistaContenido.getText().trim().replaceAll("[\r\n]+$", "");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -1,23 +1,18 @@
 package org.example.view;
 
 import java.awt.Image;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.StringReader;
 import java.util.LinkedList;
 import java.util.Objects;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.Box;
-import javax.swing.JMenu;
-import javax.swing.JTextArea;
+
 import org.example.backend.interprete.abstracto.Instruccion;
 import org.example.backend.interprete.analisis.Parser;
 import org.example.backend.interprete.analisis.Scan;
 import org.example.backend.interprete.simbol.TablaSimbolo;
 import org.example.backend.interprete.simbol.Tree;
-
 import org.example.backend.util.FilesControl;
 import org.example.backend.util.GestionTab;
 
@@ -34,18 +29,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
      */
     public VentanaPrincipal() {
         initComponents();
-        barraMenu.add(Box.createHorizontalGlue());
-        build = new JMenu("Build");
-        barraMenu.add(build);
-        barraMenu.revalidate();
 
         this.control = new FilesControl();
         this.gestionTab = new GestionTab(tab, control);
 
         Image icon = new ImageIcon(getClass().getResource("/logoTransparente.png")).getImage();
         setIconImage(icon);
-
-        loadActionBuild();
     }
 
     /**
@@ -68,12 +57,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         eliminarTabMenuItem = new javax.swing.JMenuItem();
         menuReport = new javax.swing.JMenu();
         verReporteItemMenu = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("JavaCraft");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setMinimumSize(new java.awt.Dimension(1082, 658));
 
+        salidaTxtArea.setEditable(false);
         salidaTxtArea.setColumns(20);
         salidaTxtArea.setRows(5);
         jScrollPane1.setViewportView(salidaTxtArea);
@@ -126,25 +118,37 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         barraMenu.add(menuReport);
 
+        jMenu1.setText("build");
+
+        jMenuItem1.setText("Run");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        barraMenu.add(jMenu1);
+
         setJMenuBar(barraMenu);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
-                    .addComponent(tab)))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
+                                        .addComponent(tab)))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tab, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(tab, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -186,60 +190,44 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         rd.setVisible(true);
     }//GEN-LAST:event_verReporteItemMenuActionPerformed
 
-    private void loadActionBuild() {
-        build.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (tab.getSelectedIndex() != -1) {
-                    int index = tab.getSelectedIndex();
-                    Tab temp = (Tab) tab.getComponentAt(index);
-                    String texto = temp.getVistaContenido() + "\n";
-                    try {
-                        StringReader stringReader = new StringReader(texto);
-                        Parser parser = new Parser(new Scan(stringReader));
-                        var resultado = parser.parse();
-                        var ast = new Tree((LinkedList<Instruccion>) resultado.value);
-                        var tabla = new TablaSimbolo();
-                        tabla.setNombre("GLOBAL");
-                        ast.setConsola("");
-                        for (var a : ast.getInstrucciones()) {
-                            var res = a.interpretar(ast, tabla);
-                        }
-                        System.out.println(ast.getConsola());
-                    } catch (Exception ex) {
-                        System.out.println("Algo salio mal");
-                        //noinspection ThrowablePrintedToSystemOut
-                        System.out.println(ex);
-
-                    }
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // /*
+        if (tab.getSelectedIndex() != -1) {
+            salidaTxtArea.setText("");
+            int index = tab.getSelectedIndex();
+            Tab temp = (Tab) tab.getComponentAt(index);
+            String texto = temp.getVistaContenido() + "\n";
+            try {
+                StringReader stringReader = new StringReader(texto);
+                Parser parser = new Parser(new Scan(stringReader));
+                var resultado = parser.parse();
+                var ast = new Tree((LinkedList<Instruccion>) resultado.value);
+                var tabla = new TablaSimbolo();
+                tabla.setNombre("GLOBAL");
+                ast.setConsola("");
+                for (var a : ast.getInstrucciones()) {
+                    var res = a.interpretar(ast, tabla);
                 }
+                System.out.println(ast.getConsola());
+                salidaTxtArea.append(ast.getConsola());
+            } catch (Exception ex) {
+                System.out.println("Algo salio mal");
+                //noinspection ThrowablePrintedToSystemOut
+                System.out.println(ex);
+
             }
+        }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
+        //*/
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-        });
-
-    }
-
-    private javax.swing.JMenu build;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem abrirMenuItem;
     private javax.swing.JMenuBar barraMenu;
     private javax.swing.JMenuItem eliminarTabMenuItem;
     private javax.swing.JMenuItem guardarMenuItem;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenu menuReport;

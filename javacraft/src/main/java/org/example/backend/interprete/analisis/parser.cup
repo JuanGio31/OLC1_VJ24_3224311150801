@@ -6,7 +6,7 @@ import org.example.backend.interprete.abstracto.Instruccion;
 import org.example.backend.interprete.expresion.*;
 import org.example.backend.interprete.simbol.*;
 
-import org.example.backend.interprete.metodo.*;
+import org.example.backend.interprete.instruccion.*;
 
 class Parser;
 
@@ -27,16 +27,21 @@ parser code {:
 
 
 //** Simboloes terminal **//
-terminal ID, NUMBER, LPAREN, RPAREN, TIMES, INT, DOUBLE, BOOL, CHAR, STRING, VAR, CONST, PLUS, MINUS, DIV, MOD, POWER, EQ;
+terminal String CADENA, ENTERO, DECIMAL, ID;
+terminal LPAREN, RPAREN, TIMES, INT, DOUBLE, BOOL, CHAR, STRING, VAR, CONST, PLUS, MINUS, DIV, MOD, POWER, UMENOS;
 terminal NE, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL, OR, AND, XOR, NOT, IF, ELSE, WHILE, DO, FOR, MATCH, DEFAULT, LBRACE;
-terminal RBRACE, FIN_INSTRUCCION, ASSIGN, BREAK, CONTINUE, RETURN, PRINTLN, TRUE, FALSE, CADENA, CARACTER, COMA, DOS_PUNTOS;
+terminal RBRACE, FIN_INSTRUCCION, ASSIGN, BREAK, CONTINUE, RETURN, PRINTLN, TRUE, FALSE, CARACTER, COMA, DOS_PUNTOS;
 
 //** Simbolos no terminales **//
-nonterminal S, A;
 nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
 nonterminal Instruccion INSTRUCCION;
 nonterminal Instruccion EXPRESION;
+nonterminal Tipo TIPO;
 
+//** Precedencia **//
+precedence left ASSIGN;
+precedence left PLUS;
+precedence left UMENOS;
 
 //** Definir gramaticas **//
 start with INICIO;
@@ -51,11 +56,16 @@ INSTRUCCIONES ::= INSTRUCCIONES:a INSTRUCCION:b     {: RESULT = a; RESULT.add(b)
 INSTRUCCION ::= PRINTLN LPAREN EXPRESION:a RPAREN FIN_INSTRUCCION      {:   RESULT = new Print(a, aleft, aright);   :}
 ;
 
-//    public Relacionales(Instruccion cond1, Instruccion cond2, OperadoresRelacionales relacional, int linea, int col) {
-EXPRESION ::= //MENOS EXPRESION:a             {:   RESULT = new Aritmeticas(a, OperadoresAritmeticos.NEGACION, aleft, aright);   :} %prec UMENOS
-//            | EXPRESION:a MAS EXPRESION:b   {:   RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.SUMA, aleft, aright);   :}
-//            | EXPRESION:a IGUAL IGUAL EXPRESION:b {:    RESULT = new Relacionales(a, b, OperadoresRelacionales.EQUALS, aleft, aright);    :}%prec EQUALS
-//            | ENTERO:a      {:   RESULT = new Nativo(Integer.parseInt(a), new Tipo(tipoDato.ENTERO), aleft, aright );   :}
-//            | DECIMAL:a     {:   RESULT = new Nativo(new Double(a), new Tipo(tipoDato.DECIMAL), aleft, aright );   :}
-             CADENA:a      {:   RESULT = new Nativo(a, new Tipo(TipoDeDato.STRING), aleft, aright );   :}
+//TIPOS ::= INT       {:   RESULT=new Tipo(tipoDato.ENTERO);   :}
+//        | DOUBLE    {:   RESULT=new Tipo(tipoDato.DECIMAL);   :}
+//        | STRING    {:   RESULT=new Tipo(tipoDato.CADENA);   :}
+//;
+
+EXPRESION ::= MINUS EXPRESION:a             {:   RESULT = new Aritmeticas(a, OperadoresAritmeticos.NEGACION, aleft, aright);   :} %prec UMENOS
+            | EXPRESION:a PLUS EXPRESION:b   {:   RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.PLUS, aleft, aright);   :}
+        //    | EXPRESION:a ASSIGN ASSIGN EXPRESION:b {:    RESULT = new Relacionales(a, b, OperadoresRelacionales.EQUALS, aleft, aright);    :}%prec ASSIGN
+            | ENTERO:a      {:   RESULT = new Nativo(Integer.parseInt(a), new Tipo(TipoDeDato.INT), aleft, aright );   :}
+            | DECIMAL:a     {:   RESULT = new Nativo(new Double(a), new Tipo(TipoDeDato.DOUBLE), aleft, aright );   :}
+            | CADENA:a      {:   RESULT = new Nativo(a, new Tipo(TipoDeDato.STRING), aleft, aright );   :}
+           // | ID:a          {:   RESULT = new AccesoVar(a, aleft, aright);   :}
 ;

@@ -5,18 +5,17 @@ package org.example.backend.interprete.simbol;
  */
 public class Tipo {
 
-    private TipoDeDato type;
+    private TipoDeDato tipo;
 
-    public Tipo(TipoDeDato type) {
-        this.type = type;
+    public Tipo(TipoDeDato tipo) {
+        this.tipo = tipo;
     }
 
-    public TipoDeDato getType() {
-        return type;
+    public TipoDeDato getTipo() {
+        return tipo;
     }
 
-    public void setType(TipoDeDato type) {
-        this.type = type;
+    public void setTipo(TipoDeDato tipo) {
+        this.tipo = tipo;
     }
-
 }
