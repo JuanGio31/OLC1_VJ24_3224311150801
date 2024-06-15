@@ -74,10 +74,8 @@ public class Aritmeticas extends Instruccion {
                         return (int) op1 + (double) op2;
                     }
                     case CHAR -> {
-                        this.tipo.setTipo(TipoDeDato.CHAR);
-                        int aux = Character.getNumericValue(op2.toString().charAt(0));
-                        System.out.println(aux);
-                        return (int) op1 + aux;
+                        this.tipo.setTipo(TipoDeDato.INT);
+                        return (int) op1 + Character.getNumericValue(op2.toString().charAt(1));
                     }
                     case STRING -> {
                         this.tipo.setTipo(TipoDeDato.STRING);
@@ -91,7 +89,7 @@ public class Aritmeticas extends Instruccion {
             case DOUBLE -> {
                 switch (tipo2) {
                     case INT -> {
-                        this.tipo.setTipo(TipoDeDato.INT);
+                        this.tipo.setTipo(TipoDeDato.DOUBLE);
                         return (double) op1 + (int) op2;
                     }
                     case DOUBLE -> {
@@ -99,8 +97,8 @@ public class Aritmeticas extends Instruccion {
                         return (double) op1 + (double) op2;
                     }
                     case CHAR -> {
-                        this.tipo.setTipo(TipoDeDato.CHAR);
-                        return (double) op1 + (int) op2;
+                        this.tipo.setTipo(TipoDeDato.DOUBLE);
+                        return (double) op1 + Character.getNumericValue(op2.toString().charAt(1));
                     }
                     case STRING -> {
                         this.tipo.setTipo(TipoDeDato.STRING);
@@ -115,19 +113,19 @@ public class Aritmeticas extends Instruccion {
                 switch (tipo2) {
                     case INT -> {
                         this.tipo.setTipo(TipoDeDato.INT);
-                        return (int) op1 + (int) op2;
+                        return Character.getNumericValue(op1.toString().charAt(1)) + (int) op2;
                     }
                     case DOUBLE -> {
                         this.tipo.setTipo(TipoDeDato.DOUBLE);
-                        return (int) op1 + (double) op2;
+                        return Character.getNumericValue(op1.toString().charAt(1)) + (double) op2;
                     }
                     case CHAR -> {
-                        this.tipo.setTipo(TipoDeDato.CHAR);
-                        return op1.toString() + op2.toString();
+                        this.tipo.setTipo(TipoDeDato.STRING);
+                        return op1.toString().replaceAll("'", "") + op2.toString().replaceAll("'", "");
                     }
                     case STRING -> {
                         this.tipo.setTipo(TipoDeDato.STRING);
-                        return op1.toString() + op2.toString();
+                        return op1.toString().replaceAll("'", "") + op2.toString();
                     }
                     default -> {
                         return new ErrorM(TipoError.SEMANTICO, "Suma erronea", this.linea, this.columna);
@@ -136,6 +134,9 @@ public class Aritmeticas extends Instruccion {
             }
             case STRING -> {
                 this.tipo.setTipo(TipoDeDato.STRING);
+                if (tipo2 == TipoDeDato.CHAR) {
+                    return op1.toString() + op2.toString().charAt(1);
+                }
                 return op1.toString() + op2.toString();
             }
             default -> {

@@ -24,7 +24,7 @@ import java.util.LinkedList;
 LineTerminator       = \r|\n|\r\n
 InputCharacter       = [^\r\n]
 CommentContent       = ( [^*] | \*+ [^/*] )*
-ComentarioMultiLine  = "/**" {CommentContent} "*"+ "/"
+ComentarioMultiLine  = "/*" {CommentContent} "*"+ "/"
 EndOfLineComment     = "//" {InputCharacter}* {LineTerminator}?
 WhiteSpace     = {LineTerminator} | [ \t\f]
 

@@ -46,9 +46,6 @@ public class Main {
     }
 
     static void mostrar() {
-        int a = 8, b = 3;
-        int c = b / a;
-        int d = a / b;
-        System.out.println(b / a + " " + d);
+        System.out.println("1. " + (1 + 1));
     }
 }
