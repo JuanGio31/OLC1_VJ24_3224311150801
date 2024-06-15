@@ -2,17 +2,10 @@ package org.example.view;
 
 import java.awt.Image;
 import java.io.File;
-import java.io.StringReader;
-import java.util.LinkedList;
 import java.util.Objects;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
-import org.example.backend.interprete.abstracto.Instruccion;
-import org.example.backend.interprete.analisis.Parser;
-import org.example.backend.interprete.analisis.Scan;
-import org.example.backend.interprete.simbol.TablaSimbolo;
-import org.example.backend.interprete.simbol.Tree;
 import org.example.backend.util.FilesControl;
 import org.example.backend.util.GestionTab;
 
@@ -191,7 +184,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_verReporteItemMenuActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // /*
+         /*
         if (tab.getSelectedIndex() != -1) {
             salidaTxtArea.setText("");
             int index = tab.getSelectedIndex();
@@ -218,7 +211,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         }
 
-        //*/
+        */
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

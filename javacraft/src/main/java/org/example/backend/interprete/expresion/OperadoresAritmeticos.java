@@ -9,12 +9,10 @@ package org.example.backend.interprete.expresion;
  * @author giovanic
  */
 public enum OperadoresAritmeticos {
-    PLUS,
-    MINUS,
-    TIMES,
-    POWER,
-    MOD,
-    DIV,
+    SUMA,
+    RESTA,
+    MULTIPLICACION,
+    DIVISION,
+    MODULO,
     NEGACION
-
 }

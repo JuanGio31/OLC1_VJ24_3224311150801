@@ -49,7 +49,10 @@ public class Aritmeticas extends Instruccion {
         }
 
         return switch (operacion) {
-            case PLUS -> this.suma(opIzq, opDer);
+            case SUMA -> this.suma(opIzq, opDer);
+            case RESTA -> this.resta(opIzq, opDer);
+            case MULTIPLICACION -> this.multiplicacion(opIzq, opDer);
+            case DIVISION -> this.division(opIzq, opDer);
             case NEGACION -> this.negacion(Unico);
             default -> new ErrorM(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
         };
@@ -70,6 +73,12 @@ public class Aritmeticas extends Instruccion {
                         this.tipo.setTipo(TipoDeDato.DOUBLE);
                         return (int) op1 + (double) op2;
                     }
+                    case CHAR -> {
+                        this.tipo.setTipo(TipoDeDato.CHAR);
+                        int aux = Character.getNumericValue(op2.toString().charAt(0));
+                        System.out.println(aux);
+                        return (int) op1 + aux;
+                    }
                     case STRING -> {
                         this.tipo.setTipo(TipoDeDato.STRING);
                         return op1.toString() + op2.toString();
@@ -82,12 +91,39 @@ public class Aritmeticas extends Instruccion {
             case DOUBLE -> {
                 switch (tipo2) {
                     case INT -> {
-                        this.tipo.setTipo(TipoDeDato.DOUBLE);
-                        return (double) op1 + (int) op1;
+                        this.tipo.setTipo(TipoDeDato.INT);
+                        return (double) op1 + (int) op2;
                     }
                     case DOUBLE -> {
                         this.tipo.setTipo(TipoDeDato.DOUBLE);
                         return (double) op1 + (double) op2;
+                    }
+                    case CHAR -> {
+                        this.tipo.setTipo(TipoDeDato.CHAR);
+                        return (double) op1 + (int) op2;
+                    }
+                    case STRING -> {
+                        this.tipo.setTipo(TipoDeDato.STRING);
+                        return op1.toString() + op2.toString();
+                    }
+                    default -> {
+                        return new ErrorM(TipoError.SEMANTICO, "Suma erronea", this.linea, this.columna);
+                    }
+                }
+            }
+            case CHAR -> {
+                switch (tipo2) {
+                    case INT -> {
+                        this.tipo.setTipo(TipoDeDato.INT);
+                        return (int) op1 + (int) op2;
+                    }
+                    case DOUBLE -> {
+                        this.tipo.setTipo(TipoDeDato.DOUBLE);
+                        return (int) op1 + (double) op2;
+                    }
+                    case CHAR -> {
+                        this.tipo.setTipo(TipoDeDato.CHAR);
+                        return op1.toString() + op2.toString();
                     }
                     case STRING -> {
                         this.tipo.setTipo(TipoDeDato.STRING);
@@ -107,6 +143,166 @@ public class Aritmeticas extends Instruccion {
 
             }
         }
+    }
+
+    public Object resta(Object op1, Object op2) {
+        var tipo1 = this.operando1.tipo.getTipo();
+        var tipo2 = this.operando2.tipo.getTipo();
+
+        switch (tipo1) {
+            case INT -> {
+                switch (tipo2) {
+                    case INT -> {
+                        this.tipo.setTipo(TipoDeDato.INT);
+                        return (int) op1 - (int) op2;
+                    }
+                    case DOUBLE -> {
+                        this.tipo.setTipo(TipoDeDato.DOUBLE);
+                        return (double) op1 - (double) op2;
+                    }
+                    case CHAR -> {
+                        this.tipo.setTipo(TipoDeDato.CHAR);
+                        return (int) op1 - (int) op2;
+                    }
+                    default -> {
+                        return new ErrorM(TipoError.SEMANTICO, "Resta erronea", this.linea, this.columna);
+                    }
+                }
+            }
+            case DOUBLE -> {
+                switch (tipo2) {
+                    case INT -> {
+                        this.tipo.setTipo(TipoDeDato.DOUBLE);
+                        return (double) op1 - (int) op2;
+                    }
+                    case DOUBLE -> {
+                        this.tipo.setTipo(TipoDeDato.DOUBLE);
+                        return (double) op1 - (double) op2;
+                    }
+                    case CHAR -> {
+                        this.tipo.setTipo(TipoDeDato.CHAR);
+                        return (double) op1 + (int) op2;
+                    }
+                    default -> {
+                        return new ErrorM(TipoError.SEMANTICO, "Resta erronea", this.linea, this.columna);
+                    }
+                }
+            }
+            case CHAR -> {
+                switch (tipo2) {
+                    case INT -> {
+                        this.tipo.setTipo(TipoDeDato.INT);
+                        return (int) op1 - (int) op2;
+                    }
+                    case DOUBLE -> {
+                        this.tipo.setTipo(TipoDeDato.DOUBLE);
+                        return (int) op1 - (double) op2;
+                    }
+                    default -> {
+                        return new ErrorM(TipoError.SEMANTICO, "Resta erronea", this.linea, this.columna);
+                    }
+                }
+            }
+            default -> {
+                return new ErrorM(TipoError.SEMANTICO, "Resta erronea", this.linea, this.columna);
+
+            }
+        }
+    }
+
+    public Object multiplicacion(Object op1, Object op2) {
+        var tipo1 = this.operando1.tipo.getTipo();
+        var tipo2 = this.operando2.tipo.getTipo();
+
+        switch (tipo1) {
+            case INT -> {
+                switch (tipo2) {
+                    case INT -> {
+                        this.tipo.setTipo(TipoDeDato.INT);
+                        return (int) op1 * (int) op2;
+                    }
+                    case DOUBLE -> {
+                        this.tipo.setTipo(TipoDeDato.DOUBLE);
+                        return (double) op1 * (double) op2;
+                    }
+                    case CHAR -> {
+                        this.tipo.setTipo(TipoDeDato.CHAR);
+                        return (int) op1 * (int) op2;
+                    }
+                    default -> {
+                        return new ErrorM(TipoError.SEMANTICO, "Multiplicacion erronea", this.linea, this.columna);
+                    }
+                }
+            }
+            case DOUBLE -> {
+                switch (tipo2) {
+                    case INT -> {
+                        this.tipo.setTipo(TipoDeDato.DOUBLE);
+                        return (double) op1 * (int) op2;
+                    }
+                    case DOUBLE -> {
+                        this.tipo.setTipo(TipoDeDato.DOUBLE);
+                        return (double) op1 * (double) op2;
+                    }
+                    case CHAR -> {
+                        this.tipo.setTipo(TipoDeDato.CHAR);
+                        return (double) op1 * (int) op2;
+                    }
+                    default -> {
+                        return new ErrorM(TipoError.SEMANTICO, "Multiplicacion erronea", this.linea, this.columna);
+                    }
+                }
+            }
+            case CHAR -> {
+                switch (tipo2) {
+                    case INT -> {
+                        this.tipo.setTipo(TipoDeDato.INT);
+                        return (int) op1 * (int) op2;
+                    }
+                    case DOUBLE -> {
+                        this.tipo.setTipo(TipoDeDato.DOUBLE);
+                        return (int) op1 * (double) op2;
+                    }
+                    default -> {
+                        return new ErrorM(TipoError.SEMANTICO, "Multiplicacion erronea", this.linea, this.columna);
+                    }
+                }
+            }
+            default -> {
+                return new ErrorM(TipoError.SEMANTICO, "Multiplicacion erronea", this.linea, this.columna);
+
+            }
+        }
+    }
+
+    public Object division(Object op1, Object op2) {
+        var tipo1 = this.operando1.tipo.getTipo();
+        var tipo2 = this.operando2.tipo.getTipo();
+
+        double auxiliar = -1;
+        if (tipo2 == TipoDeDato.CHAR) {
+            auxiliar = Character.getNumericValue(op2.toString().charAt(1));
+        } else if (tipo2 == TipoDeDato.DOUBLE || tipo2 == TipoDeDato.INT) {
+            auxiliar = Double.parseDouble(String.valueOf(op2));
+        }
+
+        if (auxiliar == 0.0) {
+            System.out.println("Division por cero");
+            return new ErrorM(TipoError.SEMANTICO, "Division por cero", this.linea, this.columna);
+        }
+
+        if (tipo1 != TipoDeDato.CHAR && tipo2 != TipoDeDato.CHAR) {
+            this.tipo.setTipo(TipoDeDato.DOUBLE);
+            return Double.parseDouble(op1.toString()) / Double.parseDouble(op2.toString());
+        }
+
+        if (tipo1 == TipoDeDato.CHAR && tipo2 == TipoDeDato.CHAR) {
+            int auxiliar2 = Character.getNumericValue(op1.toString().charAt(1));
+            this.tipo.setTipo(TipoDeDato.DOUBLE);
+            return (double) auxiliar2 / (double) auxiliar;
+        }
+
+        return new ErrorM(TipoError.SEMANTICO, "Division erronea", this.linea, this.columna);
     }
 
     public Object negacion(Object op1) {

@@ -21,18 +21,23 @@ import java.util.LinkedList;
     yycolumn = 1;
 %init}
 
-LineTerminator = \r|\n|\r\n
-//InputCharacter = [^\r\n]
+LineTerminator       = \r|\n|\r\n
+InputCharacter       = [^\r\n]
+CommentContent       = ( [^*] | \*+ [^/*] )*
+ComentarioMultiLine  = "/**" {CommentContent} "*"+ "/"
+EndOfLineComment     = "//" {InputCharacter}* {LineTerminator}?
 WhiteSpace     = {LineTerminator} | [ \t\f]
+
 ESCAPE         = [\n] | [\t] | [\r] | [\"]
 CHAR           = "." | {ESCAPE}
 
 IDENTIFIER     = [A-Za-z_][A-Za-z0-9_]*
 ENTERO         = [0-9]+
 DECIMAL        = [0-9]+"."[0-9]+
-COMENTARIO     = [//][^\n]* | "/*"([^*]|" *"[^/])*"*/"
+COMENTARIO     =  {EndOfLineComment} | {ComentarioMultiLine}
 CADENA         = [\"]([^\"])*[\"]
 CARACTER       = "\'" {CHAR} "\'"
+CHARACTER      = "\'" [^\'] "\'"
 
 %{
     public LinkedList<ErrorM> errores = new LinkedList<>();
@@ -67,11 +72,11 @@ CARACTER       = "\'" {CHAR} "\'"
             "const"   { return symbol(ParserSym.CONST, yytext()); }
 
             /*  Operadores aritmeticos  */
-            "+"    { return symbol(ParserSym.PLUS, yytext()); }
-            "-"    { return symbol(ParserSym.MINUS, yytext()); }
+            "+"    { return symbol(ParserSym.MAS, yytext()); }
+            "-"    { return symbol(ParserSym.MENOS, yytext()); }
             "*"    { return symbol(ParserSym.TIMES, yytext()); }
-            "**"   { return symbol(ParserSym.POWER, yytext()); }
-            "/"    { return symbol(ParserSym.DIV, yytext()); }
+            //"**"   { return symbol(ParserSym.POWER, yytext()); }
+            "/"   { return symbol(ParserSym.DIVIDE, yytext()); }
             "%"    { return symbol(ParserSym.MOD, yytext()); }
 
             /*  Operadores logicos   */
@@ -93,7 +98,7 @@ CARACTER       = "\'" {CHAR} "\'"
             ")"    { return symbol(ParserSym.RPAREN, yytext()); }
 
             /*  Simbolos de asignacion   */
-            "="    { return symbol(ParserSym.ASSIGN, yytext()); }
+            "="    { return symbol(ParserSym.IGUAL, yytext()); }
 
             /*  Simbolos de finalizacion y sentencias de agrupacion */
             ";"    { return symbol(ParserSym.FIN_INSTRUCCION, yytext()); }
@@ -112,9 +117,9 @@ CARACTER       = "\'" {CHAR} "\'"
             "do"       { return symbol(ParserSym.DO, yytext()); }
 
             /*  Sentencias de tranferencia  */
-            "break"      { return symbol(ParserSym.BREAK, yytext()); }
-            "continue"   { return symbol(ParserSym.CONTINUE, yytext()); }
-            "return"     { return symbol(ParserSym.RETURN, yytext()); }
+//            "break"      { return symbol(ParserSym.BREAK, yytext()); }
+//            "continue"   { return symbol(ParserSym.CONTINUE, yytext()); }
+//            "return"     { return symbol(ParserSym.RETURN, yytext()); }
 
             /*  Funciones   */
             "println"    { return symbol(ParserSym.PRINTLN, yytext()); }
@@ -123,7 +128,7 @@ CARACTER       = "\'" {CHAR} "\'"
             "true"       { return symbol(ParserSym.TRUE, yytext()); }
             "false"      { return symbol(ParserSym.FALSE, yytext()); }
             //{CADENA}     { return symbol(ParserSym.CADENA, yytext()); }
-            {CARACTER}   { return symbol(ParserSym.CARACTER, yytext()); }
+            {CHARACTER}   { return symbol(ParserSym.CARACTER, yytext()); }
 
             /*  otros   */
             ":"         { return symbol(ParserSym.DOS_PUNTOS, yytext()); }
@@ -133,7 +138,7 @@ CARACTER       = "\'" {CHAR} "\'"
     <YYINITIAL> {CADENA} {
             String cadena = yytext();
             cadena = cadena.substring(1, cadena.length()-1);
-            return symbol(ParserSym.CADENA, cadena); 
+            return symbol(ParserSym.CADENA, cadena);
     }
 
     <YYINITIAL>{
@@ -143,11 +148,12 @@ CARACTER       = "\'" {CHAR} "\'"
             {ENTERO}        { return symbol(ParserSym.ENTERO, yytext()); }
             {DECIMAL}       { return symbol(ParserSym.DECIMAL, yytext()); }
             /* Comentarios */
-            {COMENTARIO}   { /* no hacer nada */ }
+            {COMENTARIO}   { /* no haceer nada */ }
             /* espacios en blanco */
             {WhiteSpace}+  { /* no haceer nada */}
     }
-    
-    <YYINITIAL> . {
-              errores.add(new ErrorM(TipoError.LEXICO, "El caracter no es valido: "+yytext(), yyline, yycolumn));
+
+ . {
+            System.err.println("Error: Caracter inesperado " + yytext());
+            errores.add(new ErrorM(TipoError.LEXICO, "El caracter no es valido: "+yytext(), yyline, yycolumn));
     }
