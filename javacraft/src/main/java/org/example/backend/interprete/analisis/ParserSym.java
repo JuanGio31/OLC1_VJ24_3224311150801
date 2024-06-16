@@ -15,31 +15,32 @@ public class ParserSym {
   public static final int ENTERO = 3;
   public static final int XOR = 28;
   public static final int DOUBLE = 10;
-  public static final int DOS_PUNTOS = 46;
+  public static final int DOS_PUNTOS = 43;
   public static final int LPAREN = 6;
   public static final int INT = 9;
-  public static final int PRINTLN = 41;
+  public static final int PRINTLN = 40;
   public static final int FOR = 34;
   public static final int MATCH = 35;
   public static final int RPAREN = 7;
   public static final int NOT = 29;
   public static final int AND = 27;
-  public static final int IGUAL = 40;
-  public static final int CARACTER = 44;
+  public static final int IGUAL = 45;
+  public static final int CARACTER = 41;
   public static final int OR = 26;
   public static final int BOOL = 11;
   public static final int UMENOS = 20;
   public static final int IF = 30;
   public static final int ID = 5;
+  public static final int BOOLEAN = 44;
   public static final int EOF = 0;
   public static final int DECIMAL = 4;
-  public static final int TRUE = 42;
   public static final int error = 1;
-  public static final int COMA = 45;
+  public static final int COMA = 42;
   public static final int CADENA = 2;
   public static final int MENOS = 17;
   public static final int MENOR = 22;
   public static final int MOD = 19;
+  public static final int EQ = 46;
   public static final int MAYOR = 23;
   public static final int TIMES = 8;
   public static final int LBRACE = 37;
@@ -51,7 +52,6 @@ public class ParserSym {
   public static final int NE = 21;
   public static final int STRING = 13;
   public static final int MENOR_IGUAL = 24;
-  public static final int FALSE = 43;
   public static final int VAR = 14;
   public static final int DO = 33;
   public static final int MAS = 16;
@@ -96,13 +96,13 @@ public class ParserSym {
   "LBRACE",
   "RBRACE",
   "FIN_INSTRUCCION",
-  "IGUAL",
   "PRINTLN",
-  "TRUE",
-  "FALSE",
   "CARACTER",
   "COMA",
-  "DOS_PUNTOS"
+  "DOS_PUNTOS",
+  "BOOLEAN",
+  "IGUAL",
+  "EQ"
   };
 }
 

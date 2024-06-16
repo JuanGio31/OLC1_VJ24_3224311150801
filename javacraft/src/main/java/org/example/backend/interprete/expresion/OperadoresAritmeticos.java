@@ -13,6 +13,7 @@ public enum OperadoresAritmeticos {
     RESTA,
     MULTIPLICACION,
     DIVISION,
+    POTENCIA,
     MODULO,
     NEGACION
 }

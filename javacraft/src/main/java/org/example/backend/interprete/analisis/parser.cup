@@ -30,8 +30,8 @@ parser code {:
 terminal String CADENA, ENTERO, DECIMAL, ID;
 terminal LPAREN, RPAREN, TIMES, INT, DOUBLE, BOOL, CHAR, STRING, VAR, CONST, MAS, MENOS, DIVIDE, MOD, UMENOS;
 terminal NE, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL, OR, AND, XOR, NOT, IF, ELSE, WHILE, DO, FOR, MATCH, DEFAULT, LBRACE;
-terminal RBRACE, FIN_INSTRUCCION, IGUAL, PRINTLN, TRUE, FALSE, CARACTER, COMA, DOS_PUNTOS;
-
+terminal RBRACE, FIN_INSTRUCCION, PRINTLN, CARACTER, COMA, DOS_PUNTOS, BOOLEAN;
+terminal IGUAL, EQ;
 //** Simbolos no terminales **//
 nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
 nonterminal Instruccion INSTRUCCION;
@@ -40,7 +40,7 @@ nonterminal Instruccion EXPRESION;
 nonterminal Tipo TIPO;
 
 //** Precedencia **//
-precedence left IGUAL;
+precedence left EQ, NE, MENOR, MENOR_IGUAL, MAYOR, MAYOR_IGUAL;
 precedence left MAS, MENOS;
 precedence left TIMES, DIVIDE, MOD;
 precedence left UMENOS;
@@ -60,21 +60,30 @@ INSTRUCCION ::= PRINT: a      {:   RESULT = a;   :}
 ;
 
 PRINT ::= PRINTLN LPAREN EXPRESION:a RPAREN FIN_INSTRUCCION      {:   RESULT = new Print(a, aleft, aright);   :};
-//TIPOS ::= INT       {:   RESULT=new Tipo(tipoDato.ENTERO);   :}
-//        | DOUBLE    {:   RESULT=new Tipo(tipoDato.DECIMAL);   :}
-//        | STRING    {:   RESULT=new Tipo(tipoDato.CADENA);   :}
-//;
 
-EXPRESION ::= MENOS EXPRESION:a             {:   RESULT = new Aritmeticas(a, OperadoresAritmeticos.NEGACION, aleft, aright);   :} %prec UMENOS
-            | EXPRESION:a MAS EXPRESION:b   {:   RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.SUMA, aleft, aright);   :}
-            | EXPRESION:a MENOS EXPRESION:b {:   RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.RESTA, aleft, aright);  :}
-            | EXPRESION:a TIMES EXPRESION:b {:   RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.MULTIPLICACION, aleft, aright);  :}
-            | EXPRESION:a DIVIDE EXPRESION:b   {:   RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.DIVISION, aleft, aright);  :}
-            | LPAREN EXPRESION:a RPAREN     {:   RESULT = a; :}
-            | ENTERO:a      {:   RESULT = new Nativo(Integer.parseInt(a), new Tipo(TipoDeDato.INT), aleft, aright );   :}
-            | DECIMAL:a     {:   RESULT = new Nativo(Double.parseDouble(a), new Tipo(TipoDeDato.DOUBLE), aleft, aright );   :}
-            | CARACTER:a     {:   RESULT = new Nativo(a, new Tipo(TipoDeDato.CHAR), aleft, aright );   :}
-            | CADENA:a      {:   RESULT = new Nativo(a, new Tipo(TipoDeDato.STRING), aleft, aright );   :}
-        //    | EXPRESION:a IGUAL IGUAL EXPRESION:b {:    RESULT = new Relacionales(a, b, OperadoresRelacionales.EQUALS, aleft, aright);    :}%prec ASSIGN
+TIPOS ::= INT       {:   RESULT = new Tipo(TipoDeDato.INT);   :}
+        | DOUBLE    {:   RESULT = new Tipo(TipoDeDato.DOUBLE);   :}
+        | STRING    {:   RESULT = new Tipo(TipoDeDato.STRING);   :}
+;
+
+EXPRESION ::= MENOS EXPRESION:a                     {:  RESULT = new Aritmeticas(a, OperadoresAritmeticos.NEGACION, aleft, aright); :} %prec UMENOS
+            | EXPRESION:a MAS EXPRESION:b           {:  RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.SUMA, aleft, aright);  :}
+            | EXPRESION:a MENOS EXPRESION:b         {:  RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.RESTA, aleft, aright); :}
+            | EXPRESION:a TIMES EXPRESION:b         {:  RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.MULTIPLICACION, aleft, aright);    :}
+            | EXPRESION:a TIMES TIMES EXPRESION:b   {:  RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.POTENCIA, aleft, aright);  :}
+            | EXPRESION:a MOD EXPRESION:b           {:  RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.MODULO, aleft, aright);    :}
+            | EXPRESION:a DIVIDE EXPRESION:b        {:  RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.DIVISION, aleft, aright);  :}
+            | EXPRESION:a IGUAL IGUAL EXPRESION:b   {:  RESULT = new Relacionales(a, b, OpRelacional.IGUAL, aleft, aright); :}%prec EQ
+            | EXPRESION:a NE EXPRESION:b            {:  RESULT = new Relacionales(a, b, OpRelacional.DIFERENCIACION, aleft, aright); :}
+            | EXPRESION:a MENOR EXPRESION:b         {:  RESULT = new Relacionales(a, b, OpRelacional.MENOR, aleft, aright); :}
+            | EXPRESION:a MAYOR EXPRESION:b         {:  RESULT = new Relacionales(a, b, OpRelacional.MAYOR, aleft, aright); :}
+            | EXPRESION:a MENOR_IGUAL EXPRESION:b   {:  RESULT = new Relacionales(a, b, OpRelacional.MENOR_IGUAL, aleft, aright);   :}
+            | EXPRESION:a MAYOR_IGUAL EXPRESION:b   {:  RESULT = new Relacionales(a, b, OpRelacional.MAYOR_IGUAL, aleft, aright);   :}
+            | LPAREN EXPRESION:a RPAREN             {:  RESULT = a; :}
+            | ENTERO:a                              {:  RESULT = new Nativo(Integer.parseInt(a), new Tipo(TipoDeDato.INT), aleft, aright ); :}
+            | DECIMAL:a                             {:  RESULT = new Nativo(Double.parseDouble(a), new Tipo(TipoDeDato.DOUBLE), aleft, aright );    :}
+            | CARACTER:a                            {:  RESULT = new Nativo(a, new Tipo(TipoDeDato.CHAR), aleft, aright );  :}
+            | CADENA:a                              {:  RESULT = new Nativo(a, new Tipo(TipoDeDato.STRING), aleft, aright );    :}
+            | BOOLEAN:a                             {:  RESULT = new Nativo(Boolean.parseBoolean((String) a), new Tipo(TipoDeDato.BOOLEAN), aleft, aright );    :}
            // | ID:a          {:   RESULT = new AccesoVar(a, aleft, aright);   :}
 ;
