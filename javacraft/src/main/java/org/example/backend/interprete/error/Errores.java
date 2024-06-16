@@ -10,11 +10,11 @@ public class Errores {
     private int linea;
     private int columa;
 
-    public Errores(TipoError tipo, String desc, int lineaa, int columaa) {
+    public Errores(TipoError tipo, String desc, int lineaa, int columa) {
         this.tipo = tipo;
         this.descripcion = desc;
         this.linea = lineaa;
-        this.columa = columaa;
+        this.columa = columa;
     }
 
     public TipoError getTipo() {

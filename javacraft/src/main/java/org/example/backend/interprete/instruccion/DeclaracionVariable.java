@@ -20,25 +20,42 @@ public class DeclaracionVariable extends Instruccion {
         this.esConstante = esConstante;
     }
 
+    public DeclaracionVariable(boolean esConstante, String identificador, Tipo tipo, int linea, int columna) {
+        super(tipo, linea, columna);
+        this.identificador = identificador;
+        this.esConstante = esConstante;
+    }
+
     @Override
     public Object interpretar(Tree arbol, TablaSimbolo tabla) {
-        var valorInterpretado = this.valor.interpretar(arbol, tabla);
+        if (valor == null) {
+            Simbolo sym = new Simbolo(this.tipo, this.identificador);
+            sym.setEsConstante(this.esConstante);
+            boolean creacion = tabla.setVariable(sym);
+            if (!creacion) {
+                return new Errores(TipoError.SEMANTICO, "Variable ya existente", this.linea, this.columna);
+            }
+        } else {
 
-        //validamos si es error
-        if (valorInterpretado instanceof Errores) {
-            return valorInterpretado;
-        }
 
-        //validamos los tipo
-        if (this.valor.tipo.getTipo() != this.tipo.getTipo()) {
-            return new Errores(TipoError.SEMANTICO, "Tipos erroneos", this.linea, this.columna);
-        }
+            var valorInterpretado = this.valor.interpretar(arbol, tabla);
 
-        Simbolo s = new Simbolo(this.tipo, this.identificador, valorInterpretado);
-        s.setEsConstante(this.esConstante);
-        boolean creacion = tabla.setVariable(s);
-        if (!creacion) {
-            return new Errores(TipoError.SEMANTICO, "Variable ya existente", this.linea, this.columna);
+            //validamos si es error
+            if (valorInterpretado instanceof Errores) {
+                return valorInterpretado;
+            }
+
+            //validamos los tipo
+            if (this.valor.tipo.getTipo() != this.tipo.getTipo()) {
+                return new Errores(TipoError.SEMANTICO, "Tipos erroneos", this.linea, this.columna);
+            }
+
+            Simbolo s = new Simbolo(this.tipo, this.identificador, valorInterpretado);
+            s.setEsConstante(this.esConstante);
+            boolean creacion = tabla.setVariable(s);
+            if (!creacion) {
+                return new Errores(TipoError.SEMANTICO, "Variable ya existente", this.linea, this.columna);
+            }
         }
         return null;
     }

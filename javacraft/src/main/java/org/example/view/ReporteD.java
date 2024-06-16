@@ -4,11 +4,18 @@
  */
 package org.example.view;
 
+import org.example.backend.interprete.error.Errores;
+
+import javax.swing.table.DefaultTableModel;
+import java.util.LinkedList;
+import org.example.backend.interprete.simbol.Simbolo;
+
 /**
- *
  * @author giovanic
  */
 public class ReporteD extends java.awt.Dialog {
+
+    private DefaultTableModel modelo;
 
     /**
      * Creates new form ReporteD
@@ -17,6 +24,7 @@ public class ReporteD extends java.awt.Dialog {
         super(parent, true);
         initComponents();
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -36,15 +44,15 @@ public class ReporteD extends java.awt.Dialog {
         });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
+                new Object[][]{
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null}
+                },
+                new String[]{
+                        "Title 1", "Title 2", "Title 3", "Title 4"
+                }
         ));
         jScrollPane1.setViewportView(jTable1);
 
@@ -61,6 +69,47 @@ public class ReporteD extends java.awt.Dialog {
         dispose();
     }//GEN-LAST:event_closeDialog
 
+    public void loadTable(LinkedList<Errores> err, String[] nombreCol) {
+        //TipoError tipo, String desc, int lineaa, int columa
+        String[] nombreColumnas = nombreCol;
+        modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(nombreColumnas);
+
+        while (modelo.getRowCount() > 0) {
+            modelo.removeRow(0);
+        }
+
+        for (Errores errores : err) {
+            Object[] tmp = new Object[4];
+            tmp[0] = errores.getTipo();
+            tmp[1] = errores.getdescripcion();
+            tmp[2] = errores.getlinea();
+            tmp[3] = errores.getcoluma();
+            modelo.addRow(tmp);
+        }
+        jTable1.setModel(modelo);
+    }
+    
+    public void loadTable2(LinkedList<Simbolo> sym, String[] nombreCol) {
+        //TipoError tipo, String desc, int lineaa, int columa
+        String[] nombreColumnas = nombreCol;
+        modelo = new DefaultTableModel();
+        modelo.setColumnIdentifiers(nombreColumnas);
+
+        while (modelo.getRowCount() > 0) {
+            modelo.removeRow(0);
+        }
+
+        for (Simbolo s : sym) {
+            Object[] tmp = new Object[4];
+            tmp[0] = s.getTipo();
+            tmp[1] = s.getId();
+            tmp[2] = s.getValue();
+            tmp[3] = s.isEsConstante();
+            modelo.addRow(tmp);
+        }
+        jTable1.setModel(modelo);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

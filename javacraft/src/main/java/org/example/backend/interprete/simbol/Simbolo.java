@@ -21,6 +21,18 @@ public class Simbolo {
         this.tipo = tipo;
         this.id = id;
         this.esConstante = false;
+        assignAuto();
+    }
+
+    public void assignAuto() {
+        var aux = this.tipo.getTipo();
+        switch (aux) {
+            case INT -> this.setValue(0);
+            case DOUBLE -> this.setValue(0.0);
+            case BOOLEAN -> this.setValue(true);
+            case CHAR -> this.setValue('\u0000');
+            case STRING -> this.setValue("");
+        }
     }
 
     public Tipo getTipo() {

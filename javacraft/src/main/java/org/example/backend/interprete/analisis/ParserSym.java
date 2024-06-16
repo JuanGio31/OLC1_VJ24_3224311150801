@@ -15,6 +15,7 @@ public class ParserSym {
   public static final int ENTERO = 3;
   public static final int XOR = 28;
   public static final int DOUBLE = 10;
+  public static final int CONTINUE = 46;
   public static final int DOS_PUNTOS = 43;
   public static final int LPAREN = 6;
   public static final int INT = 9;
@@ -24,7 +25,7 @@ public class ParserSym {
   public static final int RPAREN = 7;
   public static final int NOT = 29;
   public static final int AND = 27;
-  public static final int IGUAL = 45;
+  public static final int IGUAL = 48;
   public static final int CARACTER = 41;
   public static final int OR = 26;
   public static final int BOOL = 11;
@@ -34,13 +35,15 @@ public class ParserSym {
   public static final int BOOLEAN = 44;
   public static final int EOF = 0;
   public static final int DECIMAL = 4;
+  public static final int RETURN = 47;
   public static final int error = 1;
   public static final int COMA = 42;
   public static final int CADENA = 2;
   public static final int MENOS = 17;
   public static final int MENOR = 22;
   public static final int MOD = 19;
-  public static final int EQ = 46;
+  public static final int BREAK = 45;
+  public static final int EQ = 49;
   public static final int MAYOR = 23;
   public static final int TIMES = 8;
   public static final int LBRACE = 37;
@@ -101,6 +104,9 @@ public class ParserSym {
   "COMA",
   "DOS_PUNTOS",
   "BOOLEAN",
+  "BREAK",
+  "CONTINUE",
+  "RETURN",
   "IGUAL",
   "EQ"
   };

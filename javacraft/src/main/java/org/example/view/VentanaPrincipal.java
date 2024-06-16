@@ -2,10 +2,19 @@ package org.example.view;
 
 import java.awt.Image;
 import java.io.File;
+import java.io.StringReader;
+import java.util.LinkedList;
 import java.util.Objects;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import org.example.backend.interprete.abstracto.Instruccion;
+import org.example.backend.interprete.analisis.Parser;
+import org.example.backend.interprete.analisis.Scan;
+import org.example.backend.interprete.error.Errores;
+import org.example.backend.interprete.simbol.Simbolo;
+import org.example.backend.interprete.simbol.TablaSimbolo;
+import org.example.backend.interprete.simbol.Tree;
 import org.example.backend.util.FilesControl;
 import org.example.backend.util.GestionTab;
 
@@ -16,15 +25,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private final FilesControl control;
     private final GestionTab gestionTab;
+    private LinkedList<Errores> errores;
 
     /**
      * Creates new form VentanaPrincipal
      */
     public VentanaPrincipal() {
         initComponents();
-
+        
         this.control = new FilesControl();
         this.gestionTab = new GestionTab(tab, control);
+        errores = new LinkedList<>();
 
         Image icon = new ImageIcon(getClass().getResource("/logoTransparente.png")).getImage();
         setIconImage(icon);
@@ -128,20 +139,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
-                                        .addComponent(tab)))
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
+                    .addComponent(tab)))
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(tab, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tab, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -179,12 +190,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void verReporteItemMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verReporteItemMenuActionPerformed
         ReporteD rd = new ReporteD(this);
+        rd.loadTable(errores, new String[]{"TIPO", "DESCRIPCION", "LINEA", "COLUMNA"});
         rd.setLocationRelativeTo(null);
         rd.setVisible(true);
     }//GEN-LAST:event_verReporteItemMenuActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-         /*
+
         if (tab.getSelectedIndex() != -1) {
             salidaTxtArea.setText("");
             int index = tab.getSelectedIndex();
@@ -192,26 +204,44 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             String texto = temp.getVistaContenido() + "\n";
             try {
                 StringReader stringReader = new StringReader(texto);
-                Parser parser = new Parser(new Scan(stringReader));
+                Scan scan = new Scan(stringReader);
+                Parser parser = new Parser(scan);
                 var resultado = parser.parse();
                 var ast = new Tree((LinkedList<Instruccion>) resultado.value);
                 var tabla = new TablaSimbolo();
                 tabla.setNombre("GLOBAL");
                 ast.setConsola("");
+                LinkedList<Errores> lista = new LinkedList<>();
+                LinkedList<Simbolo> lis = new LinkedList<>();
+                lista.addAll(scan.listaErrores);
+                lista.addAll(parser.listaErrores);
                 for (var a : ast.getInstrucciones()) {
+                    if (a == null) {
+                        continue;
+                    }
                     var res = a.interpretar(ast, tabla);
+                    if (res instanceof Errores) {
+                        lista.add((Errores) res);
+                    } else {
+                        lis.add((Simbolo) res);
+                    }
                 }
                 System.out.println(ast.getConsola());
-                salidaTxtArea.append(ast.getConsola());
+                salidaTxtArea.setText(ast.getConsola());
+                if (ast.getConsola().isBlank()) {
+                    salidaTxtArea.setText("ERROR");
+                }
+                errores = lista;
+                for (var i : lista) {
+                    System.out.println(i);
+                }
             } catch (Exception ex) {
-                System.out.println("Algo salio mal");
-                //noinspection ThrowablePrintedToSystemOut
                 System.out.println(ex);
-
+                errores.clear();
             }
         }
 
-        */
+
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

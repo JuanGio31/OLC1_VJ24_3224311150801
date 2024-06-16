@@ -1,6 +1,7 @@
 package org.example.backend.interprete.analisis;
 
 import java_cup.runtime.*;
+//import org.apache.commons.text.StringEscapeUtils;
 import org.example.backend.interprete.error.*;
 import java.util.LinkedList;
 
@@ -35,7 +36,7 @@ IDENTIFIER     = [A-Za-z_][A-Za-z0-9_]*
 ENTERO         = [0-9]+
 DECIMAL        = [0-9]+"."[0-9]+
 COMENTARIO     =  {EndOfLineComment} | {ComentarioMultiLine}
-CADENA         = [\"]([^\"])*[\"]
+CADENA         = [\"] {InputCharacter}* [\"]
 CARACTER       = "\'" {CHAR} "\'"
 CHARACTER      = "\'" [^\'] "\'"
 
@@ -86,7 +87,7 @@ CHARACTER      = "\'" [^\'] "\'"
             "!"    {     return symbol(ParserSym.NOT, yytext());     }
 
             /*  Operaciones relacionales    */
-            //"=="   { return symbol(ParserSym.EQ, yytext()); }
+            "=="   { return symbol(ParserSym.EQ, yytext()); }
             "!="   {     return symbol(ParserSym.NE, yytext());          }
             "<"    {     return symbol(ParserSym.MENOR, yytext());       }
             "<="   {     return symbol(ParserSym.MENOR_IGUAL, yytext()); }
@@ -117,9 +118,9 @@ CHARACTER      = "\'" [^\'] "\'"
             "do"       {     return symbol(ParserSym.DO, yytext());  }
 
             /*  Sentencias de tranferencia  */
-//            "break"      { return symbol(ParserSym.BREAK, yytext()); }
-//            "continue"   { return symbol(ParserSym.CONTINUE, yytext()); }
-//            "return"     { return symbol(ParserSym.RETURN, yytext()); }
+            "break"      { return symbol(ParserSym.BREAK, yytext()); }
+            "continue"   { return symbol(ParserSym.CONTINUE, yytext()); }
+            "return"     { return symbol(ParserSym.RETURN, yytext()); }
 
             /*  Funciones   */
             "println"    {     return symbol(ParserSym.PRINTLN, yytext());     }
@@ -141,6 +142,7 @@ CHARACTER      = "\'" [^\'] "\'"
             return symbol(ParserSym.CADENA, cadena);
     }
 
+
     <YYINITIAL>{
             /* Identificadores */
             {IDENTIFIER}    {     return symbol(ParserSym.ID, yytext());           }
@@ -153,4 +155,4 @@ CHARACTER      = "\'" [^\'] "\'"
             {WhiteSpace}+   {     /* no haceer nada */        }
     }
 
- . {     listaErrores.add(new Errores(TipoError.LEXICO, "El caracter no es valido: "+yytext(), yyline, yycolumn));    }
+[^] {     listaErrores.add(new Errores(TipoError.LEXICO, "El caracter no es valido: "+yytext(), yyline, yycolumn));    }

@@ -38,15 +38,17 @@ parser code {:
 terminal String CADENA, ENTERO, DECIMAL, ID;
 terminal LPAREN, RPAREN, TIMES, INT, DOUBLE, BOOL, CHAR, STRING, VAR, CONST, MAS, MENOS, DIVIDE, MOD, UMENOS;
 terminal NE, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL, OR, AND, XOR, NOT, IF, ELSE, WHILE, DO, FOR, MATCH, DEFAULT, LBRACE;
-terminal RBRACE, FIN_INSTRUCCION, PRINTLN, CARACTER, COMA, DOS_PUNTOS, BOOLEAN;
+terminal RBRACE, FIN_INSTRUCCION, PRINTLN, CARACTER, COMA, DOS_PUNTOS, BOOLEAN, BREAK, CONTINUE, RETURN;
 terminal IGUAL, EQ;
+
 //** Simbolos no terminales **//
 nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
 nonterminal Instruccion INSTRUCCION;
+nonterminal Instruccion INCREMENTO, DECREMENTO;
+nonterminal Instruccion SIF;
 nonterminal Instruccion PRINT, DECLARACION, ASIGNACION;
-nonterminal Instruccion EXPRESION;
+nonterminal Instruccion EXPRESION, CAST;
 nonterminal Tipo TIPOS;
-nonterminal Casteo CAST;
 
 //** Precedencia **//
 precedence left OR, AND, XOR;
@@ -55,7 +57,7 @@ precedence left EQ, NE, MENOR, MENOR_IGUAL, MAYOR, MAYOR_IGUAL;
 precedence left MAS, MENOS;
 precedence left TIMES, DIVIDE, MOD;
 precedence right UMENOS;
-precedence left CAST;
+precedence right CAST;
 
 //** Definir gramaticas **//
 start with INICIO;
@@ -73,21 +75,20 @@ INSTRUCCION ::= PRINT: a                {:   RESULT = a;   :}
               | error FIN_INSTRUCCION
 ;
 
-PRINT ::= PRINTLN LPAREN EXPRESION:a RPAREN FIN_INSTRUCCION      {:   RESULT = new Print(a, aleft, aright);   :};
-
-//boolean esConstante, String identificador, Instruccion valor, Tipo tipo, int linea, int columna
-DECLARACION ::= CONST ID:b DOS_PUNTOS TIPOS:a IGUAL EXPRESION:c FIN_INSTRUCCION    {:   RESULT = new DeclaracionVariable(true,b,c,a, aleft, aright);    :}
-              | VAR ID:b DOS_PUNTOS TIPOS:a IGUAL EXPRESION:c FIN_INSTRUCCION      {:   RESULT = new DeclaracionVariable(false,b,c,a, aleft, aright);   :}
-              | CONST ID:b DOS_PUNTOS TIPOS:a IGUAL CAST:c                         {:   RESULT = new DeclaracionVariable(true,b,c,a, aleft, aright);    :}
-              | VAR ID:b DOS_PUNTOS TIPOS:a IGUAL CAST:c                           {:   RESULT = new DeclaracionVariable(false,b,c,a, aleft, aright);   :}
+PRINT ::= PRINTLN LPAREN EXPRESION:a RPAREN FIN_INSTRUCCION      {:     RESULT = new Print(a, aleft, aright);   :}
 ;
 
-//String id, Instruccion expresion, int linea, int columna
+//boolean esConstante, String identificador, Instruccion valor, Tipo tipo, int linea, int columna
+DECLARACION ::= CONST ID:b DOS_PUNTOS TIPOS:a IGUAL EXPRESION:c FIN_INSTRUCCION    {:   RESULT = new DeclaracionVariable(true, b, c, a, aleft, aright);    :}
+              | VAR ID:b DOS_PUNTOS TIPOS:a IGUAL EXPRESION:c FIN_INSTRUCCION      {:   RESULT = new DeclaracionVariable(false, b, c, a, aleft, aright);   :}
+              | CONST ID:a DOS_PUNTOS TIPOS:b FIN_INSTRUCCION                      {:   RESULT = new DeclaracionVariable(true, a, b, aleft, aright);   :}
+              | VAR ID:a DOS_PUNTOS TIPOS:b FIN_INSTRUCCION                        {:   RESULT = new DeclaracionVariable(false, a, b, aleft, aright);   :}
+;
+
 ASIGNACION ::= ID:a IGUAL EXPRESION:b FIN_INSTRUCCION  {:   RESULT = new AsignacionVariable(a, b, aleft, aright);  :}
 ;
 
-//TipoDeDato castear, Instruccion exp, int linea, int columna
-CAST ::= LPAREN TIPOS:a RPAREN EXPRESION:b FIN_INSTRUCCION    {:  RESULT = new Casteo(a, b, aleft, aright);  :}
+SIF ::= IF LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE      {:   RESULT = new If(a, b, aleft, aright);   :}
 ;
 
 TIPOS ::= INT       {:   RESULT = new Tipo(TipoDeDato.INT);   :}
@@ -104,7 +105,7 @@ EXPRESION ::= MENOS EXPRESION:a                     {:  RESULT = new Aritmeticas
             | EXPRESION:a TIMES TIMES EXPRESION:b   {:  RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.POTENCIA, aleft, aright);  :}
             | EXPRESION:a MOD EXPRESION:b           {:  RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.MODULO, aleft, aright);    :}
             | EXPRESION:a DIVIDE EXPRESION:b        {:  RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.DIVISION, aleft, aright);  :}
-            | EXPRESION:a IGUAL IGUAL EXPRESION:b   {:  RESULT = new Relacionales(a, b, OpRelacional.IGUAL, aleft, aright); :}%prec EQ
+            | EXPRESION:a EQ EXPRESION:b            {:  RESULT = new Relacionales(a, b, OpRelacional.IGUAL, aleft, aright); :}%prec EQ
             | EXPRESION:a NE EXPRESION:b            {:  RESULT = new Relacionales(a, b, OpRelacional.DIFERENCIACION, aleft, aright); :}
             | EXPRESION:a MENOR EXPRESION:b         {:  RESULT = new Relacionales(a, b, OpRelacional.MENOR, aleft, aright); :}
             | EXPRESION:a MAYOR EXPRESION:b         {:  RESULT = new Relacionales(a, b, OpRelacional.MAYOR, aleft, aright); :}
@@ -113,6 +114,7 @@ EXPRESION ::= MENOS EXPRESION:a                     {:  RESULT = new Aritmeticas
             | EXPRESION:a OR EXPRESION:b            {:  RESULT = new Logicos(a, b, OpLogicos.OR, aleft, aright); :}%prec OR
             | EXPRESION:a AND EXPRESION:b           {:  RESULT = new Logicos(a, b, OpLogicos.AND, aleft, aright); :}
             | EXPRESION:a XOR EXPRESION:b           {:  RESULT = new Logicos(a, b, OpLogicos.XOR, aleft, aright); :}
+            | LPAREN TIPOS:a RPAREN EXPRESION:b     {:  RESULT = new Casteo(a, b, aleft, aright);  :} %prec CAST
             | NOT EXPRESION:a                       {:  RESULT = new Logicos(a, OpLogicos.NOT, aleft, aright); :}
             | LPAREN EXPRESION:a RPAREN             {:  RESULT = a; :}
             | ENTERO:a                              {:  RESULT = new Nativo(Integer.parseInt(a), new Tipo(TipoDeDato.INT), aleft, aright ); :}

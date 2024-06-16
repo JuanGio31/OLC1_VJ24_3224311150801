@@ -1,0 +1,83 @@
+/* Gramática en BNF con notación ajustada */
+
+/* Definición de símbolos terminales */
+"CADENA", "ENTERO", "DECIMAL", "ID", "LPAREN", "RPAREN", "TIMES", "INT",
+"DOUBLE", "BOOL", "CHAR", "STRING", "VAR", "CONST", "MAS", "MENOS", "DIVIDE",
+"MOD", "UMENOS", "NE", "MENOR", "MAYOR", "MENOR_IGUAL", "MAYOR_IGUAL", "OR",
+"AND", "XOR", "NOT", "IF", "ELSE", "WHILE", "DO", "FOR", "MATCH", "DEFAULT",
+"LBRACE", "RBRACE", "FIN_INSTRUCCION", "PRINTLN", "CARACTER", "COMA",
+"DOS_PUNTOS", "BOOLEAN", "IGUAL", "EQ";
+
+/* Definición de símbolos no terminales */
+<INICIO>, <INSTRUCCIONES>,
+<INSTRUCCION>, <PRINT>, <DECLARACION>, <ASIGNACION>,<EXPRESION>, <CAST>,
+<TIPOS>
+
+/* Reglas de producción */
+
+<INICIO> ::= <INSTRUCCIONES>
+             ;
+
+
+<INSTRUCCIONES> ::= <INSTRUCCIONES> <INSTRUCCION>
+                   | <INSTRUCCION>
+                   ;
+
+
+<INSTRUCCION> ::= <PRINT>
+                | <DECLARACION>
+                | <ASIGNACION>
+                | error "FIN_INSTRUCCION"
+                ;
+
+
+<PRINT> ::= "PRINTLN" "LPAREN" <EXPRESION> "RPAREN" "FIN_INSTRUCCION"
+            ;
+
+
+<DECLARACION> ::= "CONST" "ID" "DOS_PUNTOS" <TIPOS> "IGUAL" <EXPRESION>
+                        "FIN_INSTRUCCION"
+                | "VAR" "ID" "DOS_PUNTOS" <TIPOS> "IGUAL" <EXPRESION>
+                        "FIN_INSTRUCCION"
+                | "CONST" "ID" "DOS_PUNTOS" <TIPOS> "FIN_INSTRUCCION"
+                | "VAR" "ID" "DOS_PUNTOS" <TIPOS> "FIN_INSTRUCCION"
+                ;
+
+<ASIGNACION> ::= "ID" "IGUAL" <EXPRESION> "FIN_INSTRUCCION"
+               ;
+
+
+<TIPOS> ::= "INT"
+          | "DOUBLE"
+          | "BOOL"
+          | "CHAR"
+          | "STRING"
+          ;
+
+
+<EXPRESION> ::= "MENOS" <EXPRESION>
+              | <EXPRESION> "MAS" <EXPRESION>
+              | <EXPRESION> "MENOS" <EXPRESION>
+              | <EXPRESION> "TIMES" <EXPRESION>
+              | <EXPRESION> "TIMES" "TIMES" <EXPRESION>
+              | <EXPRESION> "MOD" <EXPRESION>
+              | <EXPRESION> "DIVIDE" <EXPRESION>
+              | <EXPRESION> "EQ" <EXPRESION>
+              | <EXPRESION> "NE" <EXPRESION>
+              | <EXPRESION> "MENOR" <EXPRESION>
+              | <EXPRESION> "MAYOR" <EXPRESION>
+              | <EXPRESION> "MENOR_IGUAL" <EXPRESION>
+              | <EXPRESION> "MAYOR_IGUAL" <EXPRESION>
+              | <EXPRESION> "OR" <EXPRESION>
+              | <EXPRESION> "AND" <EXPRESION>
+              | <EXPRESION> "XOR" <EXPRESION>
+              | "LPAREN" <TIPOS> "RPAREN" <EXPRESION>
+              | "NOT" <EXPRESION>
+              | "LPAREN" <EXPRESION> "RPAREN"
+              | "ENTERO"
+              | "DECIMAL"
+              | "CARACTER"
+              | "CADENA"
+              | "BOOLEAN"
+              | "ID"
+              ;
