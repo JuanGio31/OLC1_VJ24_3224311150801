@@ -35,15 +35,17 @@ terminal IGUAL, EQ;
 //** Simbolos no terminales **//
 nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
 nonterminal Instruccion INSTRUCCION;
-nonterminal Instruccion PRINT;
+nonterminal Instruccion PRINT, DECLARACION, ASIGNACION;
 nonterminal Instruccion EXPRESION;
-nonterminal Tipo TIPO;
+nonterminal Tipo TIPOS;
 
 //** Precedencia **//
+precedence left OR, AND, XOR;
+precedence right NOT;
 precedence left EQ, NE, MENOR, MENOR_IGUAL, MAYOR, MAYOR_IGUAL;
 precedence left MAS, MENOS;
 precedence left TIMES, DIVIDE, MOD;
-precedence left UMENOS;
+precedence right UMENOS;
 
 //** Definir gramaticas **//
 start with INICIO;
@@ -55,14 +57,27 @@ INSTRUCCIONES ::= INSTRUCCIONES:a INSTRUCCION:b     {: RESULT = a; RESULT.add(b)
                 | INSTRUCCION:a                   {: RESULT = new LinkedList<>(); RESULT.add(a); :}
 ;
 
-INSTRUCCION ::= PRINT: a      {:   RESULT = a;   :}
-                | error FIN_INSTRUCCION
+INSTRUCCION ::= PRINT: a                {:   RESULT = a;   :}
+              | DECLARACION: a          {:   RESULT = a;   :}
+              | ASIGNACION: a           {:   RESULT = a;   :}
+              | error FIN_INSTRUCCION
 ;
 
 PRINT ::= PRINTLN LPAREN EXPRESION:a RPAREN FIN_INSTRUCCION      {:   RESULT = new Print(a, aleft, aright);   :};
 
+//boolean esConstante, String identificador, Instruccion valor, Tipo tipo, int linea, int columna
+DECLARACION ::= CONST ID:b DOS_PUNTOS TIPOS:a IGUAL EXPRESION:c FIN_INSTRUCCION    {:   RESULT = new DeclaracionVariable(true,b,c,a, aleft, aright);    :}
+              | VAR ID:b DOS_PUNTOS TIPOS:a IGUAL EXPRESION:c FIN_INSTRUCCION      {:   RESULT = new DeclaracionVariable(false,b,c,a, aleft, aright);   :}
+;
+
+//String id, Instruccion expresion, int linea, int columna
+ASIGNACION ::= ID:a IGUAL EXPRESION:b FIN_INSTRUCCION  {:   RESULT = new AsignacionVariable(a, b, aleft, aright);  :}
+;
+
 TIPOS ::= INT       {:   RESULT = new Tipo(TipoDeDato.INT);   :}
         | DOUBLE    {:   RESULT = new Tipo(TipoDeDato.DOUBLE);   :}
+        | BOOL      {:   RESULT = new Tipo(TipoDeDato.BOOLEAN);   :}
+        | CHAR      {:   RESULT = new Tipo(TipoDeDato.CHAR);   :}
         | STRING    {:   RESULT = new Tipo(TipoDeDato.STRING);   :}
 ;
 
@@ -79,11 +94,15 @@ EXPRESION ::= MENOS EXPRESION:a                     {:  RESULT = new Aritmeticas
             | EXPRESION:a MAYOR EXPRESION:b         {:  RESULT = new Relacionales(a, b, OpRelacional.MAYOR, aleft, aright); :}
             | EXPRESION:a MENOR_IGUAL EXPRESION:b   {:  RESULT = new Relacionales(a, b, OpRelacional.MENOR_IGUAL, aleft, aright);   :}
             | EXPRESION:a MAYOR_IGUAL EXPRESION:b   {:  RESULT = new Relacionales(a, b, OpRelacional.MAYOR_IGUAL, aleft, aright);   :}
+            | EXPRESION:a OR EXPRESION:b            {:  RESULT = new Logicos(a, b, OpLogicos.OR, aleft, aright); :}%prec OR
+            | EXPRESION:a AND EXPRESION:b           {:  RESULT = new Logicos(a, b, OpLogicos.AND, aleft, aright); :}
+            | EXPRESION:a XOR EXPRESION:b           {:  RESULT = new Logicos(a, b, OpLogicos.XOR, aleft, aright); :}
+            | NOT EXPRESION:a                       {:  RESULT = new Logicos(a, OpLogicos.NOT, aleft, aright); :}
             | LPAREN EXPRESION:a RPAREN             {:  RESULT = a; :}
             | ENTERO:a                              {:  RESULT = new Nativo(Integer.parseInt(a), new Tipo(TipoDeDato.INT), aleft, aright ); :}
             | DECIMAL:a                             {:  RESULT = new Nativo(Double.parseDouble(a), new Tipo(TipoDeDato.DOUBLE), aleft, aright );    :}
             | CARACTER:a                            {:  RESULT = new Nativo(a, new Tipo(TipoDeDato.CHAR), aleft, aright );  :}
             | CADENA:a                              {:  RESULT = new Nativo(a, new Tipo(TipoDeDato.STRING), aleft, aright );    :}
             | BOOLEAN:a                             {:  RESULT = new Nativo(Boolean.parseBoolean((String) a), new Tipo(TipoDeDato.BOOLEAN), aleft, aright );    :}
-           // | ID:a          {:   RESULT = new AccesoVar(a, aleft, aright);   :}
+            | ID:a                                  {:  RESULT = new AccesoVariable(a, aleft, aright);   :}
 ;

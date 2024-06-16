@@ -39,7 +39,6 @@ public class Relacionales extends Instruccion {
             case MENOR_IGUAL -> this.opMenorEq(condIzq, condDer);
             case IGUAL -> this.opIgual(condIzq, condDer);
             case DIFERENCIACION -> this.opDiferenciacion(condIzq, condDer);
-            //case NEGACION -> this.negacion(Unico);
             default -> new ErrorM(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
         };
     }

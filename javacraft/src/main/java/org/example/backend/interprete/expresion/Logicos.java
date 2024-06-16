@@ -8,6 +8,8 @@ import org.example.backend.interprete.simbol.Tipo;
 import org.example.backend.interprete.simbol.TipoDeDato;
 import org.example.backend.interprete.simbol.Tree;
 
+import java.util.Objects;
+
 public class Logicos extends Instruccion {
     private Instruccion operando1;
     private Instruccion operando2;
@@ -56,26 +58,37 @@ public class Logicos extends Instruccion {
     }
 
     private Object opNot(Object unico) {
-
-        return null;
+        var opU = this.operandoUnico.tipo.getTipo();
+        if (Objects.requireNonNull(opU) == TipoDeDato.BOOLEAN) {
+            return !Boolean.parseBoolean(String.valueOf(unico));
+        }
+        return new ErrorM(TipoError.SEMANTICO, "Negacion erronea", this.linea, this.columna);
     }
 
     private Object opXor(Object expr1, Object expr2) {
-        return null;
+        var op1 = this.operando1.tipo.getTipo();
+        var op2 = this.operando2.tipo.getTipo();
+        if (Objects.requireNonNull(op1) == TipoDeDato.BOOLEAN && Objects.requireNonNull(op2) == TipoDeDato.BOOLEAN) {
+            return Boolean.parseBoolean(String.valueOf(expr1)) ^ Boolean.parseBoolean(String.valueOf(expr2));
+        }
+        return new ErrorM(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
     }
 
     private Object opOr(Object expr1, Object expr2) {
-        return null;
+        var op1 = this.operando1.tipo.getTipo();
+        var op2 = this.operando2.tipo.getTipo();
+        if (Objects.requireNonNull(op1) == TipoDeDato.BOOLEAN && Objects.requireNonNull(op2) == TipoDeDato.BOOLEAN) {
+            return Boolean.parseBoolean(String.valueOf(expr1)) || Boolean.parseBoolean(String.valueOf(expr2));
+        }
+        return new ErrorM(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
     }
 
     private Object opAnd(Object expr1, Object expr2) {
-        return null;
+        var op1 = this.operando1.tipo.getTipo();
+        var op2 = this.operando2.tipo.getTipo();
+        if (Objects.requireNonNull(op1) == TipoDeDato.BOOLEAN && Objects.requireNonNull(op2) == TipoDeDato.BOOLEAN) {
+            return Boolean.parseBoolean(String.valueOf(expr1)) && Boolean.parseBoolean(String.valueOf(expr2));
+        }
+        return new ErrorM(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
     }
 }
-/*
-    //negacion
-    public Aritmeticas(Instruccion operandoUnico, OperadoresAritmeticos operacion, int linea, int col) {
-        super(new Tipo(TipoDeDato.INT), linea, col);
-        this.operacion = operacion;
-        this.operandoUnico = operandoUnico;
- */
