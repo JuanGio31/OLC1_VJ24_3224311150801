@@ -2,7 +2,7 @@ package org.example.backend.interprete.instruccion;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.example.backend.interprete.abstracto.Instruccion;
-import org.example.backend.interprete.error.ErrorM;
+import org.example.backend.interprete.error.Errores;
 import org.example.backend.interprete.simbol.TipoDeDato;
 import org.example.backend.interprete.simbol.TablaSimbolo;
 import org.example.backend.interprete.simbol.Tipo;
@@ -23,7 +23,7 @@ public class Print extends Instruccion {
     @Override
     public Object interpretar(Tree arbol, TablaSimbolo tabla) {
         var resultado = this.expresion.interpretar(arbol, tabla);
-        if (resultado instanceof ErrorM) {
+        if (resultado instanceof Errores) {
             return resultado;
         }
         String res = StringEscapeUtils.unescapeJava(resultado.toString());

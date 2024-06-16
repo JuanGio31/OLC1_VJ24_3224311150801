@@ -3,14 +3,14 @@ package org.example.backend.interprete.error;
 /**
  * @author giovanic
  */
-public class ErrorM {
+public class Errores {
 
     private TipoError tipo;
     private String descripcion;
     private int linea;
     private int columa;
 
-    public ErrorM(TipoError tipo, String desc, int lineaa, int columaa) {
+    public Errores(TipoError tipo, String desc, int lineaa, int columaa) {
         this.tipo = tipo;
         this.descripcion = desc;
         this.linea = lineaa;

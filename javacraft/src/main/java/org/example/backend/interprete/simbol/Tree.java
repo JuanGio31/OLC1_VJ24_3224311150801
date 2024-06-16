@@ -2,7 +2,7 @@ package org.example.backend.interprete.simbol;
 
 import java.util.LinkedList;
 import org.example.backend.interprete.abstracto.Instruccion;
-import org.example.backend.interprete.error.ErrorM;
+import org.example.backend.interprete.error.Errores;
 
 /**
  *
@@ -13,7 +13,7 @@ public class Tree {
     private LinkedList<Instruccion> instrucciones;
     private String consola;
     private TablaSimbolo tablaGlobal;
-    private LinkedList<ErrorM> errores;
+    private LinkedList<Errores> errores;
 
     public Tree(LinkedList<Instruccion> instrucciones) {
         this.instrucciones = instrucciones;

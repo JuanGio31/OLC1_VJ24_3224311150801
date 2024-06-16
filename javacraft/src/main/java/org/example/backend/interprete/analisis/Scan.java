@@ -314,17 +314,17 @@ public class Scan implements java_cup.runtime.Scanner {
   private boolean zzEOFDone;
 
   /* user code: */
-    public LinkedList<ErrorM> errores = new LinkedList<>();
+    public LinkedList<Errores> listaErrores = new LinkedList<>();
 
-    StringBuffer str = new StringBuffer();
+        StringBuffer str = new StringBuffer();
 
-    private Symbol symbol(int tipo){
-        return new Symbol(tipo, yyline, yycolumn);
-    }
+        private Symbol symbol(int tipo){
+            return new Symbol(tipo, yyline, yycolumn);
+        }
 
-    private Symbol symbol(int tipo, Object value){
-        return new Symbol(tipo, yyline, yycolumn, value);
-    }
+        private Symbol symbol(int tipo, Object value){
+            return new Symbol(tipo, yyline, yycolumn, value);
+        }
 
 
   /**
@@ -755,8 +755,7 @@ public class Scan implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { System.err.println("Error: Caracter inesperado " + yytext());
-            errores.add(new ErrorM(TipoError.LEXICO, "El caracter no es valido: "+yytext(), yyline, yycolumn));
+            { listaErrores.add(new Errores(TipoError.LEXICO, "El caracter no es valido: "+yytext(), yyline, yycolumn));
             }
           // fall through
           case 46: break;

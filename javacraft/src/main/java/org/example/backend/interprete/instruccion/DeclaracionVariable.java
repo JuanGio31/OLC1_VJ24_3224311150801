@@ -1,7 +1,7 @@
 package org.example.backend.interprete.instruccion;
 
 import org.example.backend.interprete.abstracto.Instruccion;
-import org.example.backend.interprete.error.ErrorM;
+import org.example.backend.interprete.error.Errores;
 import org.example.backend.interprete.error.TipoError;
 import org.example.backend.interprete.simbol.Simbolo;
 import org.example.backend.interprete.simbol.TablaSimbolo;
@@ -25,20 +25,20 @@ public class DeclaracionVariable extends Instruccion {
         var valorInterpretado = this.valor.interpretar(arbol, tabla);
 
         //validamos si es error
-        if (valorInterpretado instanceof ErrorM) {
+        if (valorInterpretado instanceof Errores) {
             return valorInterpretado;
         }
 
         //validamos los tipo
         if (this.valor.tipo.getTipo() != this.tipo.getTipo()) {
-            return new ErrorM(TipoError.SEMANTICO, "Tipos erroneos", this.linea, this.columna);
+            return new Errores(TipoError.SEMANTICO, "Tipos erroneos", this.linea, this.columna);
         }
 
         Simbolo s = new Simbolo(this.tipo, this.identificador, valorInterpretado);
         s.setEsConstante(this.esConstante);
         boolean creacion = tabla.setVariable(s);
         if (!creacion) {
-            return new ErrorM(TipoError.SEMANTICO, "Variable ya existente", this.linea, this.columna);
+            return new Errores(TipoError.SEMANTICO, "Variable ya existente", this.linea, this.columna);
         }
         return null;
     }

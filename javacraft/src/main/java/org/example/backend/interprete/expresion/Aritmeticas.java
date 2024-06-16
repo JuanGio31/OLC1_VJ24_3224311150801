@@ -1,7 +1,7 @@
 package org.example.backend.interprete.expresion;
 
 import org.example.backend.interprete.abstracto.Instruccion;
-import org.example.backend.interprete.error.ErrorM;
+import org.example.backend.interprete.error.Errores;
 import org.example.backend.interprete.error.TipoError;
 import org.example.backend.interprete.simbol.TablaSimbolo;
 import org.example.backend.interprete.simbol.Tipo;
@@ -34,16 +34,16 @@ public class Aritmeticas extends Instruccion {
         Object opIzq = null, opDer = null, Unico = null;
         if (this.operandoUnico != null) {
             Unico = this.operandoUnico.interpretar(arbol, tabla);
-            if (Unico instanceof ErrorM) {
+            if (Unico instanceof Errores) {
                 return Unico;
             }
         } else {
             opIzq = this.operando1.interpretar(arbol, tabla);
-            if (opIzq instanceof ErrorM) {
+            if (opIzq instanceof Errores) {
                 return opIzq;
             }
             opDer = this.operando2.interpretar(arbol, tabla);
-            if (opDer instanceof ErrorM) {
+            if (opDer instanceof Errores) {
                 return opDer;
             }
         }
@@ -56,7 +56,7 @@ public class Aritmeticas extends Instruccion {
             case POTENCIA -> this.potencia(opIzq, opDer);
             case MODULO -> this.modulo(opIzq, opDer);
             case NEGACION -> this.negacion(Unico);
-            default -> new ErrorM(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
+            default -> new Errores(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
         };
     }
 
@@ -77,14 +77,14 @@ public class Aritmeticas extends Instruccion {
                     }
                     case CHAR -> {
                         this.tipo.setTipo(TipoDeDato.INT);
-                        return (int) op1 + Character.getNumericValue(op2.toString().charAt(0));
+                        return (int) op1 + (int) (op2.toString().charAt(0));
                     }
                     case STRING -> {
                         this.tipo.setTipo(TipoDeDato.STRING);
                         return op1.toString() + op2.toString();
                     }
                     default -> {
-                        return new ErrorM(TipoError.SEMANTICO, "Suma erronea", this.linea, this.columna);
+                        return new Errores(TipoError.SEMANTICO, "Suma erronea", this.linea, this.columna);
                     }
                 }
             }
@@ -100,14 +100,14 @@ public class Aritmeticas extends Instruccion {
                     }
                     case CHAR -> {
                         this.tipo.setTipo(TipoDeDato.DOUBLE);
-                        return (double) op1 + Character.getNumericValue(op2.toString().charAt(0));
+                        return (double) op1 + (int) (op2.toString().charAt(0));
                     }
                     case STRING -> {
                         this.tipo.setTipo(TipoDeDato.STRING);
                         return op1.toString() + op2.toString();
                     }
                     default -> {
-                        return new ErrorM(TipoError.SEMANTICO, "Suma erronea", this.linea, this.columna);
+                        return new Errores(TipoError.SEMANTICO, "Suma erronea", this.linea, this.columna);
                     }
                 }
             }
@@ -115,11 +115,11 @@ public class Aritmeticas extends Instruccion {
                 switch (tipo2) {
                     case INT -> {
                         this.tipo.setTipo(TipoDeDato.INT);
-                        return Character.getNumericValue(op1.toString().charAt(0)) + (int) op2;
+                        return (int) (op1.toString().charAt(0)) + (int) op2;
                     }
                     case DOUBLE -> {
                         this.tipo.setTipo(TipoDeDato.DOUBLE);
-                        return Character.getNumericValue(op1.toString().charAt(0)) + (double) op2;
+                        return (int) (op1.toString().charAt(0)) + (double) op2;
                     }
                     case CHAR -> {
                         this.tipo.setTipo(TipoDeDato.STRING);
@@ -132,7 +132,7 @@ public class Aritmeticas extends Instruccion {
                         return op1.toString() + op2.toString();
                     }
                     default -> {
-                        return new ErrorM(TipoError.SEMANTICO, "Suma erronea", this.linea, this.columna);
+                        return new Errores(TipoError.SEMANTICO, "Suma erronea", this.linea, this.columna);
                     }
                 }
             }
@@ -148,10 +148,10 @@ public class Aritmeticas extends Instruccion {
                     this.tipo.setTipo(TipoDeDato.STRING);
                     return op1.toString() + op2.toString();
                 }
-                return new ErrorM(TipoError.SEMANTICO, "Suma erronea", this.linea, this.columna);
+                return new Errores(TipoError.SEMANTICO, "Suma erronea", this.linea, this.columna);
             }
             default -> {
-                return new ErrorM(TipoError.SEMANTICO, "Suma erronea", this.linea, this.columna);
+                return new Errores(TipoError.SEMANTICO, "Suma erronea", this.linea, this.columna);
 
             }
         }
@@ -174,10 +174,10 @@ public class Aritmeticas extends Instruccion {
                     }
                     case CHAR -> {
                         this.tipo.setTipo(TipoDeDato.INT);
-                        return (int) op1 - Character.getNumericValue(op2.toString().charAt(0));
+                        return (int) op1 - (int) (op2.toString().charAt(0));
                     }
                     default -> {
-                        return new ErrorM(TipoError.SEMANTICO, "Resta erronea", this.linea, this.columna);
+                        return new Errores(TipoError.SEMANTICO, "Resta erronea", this.linea, this.columna);
                     }
                 }
             }
@@ -193,10 +193,10 @@ public class Aritmeticas extends Instruccion {
                     }
                     case CHAR -> {
                         this.tipo.setTipo(TipoDeDato.DOUBLE);
-                        return (double) op1 - Character.getNumericValue(op2.toString().charAt(0));
+                        return (double) op1 - (int) (op2.toString().charAt(0));
                     }
                     default -> {
-                        return new ErrorM(TipoError.SEMANTICO, "Resta erronea", this.linea, this.columna);
+                        return new Errores(TipoError.SEMANTICO, "Resta erronea", this.linea, this.columna);
                     }
                 }
             }
@@ -204,19 +204,19 @@ public class Aritmeticas extends Instruccion {
                 switch (tipo2) {
                     case INT -> {
                         this.tipo.setTipo(TipoDeDato.INT);
-                        return Character.getNumericValue(op1.toString().charAt(0)) - (int) op2;
+                        return (int) (op1.toString().charAt(0)) - (int) op2;
                     }
                     case DOUBLE -> {
                         this.tipo.setTipo(TipoDeDato.DOUBLE);
-                        return Character.getNumericValue(op1.toString().charAt(0)) - (double) op2;
+                        return (int) (op1.toString().charAt(0)) - (double) op2;
                     }
                     default -> {
-                        return new ErrorM(TipoError.SEMANTICO, "Resta erronea", this.linea, this.columna);
+                        return new Errores(TipoError.SEMANTICO, "Resta erronea", this.linea, this.columna);
                     }
                 }
             }
             default -> {
-                return new ErrorM(TipoError.SEMANTICO, "Resta erronea", this.linea, this.columna);
+                return new Errores(TipoError.SEMANTICO, "Resta erronea", this.linea, this.columna);
 
             }
         }
@@ -239,10 +239,10 @@ public class Aritmeticas extends Instruccion {
                     }
                     case CHAR -> {
                         this.tipo.setTipo(TipoDeDato.INT);
-                        return (int) op1 * Character.getNumericValue(op2.toString().charAt(0));
+                        return (int) op1 * (int) (op2.toString().charAt(0));
                     }
                     default -> {
-                        return new ErrorM(TipoError.SEMANTICO, "Multiplicacion erronea", this.linea, this.columna);
+                        return new Errores(TipoError.SEMANTICO, "Multiplicacion erronea", this.linea, this.columna);
                     }
                 }
             }
@@ -258,10 +258,10 @@ public class Aritmeticas extends Instruccion {
                     }
                     case CHAR -> {
                         this.tipo.setTipo(TipoDeDato.DOUBLE);
-                        return (double) op1 * Character.getNumericValue(op2.toString().charAt(0));
+                        return (double) op1 * (int) (op2.toString().charAt(0));
                     }
                     default -> {
-                        return new ErrorM(TipoError.SEMANTICO, "Multiplicacion erronea", this.linea, this.columna);
+                        return new Errores(TipoError.SEMANTICO, "Multiplicacion erronea", this.linea, this.columna);
                     }
                 }
             }
@@ -269,19 +269,19 @@ public class Aritmeticas extends Instruccion {
                 switch (tipo2) {
                     case INT -> {
                         this.tipo.setTipo(TipoDeDato.INT);
-                        return Character.getNumericValue(op1.toString().charAt(0)) * (int) op2;
+                        return (int) (op1.toString().charAt(0)) * (int) op2;
                     }
                     case DOUBLE -> {
                         this.tipo.setTipo(TipoDeDato.DOUBLE);
-                        return Character.getNumericValue(op1.toString().charAt(0)) * (double) op2;
+                        return (int) (op1.toString().charAt(0)) * (double) op2;
                     }
                     default -> {
-                        return new ErrorM(TipoError.SEMANTICO, "Multiplicacion erronea", this.linea, this.columna);
+                        return new Errores(TipoError.SEMANTICO, "Multiplicacion erronea", this.linea, this.columna);
                     }
                 }
             }
             default -> {
-                return new ErrorM(TipoError.SEMANTICO, "Multiplicacion erronea", this.linea, this.columna);
+                return new Errores(TipoError.SEMANTICO, "Multiplicacion erronea", this.linea, this.columna);
 
             }
         }
@@ -300,7 +300,7 @@ public class Aritmeticas extends Instruccion {
 
         if (auxiliar == 0.0) {
             System.out.println("Division por cero");
-            return new ErrorM(TipoError.SEMANTICO, "Division por cero", this.linea, this.columna);
+            return new Errores(TipoError.SEMANTICO, "Division por cero", this.linea, this.columna);
         }
 
         switch (tipo1) {
@@ -312,10 +312,10 @@ public class Aritmeticas extends Instruccion {
                     }
                     case CHAR -> {
                         this.tipo.setTipo(TipoDeDato.DOUBLE);
-                        return (double) Character.getNumericValue(op1.toString().charAt(0)) / auxiliar;
+                        return (double) (op1.toString().charAt(0)) / auxiliar;
                     }
                     default -> {
-                        return new ErrorM(TipoError.SEMANTICO, "Division erronea", this.linea, this.columna);
+                        return new Errores(TipoError.SEMANTICO, "Division erronea", this.linea, this.columna);
                     }
                 }
             }
@@ -323,15 +323,15 @@ public class Aritmeticas extends Instruccion {
                 switch (tipo2) {
                     case INT, DOUBLE -> {
                         this.tipo.setTipo(TipoDeDato.DOUBLE);
-                        return (double) Character.getNumericValue(op1.toString().charAt(0)) / auxiliar;
+                        return (double) (op1.toString().charAt(0)) / auxiliar;
                     }
                     default -> {
-                        return new ErrorM(TipoError.SEMANTICO, "Division erronea", this.linea, this.columna);
+                        return new Errores(TipoError.SEMANTICO, "Division erronea", this.linea, this.columna);
                     }
                 }
             }
             default -> {
-                return new ErrorM(TipoError.SEMANTICO, "Division erronea", this.linea, this.columna);
+                return new Errores(TipoError.SEMANTICO, "Division erronea", this.linea, this.columna);
             }
         }
     }
@@ -361,7 +361,7 @@ public class Aritmeticas extends Instruccion {
             return Math.pow((double) op1, (int) op2);
         }
 
-        return new ErrorM(TipoError.SEMANTICO, "Potencia erronea", this.linea, this.columna);
+        return new Errores(TipoError.SEMANTICO, "Potencia erronea", this.linea, this.columna);
     }
 
     public Object modulo(Object op1, Object op2) {
@@ -386,7 +386,7 @@ public class Aritmeticas extends Instruccion {
             this.tipo.setTipo(TipoDeDato.DOUBLE);
             return Double.parseDouble(op1.toString()) % Integer.parseInt(op2.toString());
         }
-        return new ErrorM(TipoError.SEMANTICO, "Division erronea", this.linea, this.columna);
+        return new Errores(TipoError.SEMANTICO, "Division erronea", this.linea, this.columna);
     }
 
     public Object negacion(Object op1) {
@@ -401,7 +401,7 @@ public class Aritmeticas extends Instruccion {
                 return (double) op1 * -1;
             }
             default -> {
-                return new ErrorM(TipoError.SEMANTICO, "Negacion erronea", this.linea, this.columna);
+                return new Errores(TipoError.SEMANTICO, "Negacion erronea", this.linea, this.columna);
             }
         }
     }

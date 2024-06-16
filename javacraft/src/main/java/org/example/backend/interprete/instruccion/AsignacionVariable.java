@@ -1,7 +1,7 @@
 package org.example.backend.interprete.instruccion;
 
 import org.example.backend.interprete.abstracto.Instruccion;
-import org.example.backend.interprete.error.ErrorM;
+import org.example.backend.interprete.error.Errores;
 import org.example.backend.interprete.error.TipoError;
 import org.example.backend.interprete.simbol.TablaSimbolo;
 import org.example.backend.interprete.simbol.Tipo;
@@ -23,23 +23,23 @@ public class AsignacionVariable extends Instruccion {
         //variable exista
         var variable = tabla.getVariable(id);
         if (variable == null) {
-            return new ErrorM(TipoError.SEMANTICO, "Variable no exitente", this.linea, this.columna);
+            return new Errores(TipoError.SEMANTICO, "Variable no exitente", this.linea, this.columna);
         }
 
         // interpretar el nuevo valor a asignar
         var newValor = this.expresion.interpretar(arbol, tabla);
-        if (newValor instanceof ErrorM) {
+        if (newValor instanceof Errores) {
             return newValor;
         }
 
         //verificar si es constante
         if (variable.isEsConstante()) {
-            return new ErrorM(TipoError.SEMANTICO, "Variable constante", this.linea, this.columna);
+            return new Errores(TipoError.SEMANTICO, "Variable constante", this.linea, this.columna);
         }
 
         //validar tipos
         if (variable.getTipo().getTipo() != this.expresion.tipo.getTipo()) {
-            return new ErrorM(TipoError.SEMANTICO, "Tipos erroneos en asignacion", this.linea, this.columna);
+            return new Errores(TipoError.SEMANTICO, "Tipos erroneos en asignacion", this.linea, this.columna);
         }
         //this.tipo.setTipo(variable.getTipo().getTipo());
         variable.setValue(newValor);

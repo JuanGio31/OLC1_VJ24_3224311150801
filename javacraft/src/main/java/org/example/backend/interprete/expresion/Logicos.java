@@ -1,7 +1,7 @@
 package org.example.backend.interprete.expresion;
 
 import org.example.backend.interprete.abstracto.Instruccion;
-import org.example.backend.interprete.error.ErrorM;
+import org.example.backend.interprete.error.Errores;
 import org.example.backend.interprete.error.TipoError;
 import org.example.backend.interprete.simbol.TablaSimbolo;
 import org.example.backend.interprete.simbol.Tipo;
@@ -34,16 +34,16 @@ public class Logicos extends Instruccion {
         Object expr1 = null, expr2 = null, unico = null;
         if (this.operandoUnico != null) {
             unico = this.operandoUnico.interpretar(arbol, tabla);
-            if (unico instanceof ErrorM) {
+            if (unico instanceof Errores) {
                 return unico;
             }
         } else {
             expr1 = this.operando1.interpretar(arbol, tabla);
-            if (expr1 instanceof ErrorM) {
+            if (expr1 instanceof Errores) {
                 return expr1;
             }
             expr2 = this.operando2.interpretar(arbol, tabla);
-            if (expr2 instanceof ErrorM) {
+            if (expr2 instanceof Errores) {
                 return expr2;
             }
         }
@@ -53,7 +53,7 @@ public class Logicos extends Instruccion {
             case OR -> this.opOr(expr1, expr2);
             case NOT -> this.opNot(unico);
             case XOR -> this.opXor(expr1, expr2);
-            default -> new ErrorM(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
+            default -> new Errores(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
         };
     }
 
@@ -62,7 +62,7 @@ public class Logicos extends Instruccion {
         if (Objects.requireNonNull(opU) == TipoDeDato.BOOLEAN) {
             return !Boolean.parseBoolean(String.valueOf(unico));
         }
-        return new ErrorM(TipoError.SEMANTICO, "Negacion erronea", this.linea, this.columna);
+        return new Errores(TipoError.SEMANTICO, "Negacion erronea", this.linea, this.columna);
     }
 
     private Object opXor(Object expr1, Object expr2) {
@@ -71,7 +71,7 @@ public class Logicos extends Instruccion {
         if (Objects.requireNonNull(op1) == TipoDeDato.BOOLEAN && Objects.requireNonNull(op2) == TipoDeDato.BOOLEAN) {
             return Boolean.parseBoolean(String.valueOf(expr1)) ^ Boolean.parseBoolean(String.valueOf(expr2));
         }
-        return new ErrorM(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
+        return new Errores(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
     }
 
     private Object opOr(Object expr1, Object expr2) {
@@ -80,7 +80,7 @@ public class Logicos extends Instruccion {
         if (Objects.requireNonNull(op1) == TipoDeDato.BOOLEAN && Objects.requireNonNull(op2) == TipoDeDato.BOOLEAN) {
             return Boolean.parseBoolean(String.valueOf(expr1)) || Boolean.parseBoolean(String.valueOf(expr2));
         }
-        return new ErrorM(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
+        return new Errores(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
     }
 
     private Object opAnd(Object expr1, Object expr2) {
@@ -89,6 +89,6 @@ public class Logicos extends Instruccion {
         if (Objects.requireNonNull(op1) == TipoDeDato.BOOLEAN && Objects.requireNonNull(op2) == TipoDeDato.BOOLEAN) {
             return Boolean.parseBoolean(String.valueOf(expr1)) && Boolean.parseBoolean(String.valueOf(expr2));
         }
-        return new ErrorM(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
+        return new Errores(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
     }
 }

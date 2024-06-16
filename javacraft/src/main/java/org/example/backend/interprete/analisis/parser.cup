@@ -4,6 +4,7 @@ import java_cup.runtime.Symbol;
 import java.util.LinkedList;
 import org.example.backend.interprete.abstracto.Instruccion;
 import org.example.backend.interprete.expresion.*;
+import org.example.backend.interprete.error.*;
 import org.example.backend.interprete.simbol.*;
 
 import org.example.backend.interprete.instruccion.*;
@@ -11,17 +12,24 @@ import org.example.backend.interprete.instruccion.*;
 class Parser;
 
 parser code {:
-    
+
+    public LinkedList<Errores> listaErrores = new LinkedList<>();
+
+//TipoError tipo, String desc, int lineaa, int columaa
     public void syntax_error(Symbol s){
-        System.out.println("Error Sintactico en la linea " +
-        (s.left) + " y columna " + (s.right) +
-        ". No se esperaba el componente: " + (s.value) + ".");
+        listaErrores.add(new Errores(
+                        TipoError.SINTACTICO,
+                        ", Recuperable. No se esperaba el componente "+s.value,
+                        s.left,
+                        s.right));
     }
 
     public void unrecovered_syntax_error (Symbol s){
-        System.out.println("Error Sintactico no recuperable en la linea" +
-        (s.left) + " y columna " + (s.right) +
-        ". No se esperaba el componente: " + (s.value) + ".");
+        listaErrores.add(new Errores(
+                        TipoError.SINTACTICO,
+                        ", No Recuperable. No se esperaba el componente "+s.value,
+                        s.left,
+                        s.right));
     }
 :}
 
@@ -38,6 +46,7 @@ nonterminal Instruccion INSTRUCCION;
 nonterminal Instruccion PRINT, DECLARACION, ASIGNACION;
 nonterminal Instruccion EXPRESION;
 nonterminal Tipo TIPOS;
+nonterminal Casteo CAST;
 
 //** Precedencia **//
 precedence left OR, AND, XOR;
@@ -46,6 +55,7 @@ precedence left EQ, NE, MENOR, MENOR_IGUAL, MAYOR, MAYOR_IGUAL;
 precedence left MAS, MENOS;
 precedence left TIMES, DIVIDE, MOD;
 precedence right UMENOS;
+precedence left CAST;
 
 //** Definir gramaticas **//
 start with INICIO;
@@ -68,10 +78,16 @@ PRINT ::= PRINTLN LPAREN EXPRESION:a RPAREN FIN_INSTRUCCION      {:   RESULT = n
 //boolean esConstante, String identificador, Instruccion valor, Tipo tipo, int linea, int columna
 DECLARACION ::= CONST ID:b DOS_PUNTOS TIPOS:a IGUAL EXPRESION:c FIN_INSTRUCCION    {:   RESULT = new DeclaracionVariable(true,b,c,a, aleft, aright);    :}
               | VAR ID:b DOS_PUNTOS TIPOS:a IGUAL EXPRESION:c FIN_INSTRUCCION      {:   RESULT = new DeclaracionVariable(false,b,c,a, aleft, aright);   :}
+              | CONST ID:b DOS_PUNTOS TIPOS:a IGUAL CAST:c                         {:   RESULT = new DeclaracionVariable(true,b,c,a, aleft, aright);    :}
+              | VAR ID:b DOS_PUNTOS TIPOS:a IGUAL CAST:c                           {:   RESULT = new DeclaracionVariable(false,b,c,a, aleft, aright);   :}
 ;
 
 //String id, Instruccion expresion, int linea, int columna
 ASIGNACION ::= ID:a IGUAL EXPRESION:b FIN_INSTRUCCION  {:   RESULT = new AsignacionVariable(a, b, aleft, aright);  :}
+;
+
+//TipoDeDato castear, Instruccion exp, int linea, int columna
+CAST ::= LPAREN TIPOS:a RPAREN EXPRESION:b FIN_INSTRUCCION    {:  RESULT = new Casteo(a, b, aleft, aright);  :}
 ;
 
 TIPOS ::= INT       {:   RESULT = new Tipo(TipoDeDato.INT);   :}
