@@ -66,4 +66,14 @@ public class Simbolo {
     public void setEsConstante(boolean esConstante) {
         this.esConstante = esConstante;
     }
+
+    @Override
+    public String toString() {
+        return "Simbolo{" +
+                "tipo=" + tipo +
+                ", id='" + id + '\'' +
+                ", value=" + value +
+                ", esConstante=" + esConstante +
+                '}';
+    }
 }

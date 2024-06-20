@@ -8,6 +8,7 @@ package org.example.backend.interprete.analisis;
 /** CUP generated class containing symbol constants. */
 public class ParserSym {
   /* terminals */
+  public static final int CAST = 50;
   public static final int DIVIDE = 18;
   public static final int CONST = 15;
   public static final int CHAR = 12;
@@ -108,7 +109,8 @@ public class ParserSym {
   "CONTINUE",
   "RETURN",
   "IGUAL",
-  "EQ"
+  "EQ",
+  "CAST"
   };
 }
 

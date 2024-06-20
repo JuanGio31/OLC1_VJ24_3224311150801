@@ -39,15 +39,15 @@ terminal String CADENA, ENTERO, DECIMAL, ID;
 terminal LPAREN, RPAREN, TIMES, INT, DOUBLE, BOOL, CHAR, STRING, VAR, CONST, MAS, MENOS, DIVIDE, MOD, UMENOS;
 terminal NE, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL, OR, AND, XOR, NOT, IF, ELSE, WHILE, DO, FOR, MATCH, DEFAULT, LBRACE;
 terminal RBRACE, FIN_INSTRUCCION, PRINTLN, CARACTER, COMA, DOS_PUNTOS, BOOLEAN, BREAK, CONTINUE, RETURN;
-terminal IGUAL, EQ;
+terminal IGUAL, EQ, CAST;
 
 //** Simbolos no terminales **//
 nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
+nonterminal LinkedList<Instruccion> CASOS;
 nonterminal Instruccion INSTRUCCION;
-nonterminal Instruccion INCREMENTO, DECREMENTO;
-nonterminal Instruccion SIF;
+nonterminal Instruccion SIF, IMATCH, CASO;
 nonterminal Instruccion PRINT, DECLARACION, ASIGNACION;
-nonterminal Instruccion EXPRESION, CAST;
+nonterminal Instruccion EXPRESION;
 nonterminal Tipo TIPOS;
 
 //** Precedencia **//
@@ -66,12 +66,14 @@ INICIO ::= INSTRUCCIONES:a      {:   RESULT = a;   :}
 ;
 
 INSTRUCCIONES ::= INSTRUCCIONES:a INSTRUCCION:b     {: RESULT = a; RESULT.add(b); :}
-                | INSTRUCCION:a                   {: RESULT = new LinkedList<>(); RESULT.add(a); :}
+                | INSTRUCCION:a                     {: RESULT = new LinkedList<>(); RESULT.add(a); :}
 ;
 
 INSTRUCCION ::= PRINT: a                {:   RESULT = a;   :}
               | DECLARACION: a          {:   RESULT = a;   :}
               | ASIGNACION: a           {:   RESULT = a;   :}
+              | SIF:a                   {:   RESULT = a;   :}
+              | IMATCH:a                {:   RESULT = a;   :}
               | error FIN_INSTRUCCION
 ;
 
@@ -86,10 +88,35 @@ DECLARACION ::= CONST ID:b DOS_PUNTOS TIPOS:a IGUAL EXPRESION:c FIN_INSTRUCCION 
 ;
 
 ASIGNACION ::= ID:a IGUAL EXPRESION:b FIN_INSTRUCCION  {:   RESULT = new AsignacionVariable(a, b, aleft, aright);  :}
+             | ID:a MAS MAS FIN_INSTRUCCION            {:   RESULT = new AsignacionVariable(a,
+                                                                        new Aritmeticas(new AccesoVariable(a, aleft, aright),
+                                                                            OperadoresAritmeticos.INCREMENTO, aleft, aright),
+                                                                                aleft, aright);:}
+             | ID:a MENOS MENOS FIN_INSTRUCCION        {:   RESULT = new AsignacionVariable(a,
+                                                                        new Aritmeticas(new AccesoVariable(a, aleft, aright),
+                                                                            OperadoresAritmeticos.DECREMENTO, aleft, aright),
+                                                                                aleft, aright);:}
 ;
 
 SIF ::= IF LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE      {:   RESULT = new If(a, b, aleft, aright);   :}
+//      | IF LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE
+//            SIF ELSE LBRACE INSTRUCCIONES:c RBRACE
+      | IF LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE
+            ELSE LBRACE INSTRUCCIONES:c RBRACE                          {:   RESULT = new If(a, b, c, aleft, aright);   :}
 ;
+
+CASOS ::= CASOS:a CASO:b     {: RESULT = a; RESULT.add(b); :}
+        | CASO:a             {: RESULT = new LinkedList<>(); RESULT.add(a); :}
+;
+//(Instruccion condicion, LinkedList<Instruccion> instruccions, int linea, int columna)
+CASO ::= EXPRESION:a IGUAL MAYOR LBRACE INSTRUCCIONES:b RBRACE          {:  RESULT = new Caso(a, b, aleft, aright);    :}
+        | DEFAULT LBRACE INSTRUCCIONES:a RBRACE                         {:  RESULT = new DefaultCase(a, aleft, aright); :}
+;
+
+//(Instruccion condicion, LinkedList<Caso> casos, int linea, int columna)
+IMATCH ::= MATCH LPAREN EXPRESION:a RPAREN LBRACE CASOS:c RBRACE               {:  RESULT = new Match(a, c, aleft, aright);   :}
+;
+
 
 TIPOS ::= INT       {:   RESULT = new Tipo(TipoDeDato.INT);   :}
         | DOUBLE    {:   RESULT = new Tipo(TipoDeDato.DOUBLE);   :}
@@ -105,6 +132,8 @@ EXPRESION ::= MENOS EXPRESION:a                     {:  RESULT = new Aritmeticas
             | EXPRESION:a TIMES TIMES EXPRESION:b   {:  RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.POTENCIA, aleft, aright);  :}
             | EXPRESION:a MOD EXPRESION:b           {:  RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.MODULO, aleft, aright);    :}
             | EXPRESION:a DIVIDE EXPRESION:b        {:  RESULT = new Aritmeticas(a, b, OperadoresAritmeticos.DIVISION, aleft, aright);  :}
+            | EXPRESION:a MAS MAS                   {:  RESULT = new Aritmeticas(a, OperadoresAritmeticos.INCREMENTO, aleft, aright);   :}
+            | EXPRESION:a MENOS MENOS               {:  RESULT = new Aritmeticas(a, OperadoresAritmeticos.DECREMENTO, aleft, aright);   :}
             | EXPRESION:a EQ EXPRESION:b            {:  RESULT = new Relacionales(a, b, OpRelacional.IGUAL, aleft, aright); :}%prec EQ
             | EXPRESION:a NE EXPRESION:b            {:  RESULT = new Relacionales(a, b, OpRelacional.DIFERENCIACION, aleft, aright); :}
             | EXPRESION:a MENOR EXPRESION:b         {:  RESULT = new Relacionales(a, b, OpRelacional.MENOR, aleft, aright); :}

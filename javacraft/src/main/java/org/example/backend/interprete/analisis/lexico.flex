@@ -27,17 +27,13 @@ InputCharacter       = [^\r\n]
 CommentContent       = ( [^*] | \*+ [^/*] )*
 ComentarioMultiLine  = "/*" {CommentContent} "*"+ "/"
 EndOfLineComment     = "//" {InputCharacter}* {LineTerminator}?
-WhiteSpace     = {LineTerminator} | [ \t\f]
-
-ESCAPE         = [\n] | [\t] | [\r] | [\"]
-CHAR           = "." | {ESCAPE}
+WhiteSpace           = {LineTerminator} | [ \t\f]
 
 IDENTIFIER     = [A-Za-z_][A-Za-z0-9_]*
 ENTERO         = [0-9]+
 DECIMAL        = [0-9]+"."[0-9]+
 COMENTARIO     =  {EndOfLineComment} | {ComentarioMultiLine}
 CADENA         = [\"] {InputCharacter}* [\"]
-CARACTER       = "\'" {CHAR} "\'"
 CHARACTER      = "\'" [^\'] "\'"
 
 %{
@@ -110,7 +106,7 @@ CHARACTER      = "\'" [^\'] "\'"
             "if"         {     return symbol(ParserSym.IF, yytext());      }
             "else"       {     return symbol(ParserSym.ELSE, yytext());    }
             "match"      {     return symbol(ParserSym.MATCH, yytext());   }
-            "default"    {     return symbol(ParserSym.DEFAULT, yytext()); }
+            "_=>"        {     return symbol(ParserSym.DEFAULT, yytext()); }
 
             /*  Sentencias ciclicas */
             "while"    {     return symbol(ParserSym.WHILE, yytext());    }

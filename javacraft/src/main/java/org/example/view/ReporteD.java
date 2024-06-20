@@ -8,6 +8,7 @@ import org.example.backend.interprete.error.Errores;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.LinkedList;
+
 import org.example.backend.interprete.simbol.Simbolo;
 
 /**
@@ -71,9 +72,8 @@ public class ReporteD extends java.awt.Dialog {
 
     public void loadTable(LinkedList<Errores> err, String[] nombreCol) {
         //TipoError tipo, String desc, int lineaa, int columa
-        String[] nombreColumnas = nombreCol;
         modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(nombreColumnas);
+        modelo.setColumnIdentifiers(nombreCol);
 
         while (modelo.getRowCount() > 0) {
             modelo.removeRow(0);
@@ -89,12 +89,11 @@ public class ReporteD extends java.awt.Dialog {
         }
         jTable1.setModel(modelo);
     }
-    
+
     public void loadTable2(LinkedList<Simbolo> sym, String[] nombreCol) {
         //TipoError tipo, String desc, int lineaa, int columa
-        String[] nombreColumnas = nombreCol;
         modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(nombreColumnas);
+        modelo.setColumnIdentifiers(nombreCol);
 
         while (modelo.getRowCount() > 0) {
             modelo.removeRow(0);
@@ -102,7 +101,7 @@ public class ReporteD extends java.awt.Dialog {
 
         for (Simbolo s : sym) {
             Object[] tmp = new Object[4];
-            tmp[0] = s.getTipo();
+            tmp[0] = s.getTipo().getTipo();
             tmp[1] = s.getId();
             tmp[2] = s.getValue();
             tmp[3] = s.isEsConstante();

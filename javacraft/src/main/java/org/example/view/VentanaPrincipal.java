@@ -1,22 +1,17 @@
 package org.example.view;
 
-import java.awt.Image;
-import java.io.File;
-import java.io.StringReader;
-import java.util.LinkedList;
-import java.util.Objects;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-
-import org.example.backend.interprete.abstracto.Instruccion;
-import org.example.backend.interprete.analisis.Parser;
-import org.example.backend.interprete.analisis.Scan;
 import org.example.backend.interprete.error.Errores;
 import org.example.backend.interprete.simbol.Simbolo;
-import org.example.backend.interprete.simbol.TablaSimbolo;
-import org.example.backend.interprete.simbol.Tree;
 import org.example.backend.util.FilesControl;
 import org.example.backend.util.GestionTab;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author giovanic
@@ -26,16 +21,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private final FilesControl control;
     private final GestionTab gestionTab;
     private LinkedList<Errores> errores;
+    private LinkedList<Simbolo> symList;
 
     /**
      * Creates new form VentanaPrincipal
      */
     public VentanaPrincipal() {
         initComponents();
-        
+
         this.control = new FilesControl();
         this.gestionTab = new GestionTab(tab, control);
         errores = new LinkedList<>();
+        symList = new LinkedList<Simbolo>();
 
         Image icon = new ImageIcon(getClass().getResource("/logoTransparente.png")).getImage();
         setIconImage(icon);
@@ -61,6 +58,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         eliminarTabMenuItem = new javax.swing.JMenuItem();
         menuReport = new javax.swing.JMenu();
         verReporteItemMenu = new javax.swing.JMenuItem();
+        SimbolTab = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -120,6 +118,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
         menuReport.add(verReporteItemMenu);
 
+        SimbolTab.setText("Tabla de Simbolos");
+        SimbolTab.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SimbolTabActionPerformed(evt);
+            }
+        });
+        menuReport.add(SimbolTab);
+
         barraMenu.add(menuReport);
 
         jMenu1.setText("build");
@@ -139,20 +145,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
-                    .addComponent(tab)))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
+                                        .addComponent(tab)))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tab, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(tab, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -197,6 +203,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
 
+        /*
         if (tab.getSelectedIndex() != -1) {
             salidaTxtArea.setText("");
             int index = tab.getSelectedIndex();
@@ -212,7 +219,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 tabla.setNombre("GLOBAL");
                 ast.setConsola("");
                 LinkedList<Errores> lista = new LinkedList<>();
-                LinkedList<Simbolo> lis = new LinkedList<>();
                 lista.addAll(scan.listaErrores);
                 lista.addAll(parser.listaErrores);
                 for (var a : ast.getInstrucciones()) {
@@ -222,8 +228,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     var res = a.interpretar(ast, tabla);
                     if (res instanceof Errores) {
                         lista.add((Errores) res);
-                    } else {
-                        lis.add((Simbolo) res);
                     }
                 }
                 System.out.println(ast.getConsola());
@@ -235,16 +239,31 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 for (var i : lista) {
                     System.out.println(i);
                 }
+                hashToLinkedList(tabla.getTablaActual(), symList);
             } catch (Exception ex) {
                 System.out.println(ex);
                 errores.clear();
             }
         }
 
-
+        */
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void SimbolTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SimbolTabActionPerformed
+        ReporteD reporteD = new ReporteD(this);
+        reporteD.loadTable2(symList, new String[]{"TIPO", "ID", "VALOR", "CONSTANTE"});
+        reporteD.setLocationRelativeTo(null);
+        reporteD.setVisible(true);
+    }//GEN-LAST:event_SimbolTabActionPerformed
+
+    public void hashToLinkedList(HashMap<String, Object> hashMap, LinkedList<Simbolo> linkedList) {
+        for (Map.Entry<String, Object> entry : hashMap.entrySet()) {
+            linkedList.add((Simbolo) entry.getValue());
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem SimbolTab;
     private javax.swing.JMenuItem abrirMenuItem;
     private javax.swing.JMenuBar barraMenu;
     private javax.swing.JMenuItem eliminarTabMenuItem;

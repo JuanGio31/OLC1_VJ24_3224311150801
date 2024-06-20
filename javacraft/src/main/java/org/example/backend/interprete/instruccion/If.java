@@ -14,11 +14,19 @@ public class If extends Instruccion {
 
     private Instruccion condicion;
     private LinkedList<Instruccion> instrucciones;
+    private LinkedList<Instruccion> instruccionsElse;
 
     public If(Instruccion condicion, LinkedList<Instruccion> instrucciones, int linea, int columna) {
         super(new Tipo(TipoDeDato.VOID), linea, columna);
         this.condicion = condicion;
         this.instrucciones = instrucciones;
+    }
+
+    public If(Instruccion condicion, LinkedList<Instruccion> instrucciones, LinkedList<Instruccion> instruccionsElse, int linea, int columna) {
+        super(new Tipo(TipoDeDato.VOID), linea, columna);
+        this.condicion = condicion;
+        this.instrucciones = instrucciones;
+        this.instruccionsElse = instruccionsElse;
     }
 
     @Override
@@ -30,8 +38,7 @@ public class If extends Instruccion {
 
         // ver que cond sea booleano
         if (this.condicion.tipo.getTipo() != TipoDeDato.BOOLEAN) {
-            return new Errores(TipoError.SEMANTICO, "Expresion invalida",
-                    this.linea, this.columna);
+            return new Errores(TipoError.SEMANTICO, "Expresion invalida", this.linea, this.columna);
         }
 
         var newTabla = new TablaSimbolo(tabla);
@@ -47,6 +54,21 @@ public class If extends Instruccion {
                 /*
                     Manejo de errores
                  */
+            }
+        } else {
+            if (instruccionsElse != null) {
+                for (var i : this.instruccionsElse) {
+                    if (i instanceof Break) {
+                        return i;
+                    }
+                    var resultado = i.interpretar(arbol, newTabla);
+                    if (resultado instanceof Break) {
+                        return resultado;
+                    }
+                /*
+                    Manejo de errores
+                 */
+                }
             }
         }
         return null;
