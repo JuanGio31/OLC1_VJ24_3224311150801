@@ -40,10 +40,10 @@ public class AsignacionVariable extends Instruccion {
         //validar tipos
         if (variable.getTipo().getTipo() != this.expresion.tipo.getTipo()) {
             return new Errores(TipoError.SEMANTICO,
-                    "Tipos erroneos en asignacion"
+                    "Tipos erroneos en asignacion ("
                             + variable.getTipo().getTipo()
                             + " != "
-                            + this.expresion.tipo.getTipo(),
+                            + this.expresion.tipo.getTipo()+")",
                     this.linea,
                     this.columna);
         }

@@ -46,7 +46,7 @@ nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
 nonterminal LinkedList<Instruccion> CASOS;
 nonterminal Instruccion INSTRUCCION;
 nonterminal Instruccion SIF, SBREAK, SCONTINUAR, SMATCH, CASO;
-nonterminal Instruccion SFOR, REFRESH_FOR, SWHILE;
+nonterminal Instruccion SFOR, REFRESH_FOR, SWHILE, SDO;
 nonterminal Instruccion PRINT, DECLARACION, ASIGNACION;
 nonterminal Instruccion EXPRESION;
 nonterminal Tipo TIPOS;
@@ -79,6 +79,7 @@ INSTRUCCION ::= PRINT: a                {:   RESULT = a;   :}
               | SMATCH:a                {:   RESULT = a;   :}
               | SWHILE:a                {:   RESULT = a;   :}
               | SFOR:a                  {:   RESULT = a;   :}
+              | SDO:a                   {:   RESULT = a;   :}
               | error FIN_INSTRUCCION
 ;
 
@@ -110,8 +111,8 @@ SCONTINUAR ::= CONTINUE:a FIN_INSTRUCCION   {:  RESULT = new Continue(aleft, ari
 ;
 
 SIF ::= IF LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE      {:   RESULT = new If(a, b, aleft, aright);   :}
-//      | IF LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE
-//            SIF ELSE LBRACE INSTRUCCIONES:c RBRACE
+      | IF LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE
+        ELSE SIF                                                        {:   RESULT = new If(a, b, aleft, aright);   :}
       | IF LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE
             ELSE LBRACE INSTRUCCIONES:c RBRACE                          {:   RESULT = new If(a, b, c, aleft, aright);   :}
 ;
@@ -131,8 +132,10 @@ SMATCH ::= MATCH LPAREN EXPRESION:a RPAREN LBRACE CASOS:c RBRACE               {
 SWHILE ::= WHILE LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE    {:  RESULT = new While(a, b, aleft, aright);    :}
 ;
 
-//SDO ::= DO LBRACE INSTRUCCIONES:a RBRACE WHILE LPAREN EXPRESION:a RPAREN
-//;
+//LinkedList<Instruccion> instruccions, Instruccion condicion, int linea, int columna
+SDO ::= DO LBRACE INSTRUCCIONES:a RBRACE WHILE
+            LPAREN EXPRESION:b RPAREN FIN_INSTRUCCION       {:  RESULT = new DoWhile(a, b, aleft, aright); :}
+;
 
 SFOR ::= FOR LPAREN DECLARACION:a EXPRESION:b FIN_INSTRUCCION REFRESH_FOR:c RPAREN
                             LBRACE INSTRUCCIONES:d RBRACE                          {:  RESULT = new For(a, b, c, d, aleft, aright);:}
@@ -149,11 +152,11 @@ REFRESH_FOR ::= ID:a IGUAL EXPRESION:b   {:   RESULT = new AsignacionVariable(a,
                                                                                       aleft, aright);:}
 ;
 
-TIPOS ::= INT       {:   RESULT = new Tipo(TipoDeDato.INT);   :}
-        | DOUBLE    {:   RESULT = new Tipo(TipoDeDato.DOUBLE);   :}
-        | BOOL      {:   RESULT = new Tipo(TipoDeDato.BOOLEAN);   :}
-        | CHAR      {:   RESULT = new Tipo(TipoDeDato.CHAR);   :}
-        | STRING    {:   RESULT = new Tipo(TipoDeDato.STRING);   :}
+TIPOS ::= INT       {:      RESULT = new Tipo(TipoDeDato.INT);        :}
+        | DOUBLE    {:      RESULT = new Tipo(TipoDeDato.DOUBLE);     :}
+        | BOOL      {:      RESULT = new Tipo(TipoDeDato.BOOLEAN);    :}
+        | CHAR      {:      RESULT = new Tipo(TipoDeDato.CHAR);       :}
+        | STRING    {:      RESULT = new Tipo(TipoDeDato.STRING);     :}
 ;
 
 EXPRESION ::= MENOS EXPRESION:a                     {:  RESULT = new Aritmeticas(a, OperadoresAritmeticos.NEGACION, aleft, aright); :} %prec UMENOS
