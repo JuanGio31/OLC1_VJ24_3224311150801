@@ -1,13 +1,19 @@
 package org.example.view;
 
+import org.example.backend.interprete.abstracto.Instruccion;
+import org.example.backend.interprete.analisis.Parser;
+import org.example.backend.interprete.analisis.Scan;
 import org.example.backend.interprete.error.Errores;
 import org.example.backend.interprete.simbol.Simbolo;
+import org.example.backend.interprete.simbol.TablaSimbolo;
+import org.example.backend.interprete.simbol.Tree;
 import org.example.backend.util.FilesControl;
 import org.example.backend.util.GestionTab;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -203,8 +209,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
 
-        /*
         if (tab.getSelectedIndex() != -1) {
+            errores.clear();
+            symList.clear();
+
             salidaTxtArea.setText("");
             int index = tab.getSelectedIndex();
             Tab temp = (Tab) tab.getComponentAt(index);
@@ -242,11 +250,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 hashToLinkedList(tabla.getTablaActual(), symList);
             } catch (Exception ex) {
                 System.out.println(ex);
-                errores.clear();
             }
         }
 
-        */
+
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void SimbolTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SimbolTabActionPerformed

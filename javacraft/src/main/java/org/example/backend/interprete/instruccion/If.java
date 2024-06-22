@@ -41,8 +41,8 @@ public class If extends Instruccion {
             return new Errores(TipoError.SEMANTICO, "Expresion invalida", this.linea, this.columna);
         }
 
-        var newTabla = new TablaSimbolo(tabla);
         if ((boolean) cond) {
+            var newTabla = new TablaSimbolo(tabla);
             for (var i : this.instrucciones) {
                 if (i instanceof Break) {
                     return i;
@@ -51,12 +51,13 @@ public class If extends Instruccion {
                 if (resultado instanceof Break) {
                     return resultado;
                 }
-                /*
-                    Manejo de errores
-                 */
+                if (resultado instanceof Continue) {
+                    break;
+                }
             }
         } else {
             if (instruccionsElse != null) {
+                var newTabla = new TablaSimbolo(tabla);
                 for (var i : this.instruccionsElse) {
                     if (i instanceof Break) {
                         return i;
@@ -65,9 +66,6 @@ public class If extends Instruccion {
                     if (resultado instanceof Break) {
                         return resultado;
                     }
-                /*
-                    Manejo de errores
-                 */
                 }
             }
         }

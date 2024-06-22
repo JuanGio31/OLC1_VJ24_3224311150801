@@ -56,9 +56,11 @@ public class TablaSimbolo {
     }
 
     public Simbolo getVariable(String id) {
-        Simbolo busqueda = (Simbolo) this.tablaActual.get(id.toLowerCase());
-        if (busqueda != null) {
-            return busqueda;
+        for (TablaSimbolo i = this; i != null; i = i.tablaAnterior) {
+            Simbolo busqueda = (Simbolo) i.tablaActual.get(id.toLowerCase());
+            if (busqueda != null) {
+                return busqueda;
+            }
         }
         return null;
     }

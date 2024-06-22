@@ -9,6 +9,7 @@ import org.example.backend.interprete.simbol.Tipo;
 import org.example.backend.interprete.simbol.Tree;
 
 public class DeclaracionVariable extends Instruccion {
+
     public String identificador;
     public Instruccion valor;
     private boolean esConstante;
@@ -33,10 +34,9 @@ public class DeclaracionVariable extends Instruccion {
             sym.setEsConstante(this.esConstante);
             boolean creacion = tabla.setVariable(sym);
             if (!creacion) {
-                return new Errores(TipoError.SEMANTICO, "Variable ya existente", this.linea, this.columna);
+                return new Errores(TipoError.SEMANTICO, "Variable ya existente: " + sym.getId(), this.linea, this.columna);
             }
         } else {
-
 
             var valorInterpretado = this.valor.interpretar(arbol, tabla);
 
@@ -54,7 +54,7 @@ public class DeclaracionVariable extends Instruccion {
             s.setEsConstante(this.esConstante);
             boolean creacion = tabla.setVariable(s);
             if (!creacion) {
-                return new Errores(TipoError.SEMANTICO, "Variable ya existente", this.linea, this.columna);
+                return new Errores(TipoError.SEMANTICO, "Variable ya existente: " + s.getId(), this.linea, this.columna);
             }
         }
         return null;
@@ -64,4 +64,3 @@ public class DeclaracionVariable extends Instruccion {
         return esConstante;
     }
 }
-

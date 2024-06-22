@@ -45,7 +45,8 @@ terminal IGUAL, EQ, CAST;
 nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
 nonterminal LinkedList<Instruccion> CASOS;
 nonterminal Instruccion INSTRUCCION;
-nonterminal Instruccion SIF, IMATCH, CASO;
+nonterminal Instruccion SIF, SBREAK, SCONTINUAR, SMATCH, CASO;
+nonterminal Instruccion SFOR, REFRESH_FOR, SWHILE;
 nonterminal Instruccion PRINT, DECLARACION, ASIGNACION;
 nonterminal Instruccion EXPRESION;
 nonterminal Tipo TIPOS;
@@ -73,7 +74,11 @@ INSTRUCCION ::= PRINT: a                {:   RESULT = a;   :}
               | DECLARACION: a          {:   RESULT = a;   :}
               | ASIGNACION: a           {:   RESULT = a;   :}
               | SIF:a                   {:   RESULT = a;   :}
-              | IMATCH:a                {:   RESULT = a;   :}
+              | SBREAK:a                {:   RESULT = a;   :}
+              | SCONTINUAR:a            {:   RESULT = a;   :}
+              | SMATCH:a                {:   RESULT = a;   :}
+              | SWHILE:a                {:   RESULT = a;   :}
+              | SFOR:a                  {:   RESULT = a;   :}
               | error FIN_INSTRUCCION
 ;
 
@@ -98,6 +103,12 @@ ASIGNACION ::= ID:a IGUAL EXPRESION:b FIN_INSTRUCCION  {:   RESULT = new Asignac
                                                                                 aleft, aright);:}
 ;
 
+SBREAK ::= BREAK:a FIN_INSTRUCCION      {:    RESULT = new Break(aleft, aright);     :}
+;
+
+SCONTINUAR ::= CONTINUE:a FIN_INSTRUCCION   {:  RESULT = new Continue(aleft, aright);   :}
+;
+
 SIF ::= IF LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE      {:   RESULT = new If(a, b, aleft, aright);   :}
 //      | IF LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE
 //            SIF ELSE LBRACE INSTRUCCIONES:c RBRACE
@@ -108,15 +119,35 @@ SIF ::= IF LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE      {:   RES
 CASOS ::= CASOS:a CASO:b     {: RESULT = a; RESULT.add(b); :}
         | CASO:a             {: RESULT = new LinkedList<>(); RESULT.add(a); :}
 ;
-//(Instruccion condicion, LinkedList<Instruccion> instruccions, int linea, int columna)
+
 CASO ::= EXPRESION:a IGUAL MAYOR LBRACE INSTRUCCIONES:b RBRACE          {:  RESULT = new Caso(a, b, aleft, aright);    :}
         | DEFAULT LBRACE INSTRUCCIONES:a RBRACE                         {:  RESULT = new DefaultCase(a, aleft, aright); :}
 ;
 
-//(Instruccion condicion, LinkedList<Caso> casos, int linea, int columna)
-IMATCH ::= MATCH LPAREN EXPRESION:a RPAREN LBRACE CASOS:c RBRACE               {:  RESULT = new Match(a, c, aleft, aright);   :}
+SMATCH ::= MATCH LPAREN EXPRESION:a RPAREN LBRACE CASOS:c RBRACE               {:  RESULT = new Match(a, c, aleft, aright);   :}
 ;
 
+//Instruccion condicion, LinkedList<Instruccion> instruccions, int linea, int columna
+SWHILE ::= WHILE LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE    {:  RESULT = new While(a, b, aleft, aright);    :}
+;
+
+//SDO ::= DO LBRACE INSTRUCCIONES:a RBRACE WHILE LPAREN EXPRESION:a RPAREN
+//;
+
+SFOR ::= FOR LPAREN DECLARACION:a EXPRESION:b FIN_INSTRUCCION REFRESH_FOR:c RPAREN
+                            LBRACE INSTRUCCIONES:d RBRACE                          {:  RESULT = new For(a, b, c, d, aleft, aright);:}
+       | FOR LPAREN ASIGNACION:a EXPRESION:b FIN_INSTRUCCION REFRESH_FOR:c RPAREN
+                                    LBRACE INSTRUCCIONES:d RBRACE                  {:  RESULT = new For(a, b, c, d, aleft, aright);:}
+;
+
+REFRESH_FOR ::= ID:a IGUAL EXPRESION:b   {:   RESULT = new AsignacionVariable(a, b, aleft, aright);  :}
+              | ID:a MAS MAS             {:   RESULT = new AsignacionVariable(a, new Aritmeticas(new AccesoVariable(a, aleft, aright),
+                                                                                      OperadoresAritmeticos.INCREMENTO, aleft, aright),
+                                                                                      aleft, aright);:}
+              | ID:a MENOS MENOS         {:   RESULT = new AsignacionVariable(a, new Aritmeticas(new AccesoVariable(a, aleft, aright),
+                                                                                      OperadoresAritmeticos.DECREMENTO, aleft, aright),
+                                                                                      aleft, aright);:}
+;
 
 TIPOS ::= INT       {:   RESULT = new Tipo(TipoDeDato.INT);   :}
         | DOUBLE    {:   RESULT = new Tipo(TipoDeDato.DOUBLE);   :}

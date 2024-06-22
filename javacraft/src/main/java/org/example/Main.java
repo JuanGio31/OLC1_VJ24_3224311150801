@@ -1,19 +1,21 @@
 package org.example;
 
-import java.util.LinkedList;
-
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import org.example.backend.interprete.abstracto.Instruccion;
 import org.example.backend.interprete.analisis.Parser;
 import org.example.backend.interprete.analisis.Scan;
+import org.example.backend.interprete.error.Errores;
 import org.example.backend.interprete.simbol.TablaSimbolo;
 import org.example.backend.interprete.simbol.Tree;
+import org.example.view.VentanaPrincipal;
 
 import java.io.StringReader;
+import java.util.LinkedList;
 
 public class Main {
 
     public static void main(String[] args) {
-        /*
+
         FlatMacLightLaf.setup();
         java.awt.EventQueue.invokeLater(() -> {
                     VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
@@ -21,15 +23,22 @@ public class Main {
                     ventanaPrincipal.setVisible(true);
                 }
         );
-    */
 
-        //llamadaParser(pruebaPrint());
+
+        //JOptionPane.showMessageDialog(null, "COMPILE!");
+
+//        System.out.println("prueba java -> " + ((double)-3*7/2));
+//        System.out.println("prueba interprete");
+//        llamadaParser(pruebaPrint());
         //llamadaParser(pruebaIncremento());
-        llamadaParser(match());
+        //llamadaParser(match());
+       // llamadaParser(swhile());
+        //llamadaParser(sfor());
+        //llamadaParser(breakContinue());
     }
 
     static String pruebaPrint() {
-        return "println(\"hola mundo\");";
+        return "println(-3*7/2);";
     }
 
     static String pruebaIncremento() {
@@ -59,6 +68,9 @@ public class Main {
             var tabla = new TablaSimbolo();
             tabla.setNombre("GLOBAL");
             ast.setConsola("");
+            LinkedList<Errores> lista = new LinkedList<>();
+            lista.addAll(scan.listaErrores);
+            lista.addAll(parser.listaErrores);
             for (var a : ast.getInstrucciones()) {
                 if (a == null) {
                     continue;
@@ -66,6 +78,9 @@ public class Main {
                 var res = a.interpretar(ast, tabla);
             }
             System.out.println(ast.getConsola());
+            for (var i : lista) {
+                System.out.println(i);
+            }
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -73,7 +88,7 @@ public class Main {
 
     static String match() {
         String tmp = """
-                var op: int = 1;
+                var op: int = 5;
                 match(op){
                     2 => {
                         println("caso 1");
@@ -90,5 +105,61 @@ public class Main {
                 }
                 """;
         return tmp;
+    }
+
+    static String sfor() {
+        return
+                "for(var a: int =1; a<5 ; a = a+1){" +
+                        "println(a); a++;" +
+                        "}";
+    }
+
+    static String swhile() {
+        String tmp = """
+                println("\\n----------- While -----------");
+                var factorial: int = 7;
+                var cadena: string = "El factorial de ";
+                while (factorial > 0) {
+                    var i: int = factorial;
+                    var fact: int = 1;
+                    while (i > 0) {
+                        fact = fact * i;
+                        i--;
+                    }
+                    println((cadena + factorial) + " = " + fact);
+                    factorial--;
+                }
+                """;
+        return tmp;
+    }
+
+    static String breakContinue() {
+        return """
+                //break y continue
+                println("\\n----------- Sentencias de Tranferencia -----------");
+                var k: iNT = 0;
+                while (k < 3) {
+                    println("Entramos al ciclo1 con k = " + k);
+                    var l: int = 0;
+                    while (l < 3) {
+                        println("Entramos al ciclo2 con l = " + l);
+                        if (k == 1 && l == 1) {
+                            println("Hacemos break al ciclo2");
+                            break;
+                        }
+                        if (k == 2 && l == 1) {
+                            println("Hacemos continue al ciclo2");
+                            l++;
+                            continue;
+                        }
+                        l++;
+                    }
+                    if (k == 2 && l == 2) {
+                        println("Hacemos break al ciclo1");
+                        break;
+                    }
+                    k++;
+                }
+                """;
     }
 }
