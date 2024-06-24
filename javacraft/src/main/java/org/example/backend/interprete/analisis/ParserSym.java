@@ -8,47 +8,49 @@ package org.example.backend.interprete.analisis;
 /** CUP generated class containing symbol constants. */
 public class ParserSym {
   /* terminals */
-  public static final int CAST = 50;
+  public static final int CAST = 52;
   public static final int DIVIDE = 18;
   public static final int CONST = 15;
   public static final int CHAR = 12;
-  public static final int FIN_INSTRUCCION = 39;
+  public static final int FIN_INSTRUCCION = 49;
   public static final int ENTERO = 3;
   public static final int XOR = 28;
   public static final int DOUBLE = 10;
-  public static final int CONTINUE = 46;
-  public static final int DOS_PUNTOS = 43;
+  public static final int CONTINUE = 44;
+  public static final int DOS_PUNTOS = 42;
   public static final int LPAREN = 6;
   public static final int INT = 9;
-  public static final int PRINTLN = 40;
+  public static final int PRINTLN = 39;
   public static final int FOR = 34;
   public static final int MATCH = 35;
   public static final int RPAREN = 7;
   public static final int NOT = 29;
   public static final int AND = 27;
-  public static final int IGUAL = 48;
-  public static final int CARACTER = 41;
+  public static final int IGUAL = 50;
+  public static final int CARACTER = 40;
   public static final int OR = 26;
   public static final int BOOL = 11;
   public static final int UMENOS = 20;
   public static final int IF = 30;
   public static final int ID = 5;
-  public static final int BOOLEAN = 44;
+  public static final int BOOLEAN = 46;
   public static final int EOF = 0;
   public static final int DECIMAL = 4;
-  public static final int RETURN = 47;
+  public static final int RETURN = 45;
   public static final int error = 1;
-  public static final int COMA = 42;
+  public static final int COMA = 41;
   public static final int CADENA = 2;
   public static final int MENOS = 17;
   public static final int MENOR = 22;
   public static final int MOD = 19;
-  public static final int BREAK = 45;
-  public static final int EQ = 49;
+  public static final int BREAK = 43;
+  public static final int EQ = 51;
   public static final int MAYOR = 23;
   public static final int TIMES = 8;
   public static final int LBRACE = 37;
   public static final int ELSE = 31;
+  public static final int LSQUARE = 47;
+  public static final int RSQUARE = 48;
   public static final int WHILE = 32;
   public static final int DEFAULT = 36;
   public static final int MAYOR_IGUAL = 25;
@@ -99,15 +101,17 @@ public class ParserSym {
   "DEFAULT",
   "LBRACE",
   "RBRACE",
-  "FIN_INSTRUCCION",
   "PRINTLN",
   "CARACTER",
   "COMA",
   "DOS_PUNTOS",
-  "BOOLEAN",
   "BREAK",
   "CONTINUE",
   "RETURN",
+  "BOOLEAN",
+  "LSQUARE",
+  "RSQUARE",
+  "FIN_INSTRUCCION",
   "IGUAL",
   "EQ",
   "CAST"

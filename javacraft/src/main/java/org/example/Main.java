@@ -16,13 +16,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-        FlatMacLightLaf.setup();
-        java.awt.EventQueue.invokeLater(() -> {
-            VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
-            ventanaPrincipal.setLocationRelativeTo(null);
-            ventanaPrincipal.setVisible(true);
-        }
-        );
+//        FlatMacLightLaf.setup();
+//        java.awt.EventQueue.invokeLater(() -> {
+//            VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
+//            ventanaPrincipal.setLocationRelativeTo(null);
+//            ventanaPrincipal.setVisible(true);
+//        });
 
 //        llamadaParser(pruebaPrint());
         //llamadaParser(pruebaIncremento());
@@ -30,6 +29,15 @@ public class Main {
         // llamadaParser(swhile());
         //llamadaParser(sfor());
         //llamadaParser(breakContinue());
+        llamadaParser(decArr());
+    }
+
+    private static String decArr() {
+        return """
+                const hola: int[] = [5, 4, 3, 8, 10  ];
+                println(hola[4]);
+                const ho: char[] = ['o','b','c'];
+                println(ho[0]);""";
     }
 
     static String pruebaPrint() {
@@ -55,7 +63,7 @@ public class Main {
 
     static void llamadaParser(String texto) {
         try {
-            StringReader stringReader = new StringReader(texto);
+            StringReader stringReader = new StringReader(texto + "\n");
             Scan scan = new Scan(stringReader);
             Parser parser = new Parser(scan);
             var resultado = parser.parse();
@@ -71,6 +79,9 @@ public class Main {
                     continue;
                 }
                 var res = a.interpretar(ast, tabla);
+                if (res instanceof Errores) {
+                    lista.add((Errores) res);
+                }
             }
             System.out.println(ast.getConsola());
             for (var i : lista) {
@@ -103,9 +114,7 @@ public class Main {
     }
 
     static String sfor() {
-        return "for(var a: int =1; a<5 ; a = a+1){"
-                + "println(a); a++;"
-                + "}";
+        return "for(var a: int =1; a<5 ; a = a+1){" + "println(a); a++;" + "}";
     }
 
     static String swhile() {

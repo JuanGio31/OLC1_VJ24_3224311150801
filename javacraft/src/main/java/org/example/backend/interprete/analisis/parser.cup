@@ -37,9 +37,9 @@ parser code {:
 //** Simboloes terminal **//
 terminal String CADENA, ENTERO, DECIMAL, ID;
 terminal LPAREN, RPAREN, TIMES, INT, DOUBLE, BOOL, CHAR, STRING, VAR, CONST, MAS, MENOS, DIVIDE, MOD, UMENOS;
-terminal NE, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL, OR, AND, XOR, NOT, IF, ELSE, WHILE, DO, FOR, MATCH, DEFAULT, LBRACE;
-terminal RBRACE, FIN_INSTRUCCION, PRINTLN, CARACTER, COMA, DOS_PUNTOS, BOOLEAN, BREAK, CONTINUE, RETURN;
-terminal IGUAL, EQ, CAST;
+terminal NE, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL, OR, AND, XOR, NOT, IF, ELSE, WHILE, DO, FOR;
+terminal MATCH, DEFAULT, LBRACE, RBRACE, PRINTLN, CARACTER, COMA, DOS_PUNTOS, BREAK, CONTINUE, RETURN;
+terminal BOOLEAN, LSQUARE, RSQUARE, FIN_INSTRUCCION, IGUAL, EQ, CAST;
 
 //** Simbolos no terminales **//
 nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
@@ -48,7 +48,11 @@ nonterminal Instruccion INSTRUCCION;
 nonterminal Instruccion SIF, SBREAK, SCONTINUAR, SMATCH, CASO;
 nonterminal Instruccion SFOR, REFRESH_FOR, SWHILE, SDO;
 nonterminal Instruccion PRINT, DECLARACION, ASIGNACION;
+nonterminal LinkedList<Instruccion> LISTA;
+//nonterminal Instruccion VALORES;
+nonterminal Instruccion DECLARACION_VECTOR;
 nonterminal Instruccion EXPRESION;
+nonterminal Instruccion EXPR2;
 nonterminal Tipo TIPOS;
 
 //** Precedencia **//
@@ -80,13 +84,13 @@ INSTRUCCION ::= PRINT: a                {:   RESULT = a;   :}
               | SWHILE:a                {:   RESULT = a;   :}
               | SFOR:a                  {:   RESULT = a;   :}
               | SDO:a                   {:   RESULT = a;   :}
+              | DECLARACION_VECTOR:a    {:   RESULT = a;   :}
               | error FIN_INSTRUCCION
 ;
 
 PRINT ::= PRINTLN LPAREN EXPRESION:a RPAREN FIN_INSTRUCCION      {:     RESULT = new Print(a, aleft, aright);   :}
 ;
 
-//boolean esConstante, String identificador, Instruccion valor, Tipo tipo, int linea, int columna
 DECLARACION ::= CONST ID:b DOS_PUNTOS TIPOS:a IGUAL EXPRESION:c FIN_INSTRUCCION    {:   RESULT = new DeclaracionVariable(true, b, c, a, aleft, aright);    :}
               | VAR ID:b DOS_PUNTOS TIPOS:a IGUAL EXPRESION:c FIN_INSTRUCCION      {:   RESULT = new DeclaracionVariable(false, b, c, a, aleft, aright);   :}
               | CONST ID:a DOS_PUNTOS TIPOS:b FIN_INSTRUCCION                      {:   RESULT = new DeclaracionVariable(true, a, b, aleft, aright);   :}
@@ -128,11 +132,9 @@ CASO ::= EXPRESION:a IGUAL MAYOR LBRACE INSTRUCCIONES:b RBRACE          {:  RESU
 SMATCH ::= MATCH LPAREN EXPRESION:a RPAREN LBRACE CASOS:c RBRACE               {:  RESULT = new Match(a, c, aleft, aright);   :}
 ;
 
-//Instruccion condicion, LinkedList<Instruccion> instruccions, int linea, int columna
 SWHILE ::= WHILE LPAREN EXPRESION:a RPAREN LBRACE INSTRUCCIONES:b RBRACE    {:  RESULT = new While(a, b, aleft, aright);    :}
 ;
 
-//LinkedList<Instruccion> instruccions, Instruccion condicion, int linea, int columna
 SDO ::= DO LBRACE INSTRUCCIONES:a RBRACE WHILE
             LPAREN EXPRESION:b RPAREN FIN_INSTRUCCION       {:  RESULT = new DoWhile(a, b, aleft, aright); :}
 ;
@@ -150,6 +152,18 @@ REFRESH_FOR ::= ID:a IGUAL EXPRESION:b   {:   RESULT = new AsignacionVariable(a,
               | ID:a MENOS MENOS         {:   RESULT = new AsignacionVariable(a, new Aritmeticas(new AccesoVariable(a, aleft, aright),
                                                                                       OperadoresAritmeticos.DECREMENTO, aleft, aright),
                                                                                       aleft, aright);:}
+;
+
+LISTA ::= LISTA:a COMA EXPRESION:b     {:  RESULT = a; RESULT.add(b);  :}
+        | EXPRESION:a         {:  RESULT = new LinkedList<>(); RESULT.add(a); :}
+;
+
+//boolean esConstante, String id, LinkedList<Instruccion> valores, Tipo tipo, int linea, int columna
+DECLARACION_VECTOR ::= CONST ID:a DOS_PUNTOS TIPOS:b LSQUARE RSQUARE
+                       IGUAL LSQUARE LISTA:c RSQUARE FIN_INSTRUCCION   {:  RESULT = new DecArreglo(true, a, c, b, aleft, aright);    :}
+
+                     | VAR ID:a DOS_PUNTOS TIPOS:b LSQUARE RSQUARE
+                       IGUAL LSQUARE LISTA:c RSQUARE FIN_INSTRUCCION   {:  RESULT = new DecArreglo(false, a, c, b, aleft, aright);    :}
 ;
 
 TIPOS ::= INT       {:      RESULT = new Tipo(TipoDeDato.INT);        :}
@@ -186,4 +200,9 @@ EXPRESION ::= MENOS EXPRESION:a                     {:  RESULT = new Aritmeticas
             | CADENA:a                              {:  RESULT = new Nativo(a, new Tipo(TipoDeDato.STRING), aleft, aright );    :}
             | BOOLEAN:a                             {:  RESULT = new Nativo(Boolean.parseBoolean((String) a), new Tipo(TipoDeDato.BOOLEAN), aleft, aright );    :}
             | ID:a                                  {:  RESULT = new AccesoVariable(a, aleft, aright);   :}
+            | EXPR2:a                               {:  RESULT = a; :}
+;
+
+//String id, Instruccion posicion, int linea, int columna
+EXPR2 ::= ID:a LSQUARE EXPRESION:b RSQUARE      {:  RESULT = new AccesoValorVector(a, b, aleft, aright);   :}
 ;

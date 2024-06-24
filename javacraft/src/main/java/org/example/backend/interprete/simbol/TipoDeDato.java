@@ -10,5 +10,6 @@ public enum TipoDeDato {
     BOOLEAN,
     CHAR,
     STRING,
+    VECTOR,
     VOID
 }

@@ -130,6 +130,8 @@ CHARACTER      = "\'" [^\'] "\'"
             /*  otros   */
             ":"         {     return symbol(ParserSym.DOS_PUNTOS, yytext());    }
             ","         {     return symbol(ParserSym.COMA, yytext());          }
+            "["         {     return symbol(ParserSym.LSQUARE, yytext());       }
+            "]"         {     return symbol(ParserSym.RSQUARE, yytext());       }
     }
 
     <YYINITIAL> {CADENA} {
