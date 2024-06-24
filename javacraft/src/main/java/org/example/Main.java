@@ -18,21 +18,16 @@ public class Main {
 
         FlatMacLightLaf.setup();
         java.awt.EventQueue.invokeLater(() -> {
-                    VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
-                    ventanaPrincipal.setLocationRelativeTo(null);
-                    ventanaPrincipal.setVisible(true);
-                }
+            VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
+            ventanaPrincipal.setLocationRelativeTo(null);
+            ventanaPrincipal.setVisible(true);
+        }
         );
 
-
-        //JOptionPane.showMessageDialog(null, "COMPILE!");
-
-//        System.out.println("prueba java -> " + ((double)-3*7/2));
-//        System.out.println("prueba interprete");
 //        llamadaParser(pruebaPrint());
         //llamadaParser(pruebaIncremento());
         //llamadaParser(match());
-       // llamadaParser(swhile());
+        // llamadaParser(swhile());
         //llamadaParser(sfor());
         //llamadaParser(breakContinue());
     }
@@ -108,10 +103,9 @@ public class Main {
     }
 
     static String sfor() {
-        return
-                "for(var a: int =1; a<5 ; a = a+1){" +
-                        "println(a); a++;" +
-                        "}";
+        return "for(var a: int =1; a<5 ; a = a+1){"
+                + "println(a); a++;"
+                + "}";
     }
 
     static String swhile() {

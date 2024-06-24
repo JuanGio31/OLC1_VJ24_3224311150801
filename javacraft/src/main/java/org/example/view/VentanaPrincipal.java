@@ -75,6 +75,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         salidaTxtArea.setEditable(false);
         salidaTxtArea.setColumns(20);
+        salidaTxtArea.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         salidaTxtArea.setRows(5);
         jScrollPane1.setViewportView(salidaTxtArea);
 
@@ -151,20 +152,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
-                                        .addComponent(tab)))
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tab)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1064, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(tab, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tab, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -263,7 +266,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         reporteD.setVisible(true);
     }//GEN-LAST:event_SimbolTabActionPerformed
 
-    public void hashToLinkedList(HashMap<String, Object> hashMap, LinkedList<Simbolo> linkedList) {
+    private void hashToLinkedList(HashMap<String, Object> hashMap, LinkedList<Simbolo> linkedList) {
         for (Map.Entry<String, Object> entry : hashMap.entrySet()) {
             linkedList.add((Simbolo) entry.getValue());
         }

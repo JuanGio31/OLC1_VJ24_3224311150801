@@ -63,7 +63,7 @@ public class Tab extends javax.swing.JPanel {
         jPopupMenu1.add(popupCortar);
 
         vistaContenido.setColumns(20);
-        vistaContenido.setFont(new java.awt.Font("Lato", 0, 14)); // NOI18N
+        vistaContenido.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
         vistaContenido.setRows(5);
         vistaContenido.setComponentPopupMenu(jPopupMenu1);
         jScrollPane1.setViewportView(vistaContenido);
