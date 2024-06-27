@@ -39,7 +39,8 @@ terminal String CADENA, ENTERO, DECIMAL, ID;
 terminal LPAREN, RPAREN, TIMES, INT, DOUBLE, BOOL, CHAR, STRING, VAR, CONST, MAS, MENOS, DIVIDE, MOD, UMENOS;
 terminal NE, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL, OR, AND, XOR, NOT, IF, ELSE, WHILE, DO, FOR;
 terminal MATCH, DEFAULT, LBRACE, RBRACE, PRINTLN, CARACTER, COMA, DOS_PUNTOS, BREAK, CONTINUE, RETURN;
-terminal BOOLEAN, LSQUARE, RSQUARE, FIN_INSTRUCCION, IGUAL, EQ, CAST;
+terminal BOOLEAN, LSQUARE, RSQUARE, FIN_INSTRUCCION, IGUAL, EQ, CAST, COMILLADOB;
+terminal LIST, NEW, APPEND, REMOVE, STRUCT, ROUND, LENGTH, TO_STRING, PUNTO, FIND;
 
 //** Simbolos no terminales **//
 nonterminal LinkedList<Instruccion> INICIO, INSTRUCCIONES;
@@ -47,12 +48,13 @@ nonterminal LinkedList<Instruccion> CASOS;
 nonterminal Instruccion INSTRUCCION;
 nonterminal Instruccion SIF, SBREAK, SCONTINUAR, SMATCH, CASO;
 nonterminal Instruccion SFOR, REFRESH_FOR, SWHILE, SDO;
-nonterminal Instruccion PRINT, DECLARACION, ASIGNACION;
+nonterminal Instruccion PRINT, FROUND, FLENGTH, FFIND;
+nonterminal Instruccion DECLARACION, ASIGNACION;
 nonterminal LinkedList<Instruccion> LISTA;
-//nonterminal Instruccion VALORES;
-nonterminal Instruccion DECLARACION_VECTOR;
+nonterminal Instruccion DECLARACION_VECTOR, ASIGN_VECTOR;
+nonterminal Instruccion DEC_LIST, AGREGAR, ELIMINAR;
 nonterminal Instruccion EXPRESION;
-nonterminal Instruccion EXPR2;
+nonterminal Instruccion EXPR2, EXPR3;
 nonterminal Tipo TIPOS;
 
 //** Precedencia **//
@@ -85,6 +87,10 @@ INSTRUCCION ::= PRINT: a                {:   RESULT = a;   :}
               | SFOR:a                  {:   RESULT = a;   :}
               | SDO:a                   {:   RESULT = a;   :}
               | DECLARACION_VECTOR:a    {:   RESULT = a;   :}
+              | ASIGN_VECTOR:a          {:   RESULT = a;   :}
+              | DEC_LIST:a              {:   RESULT = a;   :}
+              | AGREGAR:a               {:   RESULT = a;   :}
+              | ELIMINAR:a              {:   RESULT = a;   :}
               | error FIN_INSTRUCCION
 ;
 
@@ -155,15 +161,35 @@ REFRESH_FOR ::= ID:a IGUAL EXPRESION:b   {:   RESULT = new AsignacionVariable(a,
 ;
 
 LISTA ::= LISTA:a COMA EXPRESION:b     {:  RESULT = a; RESULT.add(b);  :}
-        | EXPRESION:a         {:  RESULT = new LinkedList<>(); RESULT.add(a); :}
+        | EXPRESION:a                  {:  RESULT = new LinkedList<>(); RESULT.add(a); :}
 ;
 
-//boolean esConstante, String id, LinkedList<Instruccion> valores, Tipo tipo, int linea, int columna
 DECLARACION_VECTOR ::= CONST ID:a DOS_PUNTOS TIPOS:b LSQUARE RSQUARE
-                       IGUAL LSQUARE LISTA:c RSQUARE FIN_INSTRUCCION   {:  RESULT = new DecArreglo(true, a, c, b, aleft, aright);    :}
+                       IGUAL LSQUARE LISTA:c RSQUARE FIN_INSTRUCCION   {:  RESULT = new DecColeccion(TipoDeDato.VECTOR, true, a, c, b, aleft, aright);    :}
 
                      | VAR ID:a DOS_PUNTOS TIPOS:b LSQUARE RSQUARE
-                       IGUAL LSQUARE LISTA:c RSQUARE FIN_INSTRUCCION   {:  RESULT = new DecArreglo(false, a, c, b, aleft, aright);    :}
+                       IGUAL LSQUARE LISTA:c RSQUARE FIN_INSTRUCCION   {:  RESULT = new DecColeccion(TipoDeDato.VECTOR, false, a, c, b, aleft, aright);    :}
+;
+
+ASIGN_VECTOR ::= ID:a LSQUARE EXPRESION:b RSQUARE IGUAL EXPRESION:c FIN_INSTRUCCION {:  RESULT = new AsignacionValorEnPosicion(a, c, b, aleft, aright); :}
+;
+
+DEC_LIST ::= LIST MENOR TIPOS:b MAYOR ID:a IGUAL NEW LIST LPAREN RPAREN FIN_INSTRUCCION {:  RESULT = new DecColeccion(TipoDeDato.LIST, a, b, aleft, aright);    :}
+;
+
+AGREGAR ::= ID:a PUNTO APPEND LPAREN EXPRESION:b RPAREN FIN_INSTRUCCION     {:  RESULT = new Append(a, b, aleft, aright);  :}
+;
+
+ELIMINAR ::= EXPR3:a FIN_INSTRUCCION      {:  RESULT = a;  :}
+;
+
+FROUND ::= ROUND LPAREN EXPRESION:a RPAREN      {:  RESULT = new FRound(a, aleft, aright);  :}
+;
+
+FLENGTH ::= LENGTH LPAREN EXPRESION:a RPAREN           {:  RESULT = new FLength(a, aleft, aright);  :}
+;
+
+FFIND ::= ID:a PUNTO FIND LPAREN EXPRESION:b RPAREN     {:  RESULT = new FBuscar(a, b, aleft, aright);:}
 ;
 
 TIPOS ::= INT       {:      RESULT = new Tipo(TipoDeDato.INT);        :}
@@ -201,8 +227,14 @@ EXPRESION ::= MENOS EXPRESION:a                     {:  RESULT = new Aritmeticas
             | BOOLEAN:a                             {:  RESULT = new Nativo(Boolean.parseBoolean((String) a), new Tipo(TipoDeDato.BOOLEAN), aleft, aright );    :}
             | ID:a                                  {:  RESULT = new AccesoVariable(a, aleft, aright);   :}
             | EXPR2:a                               {:  RESULT = a; :}
+            | EXPR3:a                               {:  RESULT = a; :}
+            | FROUND:a                              {:  RESULT = a; :}
+            | FLENGTH:a                             {:  RESULT = a; :}
+            | FFIND:a                               {:  RESULT = a; :}
 ;
 
-//String id, Instruccion posicion, int linea, int columna
-EXPR2 ::= ID:a LSQUARE EXPRESION:b RSQUARE      {:  RESULT = new AccesoValorVector(a, b, aleft, aright);   :}
+EXPR2 ::= ID:a LSQUARE EXPRESION:b RSQUARE                {:  RESULT = new AccesoValorVector(a, b, aleft, aright);   :}
+;
+
+EXPR3 ::= ID:a PUNTO REMOVE LPAREN EXPRESION:b RPAREN     {:  RESULT = new Remove(a, b, aleft, aright);  :}
 ;

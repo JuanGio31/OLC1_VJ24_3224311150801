@@ -1,13 +1,13 @@
 package org.example.backend.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.FileWriter;
+import java.io.FileNotFoundException;
 
 /**
  * Clase que gestiona los ficheros
@@ -20,9 +20,8 @@ public class FilesControl {
      * Metodo para obtener un file
      *
      * @param filtro la extension predeterminada que se muestra en el
-     * filechooser
+     *               filechooser
      * @return File
-     * @throws java.io.FileNotFoundException
      */
     private File seleccionarArchivo(FileNameExtensionFilter filtro) throws FileNotFoundException {
         JFileChooser fileChooser = new JFileChooser("src");
@@ -71,7 +70,7 @@ public class FilesControl {
         FileReader fr = null;
         BufferedReader br = null;
         //Cadena de texto donde se guardara el contenido del archivo
-        String contenido = "";
+        StringBuilder contenido = new StringBuilder();
         try {
             //ruta puede ser de tipo String
             fr = new FileReader(ruta);
@@ -80,7 +79,7 @@ public class FilesControl {
             String linea;
             //Obtenemos el contenido del archivo linea por linea
             while ((linea = br.readLine()) != null) {
-                contenido += linea + "\n";
+                contenido.append(linea).append("\n");
             }
 
         } catch (IOException ignored) {
@@ -92,13 +91,12 @@ public class FilesControl {
             } catch (IOException ignored) {
             }
         }
-        return contenido;
+        return contenido.toString();
     }
 
     /**
      * Metodo para crear un archivo, en este caso html
      *
-     * @param name la ruta del archivo
      * @return retornara el archivo creado
      */
     private File crearArchivo(String path) {
@@ -119,7 +117,7 @@ public class FilesControl {
      * Metodo para escribir en un archivo
      *
      * @param contenido cadena de caracteres
-     * @param ruta el path del archivo
+     * @param ruta      el path del archivo
      */
     public void sobreEscribir(String contenido, String ruta) {
         //antes -> escribirEnFile
@@ -137,7 +135,7 @@ public class FilesControl {
     /**
      * Metodo que sirve para comprobar si el archivo a sido sobreescrito.
      *
-     * @param file archivo del cual se obtendra el contenido
+     * @param file      archivo del cual se obtendra el contenido
      * @param contenido texto a evaluar con el contenido del archivo
      * @return true: si el archivo esta sobreescrito, de lo contrario false
      */
@@ -163,44 +161,5 @@ public class FilesControl {
             }
         }
         return null;
-    }
-
-    /**
-     * Metodo para eliminar un archivo.
-     *
-     * @param file_name ruta del archivo y nombre
-     */
-    public void eliminarArchivo(String file_name) {
-        File file = new File(file_name);
-        file.delete();
-    }
-
-    /**
-     * Elimina los archivos con una determinada extensión de una carpeta
-     *
-     * @param path Carpeta de la cual eliminar los archivos
-     * @param extension Extensión de los archivos a eliminar
-     */
-    public void eliminarPorExtension(String path, final String extension) {
-        File[] archivos = new File(path).listFiles((File archivo) -> {
-            if (archivo.isFile()) {
-                return archivo.getName().endsWith('.' + extension);
-            }
-            return false;
-        });
-        for (File archivo : archivos) {
-            archivo.delete();
-        }
-    }
-
-    /**
-     * Metodo para comprobar la existencia de un archivo
-     *
-     * @param path ruta del archivo
-     * @return regresa un valor booleando en caso de que es archivo exista o no
-     */
-    public boolean existencia(String path) {
-        File fr = new File(path);
-        return fr.exists();
     }
 }

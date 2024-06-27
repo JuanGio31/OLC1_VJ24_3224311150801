@@ -1,19 +1,13 @@
 package org.example.view;
 
-import org.example.backend.interprete.abstracto.Instruccion;
-import org.example.backend.interprete.analisis.Parser;
-import org.example.backend.interprete.analisis.Scan;
 import org.example.backend.interprete.error.Errores;
 import org.example.backend.interprete.simbol.Simbolo;
-import org.example.backend.interprete.simbol.TablaSimbolo;
-import org.example.backend.interprete.simbol.Tree;
 import org.example.backend.util.FilesControl;
 import org.example.backend.util.GestionTab;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.StringReader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;

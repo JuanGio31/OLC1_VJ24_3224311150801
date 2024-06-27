@@ -10,8 +10,11 @@ public class ParserSym {
   /* terminals */
   public static final int CAST = 52;
   public static final int DIVIDE = 18;
+  public static final int TO_STRING = 61;
   public static final int CONST = 15;
   public static final int CHAR = 12;
+  public static final int FIND = 63;
+  public static final int REMOVE = 57;
   public static final int FIN_INSTRUCCION = 49;
   public static final int ENTERO = 3;
   public static final int XOR = 28;
@@ -26,6 +29,7 @@ public class ParserSym {
   public static final int RPAREN = 7;
   public static final int NOT = 29;
   public static final int AND = 27;
+  public static final int APPEND = 56;
   public static final int IGUAL = 50;
   public static final int CARACTER = 40;
   public static final int OR = 26;
@@ -37,7 +41,9 @@ public class ParserSym {
   public static final int EOF = 0;
   public static final int DECIMAL = 4;
   public static final int RETURN = 45;
+  public static final int NEW = 55;
   public static final int error = 1;
+  public static final int COMILLADOB = 53;
   public static final int COMA = 41;
   public static final int CADENA = 2;
   public static final int MENOS = 17;
@@ -49,16 +55,21 @@ public class ParserSym {
   public static final int TIMES = 8;
   public static final int LBRACE = 37;
   public static final int ELSE = 31;
+  public static final int PUNTO = 62;
   public static final int LSQUARE = 47;
   public static final int RSQUARE = 48;
   public static final int WHILE = 32;
+  public static final int LIST = 54;
   public static final int DEFAULT = 36;
   public static final int MAYOR_IGUAL = 25;
   public static final int RBRACE = 38;
   public static final int NE = 21;
   public static final int STRING = 13;
   public static final int MENOR_IGUAL = 24;
+  public static final int STRUCT = 58;
   public static final int VAR = 14;
+  public static final int LENGTH = 60;
+  public static final int ROUND = 59;
   public static final int DO = 33;
   public static final int MAS = 16;
   public static final String[] terminalNames = new String[] {
@@ -114,7 +125,18 @@ public class ParserSym {
   "FIN_INSTRUCCION",
   "IGUAL",
   "EQ",
-  "CAST"
+  "CAST",
+  "COMILLADOB",
+  "LIST",
+  "NEW",
+  "APPEND",
+  "REMOVE",
+  "STRUCT",
+  "ROUND",
+  "LENGTH",
+  "TO_STRING",
+  "PUNTO",
+  "FIND"
   };
 }
 

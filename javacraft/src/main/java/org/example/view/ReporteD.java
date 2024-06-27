@@ -109,7 +109,7 @@ public class ReporteD extends java.awt.Dialog {
 
         for (Simbolo s : sym) {
             Object[] tmp = new Object[4];
-            tmp[0] = s.getTipo().getTipo();
+            tmp[0] = s.getTipoDato().getTipo();
             tmp[1] = s.getId();
             tmp[2] = s.getValue();
             tmp[3] = s.isEsConstante();

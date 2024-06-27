@@ -23,7 +23,7 @@ public class AccesoVariable extends Instruccion {
         if (valor == null) {
             return new Errores(TipoError.SEMANTICO, "Variable no existente", this.linea, this.columna);
         }
-        this.tipo.setTipo(valor.getTipo().getTipo());
+        this.tipo.setTipo(valor.getTipoDato().getTipo());
         return valor.getValue();
     }
 }

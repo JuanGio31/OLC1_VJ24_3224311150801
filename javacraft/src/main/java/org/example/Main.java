@@ -1,13 +1,11 @@
 package org.example;
 
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import org.example.backend.interprete.abstracto.Instruccion;
 import org.example.backend.interprete.analisis.Parser;
 import org.example.backend.interprete.analisis.Scan;
 import org.example.backend.interprete.error.Errores;
 import org.example.backend.interprete.simbol.TablaSimbolo;
 import org.example.backend.interprete.simbol.Tree;
-import org.example.view.VentanaPrincipal;
 
 import java.io.StringReader;
 import java.util.LinkedList;
@@ -23,25 +21,85 @@ public class Main {
 //            ventanaPrincipal.setVisible(true);
 //        });
 
-//        llamadaParser(pruebaPrint());
+        //llamadaParser(pruebaPrint());
         //llamadaParser(pruebaIncremento());
         //llamadaParser(match());
         // llamadaParser(swhile());
         //llamadaParser(sfor());
         //llamadaParser(breakContinue());
-        llamadaParser(decArr());
+        //llamadaParser(pruebaVector1());
+        //llamadaParser(decArr());
+        llamadaParser(pruebaList());
     }
 
     private static String decArr() {
         return """
-                const hola: int[] = [5, 4, 3, 8, 10  ];
-                println(hola[4]);
-                const ho: char[] = ['o','b','c'];
-                println(ho[0]);""";
+                var vector1 : string [] = ["Hola", "Mundo"];
+                var vector2 : int [] = [2, 5, 3, 1, 4];
+                const vector3 : double [] = [(double)1, 2.0, 3.5, 4.5, 5.2];
+                const vector4 : char [] = [(char)97, '2', 'b', (char)10, '\n'];
+                const vector5 : bool [] = [true, false, false,true, true];
+
+                println("Hola " + vector1[1]);
+                vector1[1] = "World";
+                println("Hola " + vector1[1]);
+                                
+                for(var i: int = 0; i<4 ; i++){
+                  for(var j: int = i+1; j<5; j++){
+                    if(vector2[i] < vector2[j]){
+                      var temp : int = vector2[i];
+                      vector2[i] = vector2[j];
+                      vector2[j] = temp;
+                    }
+                  }
+                }
+
+                println("Vector ordenado:");
+                println(vector2[0]);
+                println(vector2[1]);
+                println(vector2[2]);
+                println(vector2[3]);
+                """;
+    }
+
+    private static String pruebaList() {
+        return """
+                var vector2 : int [] = [2, 5, 3, 1, 4];
+                List<int> lista = new List();
+                lista.append(1);
+                lista.append(2);
+                lista.append(3);
+                lista.append(4);
+                vector2[0] = lista[0];
+                lista.remove(0);
+                println(lista.find(3));
+                println(lista.Find(vector2));
+                println(lista[0]);
+                println(lista[1]);
+                println(lista[2]);
+                //println(lista[3]);
+                //println(lista[4]);
+                """;
     }
 
     static String pruebaPrint() {
-        return "println(-3*7/2);";
+        return """
+                    const arreglo2: int[] = [0, 0, 1, 2, 0, 0, 5, 1, 0, 0, 8, 0, 0];
+                    var temporal: int = 0;
+                    var suma: int = 0;
+                    var ceros: int = 0;
+                    var i: int = 0;
+                    for (i = 0; i < length(arreglo2); i++) {
+                        temporal = arreglo2[i];
+                        if (temporal == 0) {
+                            ceros = ceros + 1;
+                            continue;
+                        }
+                        suma = suma + temporal;
+                    }
+                    println("La suma de los elementos del arreglo es: " + suma);
+                    println("La cantidad de ceros en el arreglo es: " + ceros);
+                """;
     }
 
     static String pruebaIncremento() {
@@ -87,6 +145,8 @@ public class Main {
             for (var i : lista) {
                 System.out.println(i);
             }
+            System.out.println("\n\n\n");
+            tabla.getTablaActual().forEach((key, value) -> System.out.println(key + " : " + value));
         } catch (Exception ex) {
             System.out.println(ex);
         }

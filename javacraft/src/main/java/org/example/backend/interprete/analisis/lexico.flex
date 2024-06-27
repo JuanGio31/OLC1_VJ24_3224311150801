@@ -11,7 +11,6 @@ import java.util.LinkedList;
 %public
 %class Scan
 %line
-%char
 %column
 %full
 //%debug
@@ -33,8 +32,11 @@ IDENTIFIER     = [A-Za-z_][A-Za-z0-9_]*
 ENTERO         = [0-9]+
 DECIMAL        = [0-9]+"."[0-9]+
 COMENTARIO     =  {EndOfLineComment} | {ComentarioMultiLine}
-CADENA         = [\"] {InputCharacter}* [\"]
+//CADENA         = [\"] {InputCharacter}* [\"]
 CHARACTER      = "\'" [^\'] "\'"
+COMILLADO      = [\"]
+//CADENACOMILLASDOBLES = [\"]([^\"]|(\\\"))*[\"]
+CADENACOMILLASDOBLES = [\"]([^\r\"])*[\"]
 
 %{
     public LinkedList<Errores> listaErrores = new LinkedList<>();
@@ -57,12 +59,25 @@ CHARACTER      = "\'" [^\'] "\'"
 
 %%
     <YYINITIAL>{
+            "["         {     return symbol(ParserSym.LSQUARE, yytext());   }
+            ","         {     return symbol(ParserSym.COMA, yytext());      }
+            "]"         {     return symbol(ParserSym.RSQUARE, yytext());   }
+
             /*  Tipo de datos   */
             "int"      {     return symbol(ParserSym.INT, yytext());      }
             "double"   {     return symbol(ParserSym.DOUBLE, yytext());   }
             "bool"     {     return symbol(ParserSym.BOOL, yytext());     }
             "char"     {     return symbol(ParserSym.CHAR, yytext());     }
             "String"   {     return symbol(ParserSym.STRING, yytext());   }
+
+            /*  Coleccion   */
+            "List"     {     return symbol(ParserSym.LIST, yytext());     }
+            "new"      {     return symbol(ParserSym.NEW, yytext());      }
+            "append"   {     return symbol(ParserSym.APPEND, yytext());   }
+            "remove"   {     return symbol(ParserSym.REMOVE, yytext());   }
+
+            /*  Estructura  */
+            "struc"    {     return symbol(ParserSym.STRUCT, yytext());   }
 
             /*  Tipo de variable    */
             "var"     {     return symbol(ParserSym.VAR, yytext());     }
@@ -111,34 +126,38 @@ CHARACTER      = "\'" [^\'] "\'"
             /*  Sentencias ciclicas */
             "while"    {     return symbol(ParserSym.WHILE, yytext());    }
             "for"      {     return symbol(ParserSym.FOR, yytext());      }
-            "do"       {     return symbol(ParserSym.DO, yytext());  }
+            "do"       {     return symbol(ParserSym.DO, yytext());       }
 
             /*  Sentencias de tranferencia  */
-            "break"      { return symbol(ParserSym.BREAK, yytext()); }
-            "continue"   { return symbol(ParserSym.CONTINUE, yytext()); }
-            "return"     { return symbol(ParserSym.RETURN, yytext()); }
+            "break"      { return symbol(ParserSym.BREAK, yytext());       }
+            "continue"   { return symbol(ParserSym.CONTINUE, yytext());    }
+            "return"     { return symbol(ParserSym.RETURN, yytext());      }
 
             /*  Funciones   */
             "println"    {     return symbol(ParserSym.PRINTLN, yytext());     }
+            "round"      {     return symbol(ParserSym.ROUND, yytext());       }
+            "length"     {     return symbol(ParserSym.LENGTH, yytext());      }
+            "Find"       {     return symbol(ParserSym.FIND, yytext());      }
+            "toString"   {     return symbol(ParserSym.TO_STRING, yytext());   }
 
             /*  Variables   */
-            "true"       {     return symbol(ParserSym.BOOLEAN, yytext());     }
-            "false"      {     return symbol(ParserSym.BOOLEAN, yytext());     }
+            "true"       {     return symbol(ParserSym.BOOLEAN, yytext());               }
+            "false"      {     return symbol(ParserSym.BOOLEAN, yytext());               }
             //{CADENA}     { return symbol(ParserSym.CADENA, yytext());   }
             {CHARACTER}  {     return symbol(ParserSym.CARACTER, yytext().charAt(1));    }
 
             /*  otros   */
             ":"         {     return symbol(ParserSym.DOS_PUNTOS, yytext());    }
-            ","         {     return symbol(ParserSym.COMA, yytext());          }
-            "["         {     return symbol(ParserSym.LSQUARE, yytext());       }
-            "]"         {     return symbol(ParserSym.RSQUARE, yytext());       }
+            "."         {     return symbol(ParserSym.PUNTO, yytext());         }
     }
 
-    <YYINITIAL> {CADENA} {
+    <YYINITIAL> {CADENACOMILLASDOBLES} {
             String cadena = yytext();
             cadena = cadena.substring(1, cadena.length()-1);
             return symbol(ParserSym.CADENA, cadena);
     }
+
+     {COMILLADO} {     return symbol(ParserSym.COMILLADOB, yytext());}
 
 
     <YYINITIAL>{
