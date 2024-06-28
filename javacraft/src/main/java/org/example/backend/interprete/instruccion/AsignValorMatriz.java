@@ -11,57 +11,60 @@ import org.example.backend.interprete.simbol.Tree;
 
 import java.util.LinkedList;
 
-public class AsignacionValorEnPosicion extends Instruccion {
+public class AsignValorMatriz extends Instruccion {
     private String id;
     private Instruccion valor;
-    private Instruccion posicion;
+    private Instruccion posX;
+    private Instruccion posY;
 
-    public AsignacionValorEnPosicion(String id, Instruccion valor, Instruccion posicion, int linea, int columna) {
+    public AsignValorMatriz(String id, Instruccion posY, Instruccion posX, Instruccion valor, int linea, int columna) {
         super(new Tipo(TipoDeDato.VOID), linea, columna);
         this.id = id;
+        this.posY = posY;
+        this.posX = posX;
         this.valor = valor;
-        this.posicion = posicion;
+
     }
 
     @Override
     public Object interpretar(Tree arbol, TablaSimbolo tabla) {
-        var arr = tabla.getVariable(id);
-        if (arr == null) {
-            return new Errores(TipoError.SEMANTICO, "No existente Coleccion: " + id, this.linea, this.columna);
+        var variable = tabla.getVariable(id);
+        if (variable == null) {
+            return new Errores(TipoError.SEMANTICO, "La variable no existe.", this.linea, this.columna);
         }
-        if (arr.getTipo().getTipo() != TipoDeDato.LIST && arr.getTipo().getTipo() != TipoDeDato.VECTOR) {
-            return new Errores(TipoError.SEMANTICO, "No es Coleccion de una dimension: " + id, this.linea, this.columna);
+        if (variable.getTipo().getTipo() != TipoDeDato.MATRIZ) {
+            return new Errores(TipoError.SEMANTICO, "No es vector de 2-Dimensiones.", this.linea, this.columna);
         }
         var nuevoValor = this.valor.interpretar(arbol, tabla);
         if (nuevoValor instanceof Errores) {
             return nuevoValor;
         }
-        if (arr.isEsConstante()) {
+        if (variable.isEsConstante()) {
             return new Errores(TipoError.SEMANTICO, "Arreglo constante: " + id, this.linea, this.columna);
         }
-        if (arr.getTipoDato().getTipo() != this.valor.tipo.getTipo()) {
+        if (variable.getTipoDato().getTipo() != this.valor.tipo.getTipo()) {
             return new Errores(TipoError.SEMANTICO,
                     "Tipos erroneos en asignacion ("
-                            + arr.getTipoDato().getTipo()
+                            + variable.getTipoDato().getTipo()
                             + " != "
                             + this.valor.tipo.getTipo() + ")",
                     this.linea,
                     this.columna);
         }
-        LinkedList<Instruccion> datos = (LinkedList<Instruccion>) arr.getValue();
-        var index = posicion.interpretar(arbol, tabla);
-        if (posicion.tipo.getTipo() != TipoDeDato.INT) {
+        var datos = (LinkedList<LinkedList<Instruccion>>) variable.getValue();
+        var indexI = posY.interpretar(arbol, tabla);
+        var indexJ = posX.interpretar(arbol, tabla);
+        if (posY.tipo.getTipo() != posX.tipo.getTipo()) {
             return new Errores(TipoError.SEMANTICO, "Indice no valido, debe ser entero", this.linea, this.columna);
         }
-
-        if ((int) index > -1 && (int) index < datos.size()) {
-            for (int i = 0; i < datos.size(); i++) {
-                if (i == (int) index) {
-                    datos.set(i, new Nativo(nuevoValor, tipo, this.linea, this.columna));
-                    break;
-                }
-            }
-            arr.setValue(datos);
+        if (posY.tipo.getTipo() != TipoDeDato.INT) {
+            return new Errores(TipoError.SEMANTICO, "Indice invalido, debe ser entero", this.linea, this.columna);
+        }
+        if (((int) indexI > -1 && (int) indexI < datos.size())
+                && ((int) indexJ > -1 && (int) indexJ < datos.getFirst().size())) {
+            var temp = datos.get((int) indexI);
+            temp.set((int) indexJ, new Nativo(nuevoValor, variable.getTipoDato(), this.linea, this.columna));
+            variable.setValue(datos);
         } else {
             return new Errores(TipoError.SEMANTICO, "ArrayIndexException", this.linea, this.columna);
         }

@@ -4,6 +4,7 @@ import org.example.backend.interprete.abstracto.Instruccion;
 import org.example.backend.interprete.analisis.Parser;
 import org.example.backend.interprete.analisis.Scan;
 import org.example.backend.interprete.error.Errores;
+import org.example.backend.interprete.instruccion.Metodo;
 import org.example.backend.interprete.simbol.TablaSimbolo;
 import org.example.backend.interprete.simbol.Tree;
 
@@ -64,21 +65,10 @@ public class Main {
 
     private static String pruebaList() {
         return """
-                var vector2 : int [] = [2, 5, 3, 1, 4];
-                List<int> lista = new List();
-                lista.append(1);
-                lista.append(2);
-                lista.append(3);
-                lista.append(4);
-                vector2[0] = lista[0];
-                lista.remove(0);
-                println(lista.find(3));
-                println(lista.Find(vector2));
-                println(lista[0]);
-                println(lista[1]);
-                println(lista[2]);
-                //println(lista[3]);
-                //println(lista[4]);
+                var vector: int[][] = [[1,2],[2,3],[3,4]];
+                println(vector[0][1]);
+                vector[0][1] = 'A';
+                println(vector[0][1]);
                 """;
     }
 
@@ -124,23 +114,34 @@ public class Main {
             StringReader stringReader = new StringReader(texto + "\n");
             Scan scan = new Scan(stringReader);
             Parser parser = new Parser(scan);
+
             var resultado = parser.parse();
             var ast = new Tree((LinkedList<Instruccion>) resultado.value);
             var tabla = new TablaSimbolo();
             tabla.setNombre("GLOBAL");
             ast.setConsola("");
+            ast.setTablaGlobal(tabla);
+
             LinkedList<Errores> lista = new LinkedList<>();
             lista.addAll(scan.listaErrores);
             lista.addAll(parser.listaErrores);
-            for (var a : ast.getInstrucciones()) {
+            for (var a : ast.getInstrucciones()) {//primera vuelda
                 if (a == null) {
                     continue;
                 }
+
+                if (a instanceof Metodo){
+                    ast.addFun(a);
+                }
+
                 var res = a.interpretar(ast, tabla);
                 if (res instanceof Errores) {
                     lista.add((Errores) res);
                 }
             }
+            //segunda vuelta
+
+            //tercera vuelta->entryPoint
             System.out.println(ast.getConsola());
             for (var i : lista) {
                 System.out.println(i);

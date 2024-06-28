@@ -50,6 +50,7 @@ public class ParserSym {
   public static final int MENOR = 22;
   public static final int MOD = 19;
   public static final int BREAK = 43;
+  public static final int VOID = 64;
   public static final int EQ = 51;
   public static final int MAYOR = 23;
   public static final int TIMES = 8;
@@ -136,7 +137,8 @@ public class ParserSym {
   "LENGTH",
   "TO_STRING",
   "PUNTO",
-  "FIND"
+  "FIND",
+  "VOID"
   };
 }
 

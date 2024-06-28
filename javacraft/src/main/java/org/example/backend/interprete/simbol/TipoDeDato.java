@@ -10,6 +10,7 @@ public enum TipoDeDato {
     CHAR,
     STRING,
     VECTOR,
+    MATRIZ,
     LIST,
     METOD,
     VARIABLE,

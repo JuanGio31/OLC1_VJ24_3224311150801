@@ -1,6 +1,7 @@
 package org.example.backend.interprete.simbol;
 
 import org.example.backend.interprete.abstracto.Instruccion;
+import org.example.backend.interprete.error.Errores;
 
 import java.util.LinkedList;
 
@@ -156,6 +157,25 @@ public class Simbolo {
                 }
             }
             return valores;
+        } else if (tipo.getTipo() == TipoDeDato.MATRIZ) {
+            LinkedList<LinkedList> valores = (LinkedList<LinkedList>) this.getValue();
+            var datos = new LinkedList<LinkedList>();
+            for (int i = 0; i < valores.size(); i++) {
+                LinkedList obj = new LinkedList();
+                for (int j = 0; j < valores.getFirst().size(); j++) {
+                    var temp = (Instruccion) valores.get(i).get(j);
+                    var valorInterpretado = temp.interpretar(null, null);
+                    if (valorInterpretado instanceof String) {
+                        obj.add("\"" + valorInterpretado + "\"");
+                    } else if (valorInterpretado instanceof Character) {
+                        obj.add("'" + valorInterpretado + "'");
+                    } else {
+                        obj.add(valorInterpretado);
+                    }
+                }
+                datos.add(obj);
+            }
+            return datos;
         }
         return null;
     }

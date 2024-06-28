@@ -149,6 +149,7 @@ CADENACOMILLASDOBLES = [\"]([^\r\"])*[\"]
             /*  otros   */
             ":"         {     return symbol(ParserSym.DOS_PUNTOS, yytext());    }
             "."         {     return symbol(ParserSym.PUNTO, yytext());         }
+            "void"      {     return symbol(ParserSym.VOID, yytext());          }
     }
 
     <YYINITIAL> {CADENACOMILLASDOBLES} {
