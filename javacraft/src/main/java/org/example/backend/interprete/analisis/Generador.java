@@ -8,14 +8,14 @@ public class Generador {
 
     public static void generarCompilador() {
         try{
-            String ruta = "src/main/java/org/example/backend/interprete/analisis/";
+            String ruta = "/home/giovanic/Documentos/LenguajesProgra/Java/JAVA SE/OLC1_VJ24_3224311150801/javacraft/src/main/java/org/example/backend/interprete/analisis/";
             /*
                 ruta -> ruta del los archivos
                 -d -> ruta donde se genera la salida
                 ruta salida
             */ 
 
-           String Flex[] = {ruta + "lexico.flex", "-d", ruta};
+           String[] Flex = {ruta + "lexico.flex", "-d", ruta};
            jflex.Main.generate(Flex);
 
            /*

@@ -9,9 +9,10 @@ import org.example.backend.interprete.simbol.Tipo;
 import org.example.backend.interprete.simbol.Tree;
 
 public class DeclaracionVariable extends Instruccion {
+
     public String identificador;
     public Instruccion valor;
-    private boolean esConstante;
+    private final boolean esConstante;
 
     public DeclaracionVariable(boolean esConstante, String identificador, Instruccion valor, Tipo tipo, int linea, int columna) {
         super(tipo, linea, columna);
@@ -33,35 +34,23 @@ public class DeclaracionVariable extends Instruccion {
             sym.setEsConstante(this.esConstante);
             boolean creacion = tabla.setVariable(sym);
             if (!creacion) {
-                return new Errores(TipoError.SEMANTICO, "Variable ya existente", this.linea, this.columna);
+                return new Errores(TipoError.SEMANTICO, "variable ya existente: " + sym.getId(), this.linea, this.columna);
             }
         } else {
-
-
             var valorInterpretado = this.valor.interpretar(arbol, tabla);
-
-            //validamos si es error
             if (valorInterpretado instanceof Errores) {
                 return valorInterpretado;
             }
-
-            //validamos los tipo
             if (this.valor.tipo.getTipo() != this.tipo.getTipo()) {
                 return new Errores(TipoError.SEMANTICO, "Tipos erroneos", this.linea, this.columna);
             }
-
             Simbolo s = new Simbolo(this.tipo, this.identificador, valorInterpretado);
             s.setEsConstante(this.esConstante);
             boolean creacion = tabla.setVariable(s);
             if (!creacion) {
-                return new Errores(TipoError.SEMANTICO, "Variable ya existente", this.linea, this.columna);
+                return new Errores(TipoError.SEMANTICO, "Variable ya existente: " + s.getId(), this.linea, this.columna);
             }
         }
         return null;
     }
-
-    public boolean isConstante() {
-        return esConstante;
-    }
 }
-

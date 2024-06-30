@@ -3,9 +3,9 @@ package org.example.backend.interprete.instruccion;
 import org.apache.commons.text.StringEscapeUtils;
 import org.example.backend.interprete.abstracto.Instruccion;
 import org.example.backend.interprete.error.Errores;
-import org.example.backend.interprete.simbol.TipoDeDato;
 import org.example.backend.interprete.simbol.TablaSimbolo;
 import org.example.backend.interprete.simbol.Tipo;
+import org.example.backend.interprete.simbol.TipoDeDato;
 import org.example.backend.interprete.simbol.Tree;
 
 /**
@@ -29,6 +29,7 @@ public class Print extends Instruccion {
 
         String res = StringEscapeUtils.unescapeJava(resultado.toString());
         arbol.Print(res);
+        //arbol.Print(resultado.toString());
         return null;
     }
 

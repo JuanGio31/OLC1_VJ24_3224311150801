@@ -4,10 +4,12 @@
  */
 package org.example.view;
 
+import java.awt.Dimension;
 import org.example.backend.interprete.error.Errores;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.LinkedList;
+
 import org.example.backend.interprete.simbol.Simbolo;
 
 /**
@@ -23,8 +25,9 @@ public class ReporteD extends java.awt.Dialog {
     public ReporteD(java.awt.Frame parent) {
         super(parent, true);
         initComponents();
+        setMinimumSize(new Dimension(500, 80));
+        setPreferredSize(new Dimension(500, 80));
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -44,16 +47,18 @@ public class ReporteD extends java.awt.Dialog {
         });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null}
-                },
-                new String[]{
-                        "Title 1", "Title 2", "Title 3", "Title 4"
-                }
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
         ));
+        jTable1.setMinimumSize(new java.awt.Dimension(500, 80));
+        jTable1.setPreferredSize(new java.awt.Dimension(500, 80));
         jScrollPane1.setViewportView(jTable1);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -71,9 +76,8 @@ public class ReporteD extends java.awt.Dialog {
 
     public void loadTable(LinkedList<Errores> err, String[] nombreCol) {
         //TipoError tipo, String desc, int lineaa, int columa
-        String[] nombreColumnas = nombreCol;
         modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(nombreColumnas);
+        modelo.setColumnIdentifiers(nombreCol);
 
         while (modelo.getRowCount() > 0) {
             modelo.removeRow(0);
@@ -88,13 +92,16 @@ public class ReporteD extends java.awt.Dialog {
             modelo.addRow(tmp);
         }
         jTable1.setModel(modelo);
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(250);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(75);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(75);
     }
-    
+
     public void loadTable2(LinkedList<Simbolo> sym, String[] nombreCol) {
         //TipoError tipo, String desc, int lineaa, int columa
-        String[] nombreColumnas = nombreCol;
         modelo = new DefaultTableModel();
-        modelo.setColumnIdentifiers(nombreColumnas);
+        modelo.setColumnIdentifiers(nombreCol);
 
         while (modelo.getRowCount() > 0) {
             modelo.removeRow(0);
@@ -102,13 +109,17 @@ public class ReporteD extends java.awt.Dialog {
 
         for (Simbolo s : sym) {
             Object[] tmp = new Object[4];
-            tmp[0] = s.getTipo();
+            tmp[0] = s.getTipoDato().getTipo();
             tmp[1] = s.getId();
-            tmp[2] = s.getValue();
+            tmp[2] = s.getVal().toString();
             tmp[3] = s.isEsConstante();
             modelo.addRow(tmp);
         }
         jTable1.setModel(modelo);
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(80);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(265);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(90);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

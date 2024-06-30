@@ -1,7 +1,6 @@
 package org.example.backend.interprete.simbol;
 
 /**
- *
  * @author giovanic
  */
 public enum TipoDeDato {
@@ -10,5 +9,10 @@ public enum TipoDeDato {
     BOOLEAN,
     CHAR,
     STRING,
+    VECTOR,
+    MATRIZ,
+    LIST,
+    METOD,
+    VARIABLE,
     VOID
 }

@@ -56,6 +56,8 @@ public class Aritmeticas extends Instruccion {
             case POTENCIA -> this.potencia(opIzq, opDer);
             case MODULO -> this.modulo(opIzq, opDer);
             case NEGACION -> this.negacion(Unico);
+            case INCREMENTO -> this.incremento(Unico);
+            case DECREMENTO -> this.decremento(Unico);
             default -> new Errores(TipoError.SEMANTICO, "Operador invalido", this.linea, this.columna);
         };
     }
@@ -402,6 +404,40 @@ public class Aritmeticas extends Instruccion {
             }
             default -> {
                 return new Errores(TipoError.SEMANTICO, "Negacion erronea", this.linea, this.columna);
+            }
+        }
+    }
+
+    private Object incremento(Object obj) {
+        var unico = this.operandoUnico.tipo.getTipo();
+        switch (unico) {
+            case INT -> {
+                this.tipo.setTipo(TipoDeDato.INT);
+                return Integer.parseInt(obj.toString()) + 1;
+            }
+            case DOUBLE -> {
+                this.tipo.setTipo(TipoDeDato.DOUBLE);
+                return Double.parseDouble(obj.toString()) + 1;
+            }
+            default -> {
+                return new Errores(TipoError.SEMANTICO, "Operacion invalida!", this.linea, this.columna);
+            }
+        }
+    }
+
+    private Object decremento(Object obj) {
+        var unico = this.operandoUnico.tipo.getTipo();
+        switch (unico) {
+            case INT -> {
+                this.tipo.setTipo(TipoDeDato.INT);
+                return Integer.parseInt(obj.toString()) - 1;
+            }
+            case DOUBLE -> {
+                this.tipo.setTipo(TipoDeDato.DOUBLE);
+                return Double.parseDouble(obj.toString()) - 1;
+            }
+            default -> {
+                return new Errores(TipoError.SEMANTICO, "Operacion invalida!", this.linea, this.columna);
             }
         }
     }

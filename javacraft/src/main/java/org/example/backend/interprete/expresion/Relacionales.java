@@ -3,6 +3,7 @@ package org.example.backend.interprete.expresion;
 import org.example.backend.interprete.abstracto.Instruccion;
 import org.example.backend.interprete.error.Errores;
 import org.example.backend.interprete.error.TipoError;
+import org.example.backend.interprete.instruccion.Retorno;
 import org.example.backend.interprete.simbol.TablaSimbolo;
 import org.example.backend.interprete.simbol.Tipo;
 import org.example.backend.interprete.simbol.TipoDeDato;
@@ -53,33 +54,34 @@ public class Relacionales extends Instruccion {
                 case INT -> Integer.parseInt(condIzq.toString()) == Integer.parseInt(condDer.toString());
                 case DOUBLE -> Integer.parseInt(condIzq.toString()) == Double.parseDouble(condDer.toString());
                 case CHAR -> Integer.parseInt(condIzq.toString()) == (int) (condDer.toString().charAt(0));
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, = ", this.linea, this.columna);
             };
             case DOUBLE -> switch (comparando2) {
                 case INT -> Double.parseDouble(condIzq.toString()) == Integer.parseInt(condDer.toString());
                 case DOUBLE -> Double.parseDouble(condIzq.toString()) == Double.parseDouble(condDer.toString());
                 case CHAR -> Double.parseDouble(condIzq.toString()) == (double) (condDer.toString().charAt(0));
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, = ", this.linea, this.columna);
             };
             case CHAR -> switch (comparando2) {
                 case INT -> (int) (condIzq.toString().charAt(0)) == Integer.parseInt(condDer.toString());
                 case DOUBLE -> (double) (condIzq.toString().charAt(0)) == Double.parseDouble(condDer.toString());
                 case CHAR -> condIzq.toString().charAt(1) == condDer.toString().charAt(1);
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, = ", this.linea, this.columna);
             };
             case BOOLEAN -> {
                 if (comparando2 == TipoDeDato.BOOLEAN) {
                     yield Boolean.parseBoolean(condIzq.toString()) == Boolean.parseBoolean(condDer.toString());
                 }
-                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido, = ", this.linea, this.columna);
             }
             case STRING -> {
                 if (comparando2 == TipoDeDato.STRING) {
                     yield condIzq.toString().equalsIgnoreCase(condDer.toString());
                 }
-                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido, = ", this.linea, this.columna);
             }
-            default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+
+            default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, = ", this.linea, this.columna);
         };
     }
 
@@ -92,20 +94,20 @@ public class Relacionales extends Instruccion {
                 case INT -> Integer.parseInt(condIzq.toString()) <= Integer.parseInt(condDer.toString());
                 case DOUBLE -> Integer.parseInt(condIzq.toString()) <= Double.parseDouble(condDer.toString());
                 case CHAR -> Integer.parseInt(condIzq.toString()) <= (int) (condDer.toString().charAt(0));
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, <= ", this.linea, this.columna);
             };
             case DOUBLE -> switch (comparando2) {
                 case INT -> Double.parseDouble(condIzq.toString()) <= Integer.parseInt(condDer.toString());
                 case DOUBLE -> Double.parseDouble(condIzq.toString()) <= Double.parseDouble(condDer.toString());
                 case CHAR ->
                         Double.parseDouble(condIzq.toString()) <= Character.getNumericValue(condDer.toString().charAt(1));
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, <= ", this.linea, this.columna);
             };
             case CHAR -> switch (comparando2) {
                 case INT -> (int) (condIzq.toString().charAt(0)) <= Integer.parseInt(condDer.toString());
                 case DOUBLE -> (int) (condIzq.toString().charAt(0)) <= Double.parseDouble(condDer.toString());
                 case CHAR -> condIzq.toString().charAt(0) <= condDer.toString().charAt(0);
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, <= ", this.linea, this.columna);
             };
             case BOOLEAN -> {
                 if (comparando2 == TipoDeDato.BOOLEAN) {
@@ -113,7 +115,7 @@ public class Relacionales extends Instruccion {
                     int aux2 = Boolean.parseBoolean(condDer.toString()) ? 1 : 0;
                     yield aux1 <= aux2;
                 }
-                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido, <= ", this.linea, this.columna);
             }
 /*
             case STRING -> {
@@ -123,7 +125,7 @@ public class Relacionales extends Instruccion {
                 yield new ErrorM(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
             }
 */
-            default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+            default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, <= ", this.linea, this.columna);
         };
     }
 
@@ -136,20 +138,20 @@ public class Relacionales extends Instruccion {
                 case INT -> Integer.parseInt(condIzq.toString()) >= Integer.parseInt(condDer.toString());
                 case DOUBLE -> Integer.parseInt(condIzq.toString()) >= Double.parseDouble(condDer.toString());
                 case CHAR -> Integer.parseInt(condIzq.toString()) >= (int) (condDer.toString().charAt(0));
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, >= ", this.linea, this.columna);
             };
             case DOUBLE -> switch (comparando2) {
                 case INT -> Double.parseDouble(condIzq.toString()) >= Integer.parseInt(condDer.toString());
                 case DOUBLE -> Double.parseDouble(condIzq.toString()) >= Double.parseDouble(condDer.toString());
                 case CHAR ->
                         Double.parseDouble(condIzq.toString()) >= Character.getNumericValue(condDer.toString().charAt(1));
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, >= ", this.linea, this.columna);
             };
             case CHAR -> switch (comparando2) {
                 case INT -> (int) (condIzq.toString().charAt(0)) >= Integer.parseInt(condDer.toString());
                 case DOUBLE -> (int) (condIzq.toString().charAt(0)) >= Double.parseDouble(condDer.toString());
                 case CHAR -> condIzq.toString().charAt(1) >= condDer.toString().charAt(1);
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, >= ", this.linea, this.columna);
             };
             case BOOLEAN -> {
                 if (comparando2 == TipoDeDato.BOOLEAN) {
@@ -157,7 +159,7 @@ public class Relacionales extends Instruccion {
                     int aux2 = Boolean.parseBoolean(condDer.toString()) ? 1 : 0;
                     yield aux1 >= aux2;
                 }
-                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido, >= ", this.linea, this.columna);
             }
 /*
             case STRING -> {
@@ -167,7 +169,7 @@ public class Relacionales extends Instruccion {
                 yield new ErrorM(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
             }
 */
-            default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+            default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, >= ", this.linea, this.columna);
         };
     }
 
@@ -180,19 +182,19 @@ public class Relacionales extends Instruccion {
                 case INT -> Integer.parseInt(condIzq.toString()) < Integer.parseInt(condDer.toString());
                 case DOUBLE -> Integer.parseInt(condIzq.toString()) < Double.parseDouble(condDer.toString());
                 case CHAR -> Integer.parseInt(condIzq.toString()) < (int) (condDer.toString().charAt(1));
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, < ", this.linea, this.columna);
             };
             case DOUBLE -> switch (comparando2) {
                 case INT -> Double.parseDouble(condIzq.toString()) < Integer.parseInt(condDer.toString());
                 case DOUBLE -> Double.parseDouble(condIzq.toString()) < Double.parseDouble(condDer.toString());
                 case CHAR -> Double.parseDouble(condIzq.toString()) < (double) (condDer.toString().charAt(1));
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, < ", this.linea, this.columna);
             };
             case CHAR -> switch (comparando2) {
                 case INT -> (double) (condIzq.toString().charAt(0)) < Integer.parseInt(condDer.toString());
                 case DOUBLE -> (double) (condIzq.toString().charAt(0)) < Double.parseDouble(condDer.toString());
                 case CHAR -> condIzq.toString().charAt(0) < condDer.toString().charAt(0);
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, < ", this.linea, this.columna);
             };
             case BOOLEAN -> {
                 if (comparando2 == TipoDeDato.BOOLEAN) {
@@ -200,7 +202,7 @@ public class Relacionales extends Instruccion {
                     int aux2 = Boolean.parseBoolean(condDer.toString()) ? 1 : 0;
                     yield aux1 < aux2;
                 }
-                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido, < ", this.linea, this.columna);
             }
 /*
             case STRING -> {
@@ -210,7 +212,7 @@ public class Relacionales extends Instruccion {
                 yield new ErrorM(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
             }
 */
-            default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+            default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, < ", this.linea, this.columna);
         };
     }
 
@@ -223,19 +225,19 @@ public class Relacionales extends Instruccion {
                 case INT -> Integer.parseInt(condIzq.toString()) > Integer.parseInt(condDer.toString());
                 case DOUBLE -> Integer.parseInt(condIzq.toString()) > Double.parseDouble(condDer.toString());
                 case CHAR -> Integer.parseInt(condIzq.toString()) > (int) (condDer.toString().charAt(0));
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, > ", this.linea, this.columna);
             };
             case DOUBLE -> switch (comparando2) {
                 case INT -> Double.parseDouble(condIzq.toString()) > Integer.parseInt(condDer.toString());
                 case DOUBLE -> Double.parseDouble(condIzq.toString()) < Double.parseDouble(condDer.toString());
                 case CHAR -> Double.parseDouble(condIzq.toString()) > (int) (condDer.toString().charAt(1));
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, > ", this.linea, this.columna);
             };
             case CHAR -> switch (comparando2) {
                 case INT -> (int) (condIzq.toString().charAt(0)) > Integer.parseInt(condDer.toString());
                 case DOUBLE -> (double) (condIzq.toString().charAt(0)) > Double.parseDouble(condDer.toString());
                 case CHAR -> condIzq.toString().charAt(1) > condDer.toString().charAt(1);
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, > ", this.linea, this.columna);
             };
             case BOOLEAN -> {
                 if (comparando2 == TipoDeDato.BOOLEAN) {
@@ -243,7 +245,7 @@ public class Relacionales extends Instruccion {
                     int aux2 = Boolean.parseBoolean(condDer.toString()) ? 1 : 0;
                     yield aux1 > aux2;
                 }
-                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido, > ", this.linea, this.columna);
             }
 /*
             case STRING -> {
@@ -253,7 +255,7 @@ public class Relacionales extends Instruccion {
                 yield new ErrorM(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
             }
 */
-            default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+            default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, > ", this.linea, this.columna);
         };
     }
 
@@ -266,33 +268,33 @@ public class Relacionales extends Instruccion {
                 case INT -> Integer.parseInt(condIzq.toString()) != Integer.parseInt(condDer.toString());
                 case DOUBLE -> Integer.parseInt(condIzq.toString()) != Double.parseDouble(condDer.toString());
                 case CHAR -> Integer.parseInt(condIzq.toString()) != (int) (condDer.toString().charAt(1));
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, != ", this.linea, this.columna);
             };
             case DOUBLE -> switch (comparando2) {
                 case INT -> Double.parseDouble(condIzq.toString()) != Integer.parseInt(condDer.toString());
                 case DOUBLE -> Double.parseDouble(condIzq.toString()) != Double.parseDouble(condDer.toString());
                 case CHAR -> Double.parseDouble(condIzq.toString()) != (double) (condDer.toString().charAt(1));
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, != ", this.linea, this.columna);
             };
             case CHAR -> switch (comparando2) {
                 case INT -> (int) (condIzq.toString().charAt(0)) != Integer.parseInt(condDer.toString());
                 case DOUBLE -> (int) (condIzq.toString().charAt(1)) != Double.parseDouble(condDer.toString());
                 case CHAR -> condIzq.toString().charAt(0) != condDer.toString().charAt(0);
-                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, != ", this.linea, this.columna);
             };
             case BOOLEAN -> {
                 if (comparando2 == TipoDeDato.BOOLEAN) {
                     yield Boolean.parseBoolean(condIzq.toString()) != Boolean.parseBoolean(condDer.toString());
                 }
-                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido, != ", this.linea, this.columna);
             }
             case STRING -> {
                 if (comparando2 == TipoDeDato.STRING) {
                     yield !condIzq.toString().equalsIgnoreCase(condDer.toString());
                 }
-                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+                yield new Errores(TipoError.SEMANTICO, "Relacional Invalido, != ", this.linea, this.columna);
             }
-            default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido", this.linea, this.columna);
+            default -> new Errores(TipoError.SEMANTICO, "Relacional Invalido, != ", this.linea, this.columna);
         };
     }
 }

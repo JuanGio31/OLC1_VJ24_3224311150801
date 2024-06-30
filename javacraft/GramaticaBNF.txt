@@ -1,83 +1,111 @@
-/* Gramática en BNF con notación ajustada */
-
-/* Definición de símbolos terminales */
-"CADENA", "ENTERO", "DECIMAL", "ID", "LPAREN", "RPAREN", "TIMES", "INT",
-"DOUBLE", "BOOL", "CHAR", "STRING", "VAR", "CONST", "MAS", "MENOS", "DIVIDE",
-"MOD", "UMENOS", "NE", "MENOR", "MAYOR", "MENOR_IGUAL", "MAYOR_IGUAL", "OR",
-"AND", "XOR", "NOT", "IF", "ELSE", "WHILE", "DO", "FOR", "MATCH", "DEFAULT",
-"LBRACE", "RBRACE", "FIN_INSTRUCCION", "PRINTLN", "CARACTER", "COMA",
-"DOS_PUNTOS", "BOOLEAN", "IGUAL", "EQ";
-
-/* Definición de símbolos no terminales */
-<INICIO>, <INSTRUCCIONES>,
-<INSTRUCCION>, <PRINT>, <DECLARACION>, <ASIGNACION>,<EXPRESION>, <CAST>,
-<TIPOS>
-
-/* Reglas de producción */
-
 <INICIO> ::= <INSTRUCCIONES>
-             ;
-
 
 <INSTRUCCIONES> ::= <INSTRUCCIONES> <INSTRUCCION>
-                   | <INSTRUCCION>
-                   ;
-
+                  | <INSTRUCCION>
 
 <INSTRUCCION> ::= <PRINT>
                 | <DECLARACION>
                 | <ASIGNACION>
+                | <SIF>
+                | <SBREAK>
+                | <SCONTINUAR>
+                | <SMATCH>
+                | <SWHILE>
+                | <SFOR>
+                | <SDO>
+                | <DECLARACION_VECTOR>
+                | <ASIGN_VECTOR>
+                | <DEC_LIST>
+                | <AGREGAR>
+                | <ELIMINAR>
+                | <METODO>
+                | <MAIN>
+                | <RETORNO>
+                | <LLAMADA>
                 | error "FIN_INSTRUCCION"
-                ;
-
 
 <PRINT> ::= "PRINTLN" "LPAREN" <EXPRESION> "RPAREN" "FIN_INSTRUCCION"
-            ;
 
-
-<DECLARACION> ::= "CONST" "ID" "DOS_PUNTOS" <TIPOS> "IGUAL" <EXPRESION>
-                        "FIN_INSTRUCCION"
-                | "VAR" "ID" "DOS_PUNTOS" <TIPOS> "IGUAL" <EXPRESION>
-                        "FIN_INSTRUCCION"
+<DECLARACION> ::= "CONST" "ID" "DOS_PUNTOS" <TIPOS> "IGUAL" <EXPRESION> "FIN_INSTRUCCION"
+                | "VAR" "ID" "DOS_PUNTOS" <TIPOS> "IGUAL" <EXPRESION> "FIN_INSTRUCCION"
                 | "CONST" "ID" "DOS_PUNTOS" <TIPOS> "FIN_INSTRUCCION"
                 | "VAR" "ID" "DOS_PUNTOS" <TIPOS> "FIN_INSTRUCCION"
-                ;
 
 <ASIGNACION> ::= "ID" "IGUAL" <EXPRESION> "FIN_INSTRUCCION"
-               ;
+               | "ID" "MAS" "MAS" "FIN_INSTRUCCION"
+               | "ID" "MENOS" "MENOS" "FIN_INSTRUCCION"
 
+<SBREAK> ::= "BREAK" "FIN_INSTRUCCION"
 
-<TIPOS> ::= "INT"
-          | "DOUBLE"
-          | "BOOL"
-          | "CHAR"
-          | "STRING"
-          ;
+<SCONTINUAR> ::= "CONTINUE" "FIN_INSTRUCCION"
 
+<SIF> ::= "IF" "LPAREN" <EXPRESION> "RPAREN" "LBRACE" <INSTRUCCIONES> "RBRACE"
+        | "IF" "LPAREN" <EXPRESION> "RPAREN" "LBRACE" <INSTRUCCIONES> "RBRACE" "ELSE" <SIF>
+        | "IF" "LPAREN" <EXPRESION> "RPAREN" "LBRACE" <INSTRUCCIONES> "RBRACE" "ELSE" "LBRACE" <INSTRUCCIONES> "RBRACE"
 
-<EXPRESION> ::= "MENOS" <EXPRESION>
-              | <EXPRESION> "MAS" <EXPRESION>
-              | <EXPRESION> "MENOS" <EXPRESION>
-              | <EXPRESION> "TIMES" <EXPRESION>
-              | <EXPRESION> "TIMES" "TIMES" <EXPRESION>
-              | <EXPRESION> "MOD" <EXPRESION>
-              | <EXPRESION> "DIVIDE" <EXPRESION>
-              | <EXPRESION> "EQ" <EXPRESION>
-              | <EXPRESION> "NE" <EXPRESION>
-              | <EXPRESION> "MENOR" <EXPRESION>
-              | <EXPRESION> "MAYOR" <EXPRESION>
-              | <EXPRESION> "MENOR_IGUAL" <EXPRESION>
-              | <EXPRESION> "MAYOR_IGUAL" <EXPRESION>
-              | <EXPRESION> "OR" <EXPRESION>
-              | <EXPRESION> "AND" <EXPRESION>
-              | <EXPRESION> "XOR" <EXPRESION>
-              | "LPAREN" <TIPOS> "RPAREN" <EXPRESION>
-              | "NOT" <EXPRESION>
-              | "LPAREN" <EXPRESION> "RPAREN"
-              | "ENTERO"
-              | "DECIMAL"
-              | "CARACTER"
-              | "CADENA"
-              | "BOOLEAN"
-              | "ID"
-              ;
+<SWHILE> ::= "WHILE" "LPAREN" <EXPRESION> "RPAREN" "LBRACE" <INSTRUCCIONES> "RBRACE"
+
+<SDO> ::= "DO" "LBRACE" <INSTRUCCIONES> "RBRACE" "WHILE" "LPAREN" <EXPRESION> "RPAREN" "FIN_INSTRUCCION"
+
+<SFOR> ::= "FOR" "LPAREN" <INSTRUCCION> "EXPRESION" "FIN_INSTRUCCION" <INSTRUCCION> "LLAMADA" "RPAREN" "LBRACE" <INSTRUCCIONES> "RBRACE"
+
+<PRINT> ::= "PRINTLN" "LPAREN" <EXPRESION> "RPAREN" "FIN_INSTRUCCION"
+
+<FROUND> ::= "ID" "PUNTO" "ROUND" "LPAREN" <CALLPARAMS> "RPAREN" "FIN_INSTRUCCION"
+
+<FLENGTH> ::= "ID" "PUNTO" "LENGTH" "LPAREN" <CALLPARAMS> "RPAREN" "FIN_INSTRUCCION"
+
+<FFIND> ::= "ID" "PUNTO" "FIND" "LPAREN" <CALLPARAMS> "RPAREN" "FIN_INSTRUCCION"
+
+<DECLARACION_VECTOR> ::= "LIST" <DEC_LIST> "FIN_INSTRUCCION"
+
+<ASIGN_VECTOR> ::= "ID" "PUNTO" "NEW" "LIST" "LPAREN" <MATRIZ> "RPAREN" "FIN_INSTRUCCION"
+
+<DEC_LIST> ::= "ID" "IGUAL" "LSQUARE" "RSQUARE"
+              | "ID" "IGUAL" "LSQUARE" <INSTRUCCIONES> "RSQUARE"
+
+<AGREGAR> ::= "ID" "PUNTO" "APPEND" "LPAREN" <EXPRESION> "RPAREN" "FIN_INSTRUCCION"
+
+<ELIMINAR> ::= "ID" "PUNTO" "REMOVE" "LPAREN" <EXPRESION> "RPAREN" "FIN_INSTRUCCION"
+
+<METODO> ::= "DOUBLE" "ID" "LPAREN" <DECPARAMETROS> "RPAREN" "LBRACE" <INSTRUCCIONES> "RETURN" <EXPRESION> "RBRACE"
+           | "INT" "ID" "LPAREN" <DECPARAMETROS> "RPAREN" "LBRACE" <INSTRUCCIONES> "RETURN" <EXPRESION> "RBRACE"
+           | "CHAR" "ID" "LPAREN" <DECPARAMETROS> "RPAREN" "LBRACE" <INSTRUCCIONES> "RETURN" <EXPRESION> "RBRACE"
+           | "BOOLEAN" "ID" "LPAREN" <DECPARAMETROS> "RPAREN" "LBRACE" <INSTRUCCIONES> "RETURN" <EXPRESION> "RBRACE"
+           | "STRING" "ID" "LPAREN" <DECPARAMETROS> "RPAREN" "LBRACE" <INSTRUCCIONES> "RETURN" <EXPRESION> "RBRACE"
+
+<MAIN> ::= "VOID" "START_WITH" "LBRACE" <INSTRUCCIONES> "RBRACE"
+
+<RETORNO> ::= "RETURN" <EXPRESION> "FIN_INSTRUCCION"
+
+<LLAMADA> ::= "ID" "LPAREN" <CALLPARAMS> "RPAREN" "FIN_INSTRUCCION"
+
+<EXPRESION> ::= <EXPR2>
+
+<EXPR2> ::= <EXPR2> "OR" <EXPR3>
+          | <EXPR2> "AND" <EXPR3>
+          | <EXPR2> "XOR" <EXPR3>
+          | <EXPR3>
+
+<EXPR3> ::= <EXPR3> "EQ" <EXPR4>
+          | <EXPR3> "NE" <EXPR4>
+          | <EXPR3> "MENOR" <EXPR4>
+          | <EXPR3> "MENOR_IGUAL" <EXPR4>
+          | <EXPR3> "MAYOR" <EXPR4>
+          | <EXPR3> "MAYOR_IGUAL" <EXPR4>
+          | <EXPR4>
+
+<EXPR4> ::= <EXPR4> "MAS" <EXPR5>
+          | <EXPR4> "MENOS" <EXPR5>
+          | <EXPR5>
+
+<EXPR5> ::= <EXPR5> "TIMES" <EXPR6>
+          | <EXPR5> "DIVIDE" <EXPR6>
+          | <EXPR5> "MOD" <EXPR6>
+          | <EXPR6>
+
+<EXPR6> ::= "UMENOS" <EXPR7>
+          | <EXPR7>
+
+<EXPR7> ::= <TIPOS> "LPAREN" <EXPRESION> "RPAREN" "CAST" "FIN_INSTRUCCION"
+          | "CARACTER" <EXPRESION>
