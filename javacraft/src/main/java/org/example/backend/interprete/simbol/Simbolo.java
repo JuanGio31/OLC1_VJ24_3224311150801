@@ -138,7 +138,7 @@ public class Simbolo {
                 '}';
     }
 
-    private Object getVal() {
+    public Object getVal() {
         if (tipo.getTipo() == TipoDeDato.VARIABLE) {
             return value;
         } else if (tipo.getTipo() == TipoDeDato.VECTOR ||

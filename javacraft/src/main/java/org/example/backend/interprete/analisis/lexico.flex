@@ -134,11 +134,12 @@ CADENACOMILLASDOBLES = [\"]([^\r\"])*[\"]
             "return"     { return symbol(ParserSym.RETURN, yytext());      }
 
             /*  Funciones   */
-            "println"    {     return symbol(ParserSym.PRINTLN, yytext());     }
-            "round"      {     return symbol(ParserSym.ROUND, yytext());       }
-            "length"     {     return symbol(ParserSym.LENGTH, yytext());      }
-            "Find"       {     return symbol(ParserSym.FIND, yytext());      }
-            "toString"   {     return symbol(ParserSym.TO_STRING, yytext());   }
+            "println"     {     return symbol(ParserSym.PRINTLN, yytext());     }
+            "round"       {     return symbol(ParserSym.ROUND, yytext());       }
+            "length"      {     return symbol(ParserSym.LENGTH, yytext());      }
+            "Find"        {     return symbol(ParserSym.FIND, yytext());        }
+            "toString"    {     return symbol(ParserSym.TO_STRING, yytext());   }
+            "start_with"  {     return symbol(ParserSym.START_WITH, yytext());  }
 
             /*  Variables   */
             "true"       {     return symbol(ParserSym.BOOLEAN, yytext());               }

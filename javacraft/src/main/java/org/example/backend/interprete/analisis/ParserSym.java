@@ -58,6 +58,7 @@ public class ParserSym {
   public static final int ELSE = 31;
   public static final int PUNTO = 62;
   public static final int LSQUARE = 47;
+  public static final int START_WITH = 65;
   public static final int RSQUARE = 48;
   public static final int WHILE = 32;
   public static final int LIST = 54;
@@ -138,7 +139,8 @@ public class ParserSym {
   "TO_STRING",
   "PUNTO",
   "FIND",
-  "VOID"
+  "VOID",
+  "START_WITH"
   };
 }
 

@@ -28,8 +28,8 @@ public class Print extends Instruccion {
         }
 
         String res = StringEscapeUtils.unescapeJava(resultado.toString());
-        //arbol.Print(res);
-        arbol.Print(resultado.toString());
+        arbol.Print(res);
+        //arbol.Print(resultado.toString());
         return null;
     }
 

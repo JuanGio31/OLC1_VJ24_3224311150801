@@ -77,11 +77,10 @@ public class Tree {
     }
 
     public Instruccion getFun(String id) {
-        //obtener fun por id
-        for (var index : this.funciones) {
-            if (index instanceof Metodo) {
-                if (((Metodo) index).getId().equalsIgnoreCase(id)) {
-                    return index;
+        for (var i : this.funciones) {
+            if (i instanceof Metodo metodo) {
+                if (metodo.getId().equalsIgnoreCase(id)) {
+                    return i;
                 }
             }
         }

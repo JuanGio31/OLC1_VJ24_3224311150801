@@ -111,7 +111,7 @@ public class ReporteD extends java.awt.Dialog {
             Object[] tmp = new Object[4];
             tmp[0] = s.getTipoDato().getTipo();
             tmp[1] = s.getId();
-            tmp[2] = s.getValue();
+            tmp[2] = s.getVal().toString();
             tmp[3] = s.isEsConstante();
             modelo.addRow(tmp);
         }

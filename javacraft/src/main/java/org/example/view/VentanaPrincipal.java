@@ -1,13 +1,20 @@
 package org.example.view;
 
+import org.example.backend.interprete.abstracto.Instruccion;
+import org.example.backend.interprete.analisis.Parser;
+import org.example.backend.interprete.analisis.Scan;
 import org.example.backend.interprete.error.Errores;
+import org.example.backend.interprete.instruccion.*;
 import org.example.backend.interprete.simbol.Simbolo;
+import org.example.backend.interprete.simbol.TablaSimbolo;
+import org.example.backend.interprete.simbol.Tree;
 import org.example.backend.util.FilesControl;
 import org.example.backend.util.GestionTab;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -205,7 +212,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_verReporteItemMenuActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-/*
+
         if (tab.getSelectedIndex() != -1) {
             errores.clear();
             symList.clear();
@@ -230,27 +237,61 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     if (a == null) {
                         continue;
                     }
-                    var res = a.interpretar(ast, tabla);
-                    if (res instanceof Errores) {
-                        lista.add((Errores) res);
+                    if (a instanceof Metodo) {
+                        ast.addFun(a);
                     }
+                    //funciones
+                    //structs
+                }
+                //segunda vuelta
+                for (var a : ast.getInstrucciones()) {
+                    if (a == null) {
+                        continue;
+                    }
+                    if (a instanceof DeclaracionVariable || a instanceof AsignacionVariable || a instanceof DecColeccion
+                            || a instanceof AsignacionValorEnPosicion || a instanceof DecMatriz || a instanceof AsignValorMatriz
+                            || a instanceof Llamada) {
+                        var res = a.interpretar(ast, tabla);
+                        if (res instanceof Errores) {
+                            lista.add((Errores) res);
+                        }
+                    }
+                }
+                //tercera vuelta->entryPoint
+                MetodoStart entry_point = null;
+                for (var a : ast.getInstrucciones()) {
+                    if (a == null) {
+                        continue;
+                    }
+                    if (a instanceof MetodoStart init) {
+                        entry_point = init;
+                        break;
+                    }
+                }
+                String er = "ERROR-START_WITH";
+                var resultMain = entry_point.interpretar(ast, tabla);
+                if (resultMain instanceof Errores) {
+                    System.out.println(er);
+                }
+
+                errores = lista;
+                errores.addAll(ast.getErrores());
+                for (var i : lista) {
+                    System.out.println(i);
                 }
                 System.out.println(ast.getConsola());
                 salidaTxtArea.setText(ast.getConsola());
                 if (ast.getConsola().isBlank()) {
-                    salidaTxtArea.setText("ERROR");
-                }
-                errores = lista;
-                for (var i : lista) {
-                    System.out.println(i);
+                    salidaTxtArea.setText(er);
                 }
                 hashToLinkedList(tabla.getTablaActual(), symList);
+                System.out.println("\n\n\n");
+                tabla.getTablaActual().forEach((key, value) -> System.out.println(key + " : " + value));
             } catch (Exception ex) {
                 System.out.println(ex);
             }
         }
 
-        */
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 

@@ -34,7 +34,7 @@ public class DeclaracionVariable extends Instruccion {
             sym.setEsConstante(this.esConstante);
             boolean creacion = tabla.setVariable(sym);
             if (!creacion) {
-                return new Errores(TipoError.SEMANTICO, "Vector ya existente: " + sym.getId(), this.linea, this.columna);
+                return new Errores(TipoError.SEMANTICO, "variable ya existente: " + sym.getId(), this.linea, this.columna);
             }
         } else {
             var valorInterpretado = this.valor.interpretar(arbol, tabla);

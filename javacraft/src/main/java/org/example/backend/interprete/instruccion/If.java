@@ -47,12 +47,22 @@ public class If extends Instruccion {
                 if (i instanceof Break) {
                     return i;
                 }
+                if (i instanceof Retorno) {
+                    return i;
+                }
+                if (i instanceof Continue) {
+                    break;
+                }
+
                 var resultado = i.interpretar(arbol, newTabla);
                 if (resultado instanceof Break) {
                     return resultado;
                 }
                 if (resultado instanceof Continue) {
                     break;
+                }
+                if (resultado instanceof Retorno) {
+                    return resultado;
                 }
             }
         } else {
@@ -62,8 +72,21 @@ public class If extends Instruccion {
                     if (i instanceof Break) {
                         return i;
                     }
+                    if (i instanceof Retorno) {
+                        return i;
+                    }
+                    if (i instanceof Continue) {
+                        break;
+                    }
+
                     var resultado = i.interpretar(arbol, newTabla);
                     if (resultado instanceof Break) {
+                        return resultado;
+                    }
+                    if (resultado instanceof Continue) {
+                        break;
+                    }
+                    if (resultado instanceof Retorno) {
                         return resultado;
                     }
                 }
