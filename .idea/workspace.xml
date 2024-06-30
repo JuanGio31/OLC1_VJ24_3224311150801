@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_INJECTED_CODE" value="false" />
+    <option name="SCOPE_TYPE" value="4" />
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6b333f5c-389c-4b7d-941f-6871508e76bb" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.jdks/openjdk-18.0.1/lib/src.zip!/java.base/java/util/HashMap.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/javacraft/src/main/java/org/example/backend/interprete/analisis/Parser.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/javacraft/src/main/java/org/example/backend/interprete/analisis/parser.cup" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2i4NPsFhv37oeCoJrxXSpDbjPF3" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.Generador.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Application.Prueba.executor": "Run",
+    "Maven.javacraft [clean].executor": "Run",
+    "Maven.javacraft [compile].executor": "Run",
+    "Maven.javacraft [package].executor": "Run",
+    "Maven.javacraft [validate].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "fase__2",
+    "java.suggest.annotation.dependency": "false",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/giovanic/Documentos/LenguajesProgra/Java/JAVA SE/OLC1_VJ24_3224311150801",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.41724136",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "com.codeium.AppSettingsConfigurable",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Generador" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.backend.interprete.analisis.Generador" />
+      <module name="javacraft" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.backend.interprete.analisis.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.Main" />
+      <module name="javacraft" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Prueba" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.Prueba" />
+      <module name="javacraft" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Application.Generador" />
+        <item itemvalue="Application.Prueba" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6b333f5c-389c-4b7d-941f-6871508e76bb" name="Changes" comment="" />
+      <created>1718745869649</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1718745869649</updated>
+      <workItem from="1718745870179" duration="6537000" />
+      <workItem from="1718755219434" duration="93000" />
+      <workItem from="1718755322483" duration="3521000" />
+      <workItem from="1718791082636" duration="819000" />
+      <workItem from="1718791905629" duration="4983000" />
+      <workItem from="1718826028260" duration="2402000" />
+      <workItem from="1718831904355" duration="12537000" />
+      <workItem from="1718874995042" duration="4538000" />
+      <workItem from="1718925267285" duration="6609000" />
+      <workItem from="1718960823408" duration="4523000" />
+      <workItem from="1719005605630" duration="7889000" />
+      <workItem from="1719016584818" duration="3355000" />
+      <workItem from="1719029970033" duration="933000" />
+      <workItem from="1719035394749" duration="2036000" />
+      <workItem from="1719046185457" duration="1764000" />
+      <workItem from="1719219033437" duration="13750000" />
+      <workItem from="1719234767784" duration="2781000" />
+      <workItem from="1719262663392" duration="7442000" />
+      <workItem from="1719302997188" duration="9301000" />
+      <workItem from="1719353853124" duration="3402000" />
+      <workItem from="1719392302232" duration="10735000" />
+      <workItem from="1719429029576" duration="624000" />
+      <workItem from="1719429684230" duration="3064000" />
+      <workItem from="1719435967013" duration="16482000" />
+      <workItem from="1719466431053" duration="120000" />
+      <workItem from="1719478149729" duration="5430000" />
+      <workItem from="1719484530366" duration="1815000" />
+      <workItem from="1719516142276" duration="2358000" />
+      <workItem from="1719525893995" duration="4864000" />
+      <workItem from="1719530917716" duration="4709000" />
+      <workItem from="1719565898660" duration="4411000" />
+      <workItem from="1719610604821" duration="4615000" />
+      <workItem from="1719721577212" duration="18042000" />
+      <workItem from="1719743240301" duration="2038000" />
+      <workItem from="1719745288902" duration="11588000" />
+      <workItem from="1719761862628" duration="8986000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/javacraft/src/main/java/org/example/backend/interprete/instruccion/FBuscar.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/javacraft/src/main/java/org/example/backend/interprete/instruccion/MetodoStart.java</url>
+          <line>50</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/javacraft/src/main/java/org/example/backend/interprete/expresion/Relacionales.java</url>
+          <line>83</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/javacraft/src/main/java/org/example/backend/interprete/instruccion/If.java</url>
+          <line>64</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <inline-watch fileUrl="file://$PROJECT_DIR$/javacraft/src/main/java/org/example/backend/interprete/instruccion/MetodoStart.java" line="51">
+        <watch expression="restultFun" language="JAVA" />
+      </inline-watch>
+    </watches-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
